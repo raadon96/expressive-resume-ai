@@ -34,7 +34,6 @@ profile/                                # ⚠ Replace with your own data — shi
 │                                       # Structure per file: Summary → Context & Pain Points →
 │                                       # Spoken Narrative (bullet points) → Architecture → Q&A Cheat Sheet
 └── images/                             # shared assets (qr_code.png — replace with your own)
-
 ```
 
 ## Setup
@@ -86,6 +85,8 @@ qrcode=../../profile/images/qr_code.png
 \award{Name}{Institution}{Year}{}
 \tech{TechnologyName}   % inline highlight for a tool/language
 ```
+
+**LaTeX gotcha:** use `$\sim$` for a tilde/approximately symbol. Never use `\~` — it is a LaTeX accent command and will cause a build error.
 
 **ExpressiveCoverLetter:**
 ```tex
