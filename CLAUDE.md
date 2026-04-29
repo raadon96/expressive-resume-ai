@@ -35,9 +35,6 @@ profile/                                # ⚠ Replace with your own data — shi
 │                                       # Spoken Narrative (bullet points) → Architecture → Q&A Cheat Sheet
 └── images/                             # shared assets (qr_code.png — replace with your own)
 
-docs/
-├── plans/                              # implementation plans
-└── specs/                              # feature specs
 ```
 
 ## Setup
@@ -101,6 +98,7 @@ When tailoring a CV, read these to understand the full profile:
 - `profile/contact.md` — canonical personal details for `\resumeheader` and `\coverletterheader` (name, email, phone, LinkedIn, GitHub, city, country)
 - `profile/experience.md` — LinkedIn Experience section with additional detail
 - `profile/projects/` — reusable project write-ups
+- `profile/certificates.md` — degrees and certifications
 
 ## Application Tracker
 
@@ -114,7 +112,7 @@ Analyses a job description against the profile, writes a fit analysis to `descri
 
 ```
 /review-job                                          # interactive: paste description as next message
-/review-job applications/26.04.24_pydev@yousician    # uses existing description.md in directory
+/review-job applications/26.04.26_mleng@nexusai    # uses existing description.md in directory
 /review-job https://company.com/careers/some-role    # fetches via WebFetch (LinkedIn may require interactive fallback)
 ```
 
@@ -123,7 +121,7 @@ Analyses a job description against the profile, writes a fit analysis to `descri
 Creates tailored `resume.tex` and `coverletter.tex` from the fit analysis and profile. Called automatically by `/review-job` on confirmation, or manually to resume an interrupted session:
 
 ```
-/create-application applications/26.04.24_pydev@yousician
+/create-application applications/26.04.26_mleng@nexusai
 ```
 
 ## Workflow for New Job Applications
