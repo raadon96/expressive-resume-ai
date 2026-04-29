@@ -9,9 +9,10 @@
     ],
     "shutdownAction": "stopCompose",
     "workspaceFolder": "/workspace",
-    "postCreateCommand": "",
+    "postCreateCommand": "./setup.sh",
     "extensions": [
         "james-yu.latex-workshop",
+        "anthropic.claude-code",
         // Git
         "eamodio.gitlens",
         // Other helpers
@@ -20,6 +21,9 @@
         // Other
         "mhutchie.git-graph"
     ],
+    "containerEnv": {
+        "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
+    },
     "settings": {
         // General settings
         "files.eol": "\n",

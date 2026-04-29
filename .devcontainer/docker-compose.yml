@@ -17,7 +17,8 @@ services:
       - ~/.zsh_history:/root/.zsh_history:z
       # Git config
       - ~/.gitconfig:/root/.gitconfig
+      # Claude Code credentials (persists /login auth across container rebuilds)
+      - ~/.claude:/root/.claude
     environment:
       - TZ=
     entrypoint: ["zsh", "-c", "while sleep 1000; do :; done"]
- 
