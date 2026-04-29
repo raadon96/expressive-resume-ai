@@ -1,6 +1,9 @@
+<div align="center">
+
 # expressive-resume-ai
 
-An AI-assisted LaTeX resume and cover letter system, built on [thehale/expressive-resume](https://github.com/thehale/expressive-resume). Use [Claude Code](https://claude.ai/code) as your AI engine to analyse job descriptions, assess fit, and generate tailored CVs and cover letters — all from a clean LaTeX source you control.
+Paste a job description. [Claude Code](https://claude.ai/code) analyses the fit against your profile, then generates a tailored CV and cover letter as clean LaTeX you own. Built on [thehale/expressive-resume](https://github.com/thehale/expressive-resume).
+</div>
 
 ## Prerequisites
 
@@ -13,7 +16,9 @@ An AI-assisted LaTeX resume and cover letter system, built on [thehale/expressiv
 
 ## Setup (once)
 
-### Option A — Local (Linux / macOS)
+### 1.Install
+
+#### Option A — Local (Linux / macOS)
 
 ```bash
 # 1. Fork this repository, then clone your fork
@@ -24,7 +29,7 @@ cd expressive-resume-ai
 ./setup.sh
 ```
 
-### Option B — Dev Container (all platforms, including Windows)
+#### Option B — Dev Container (all platforms, including Windows)
 
 1. Install [VS Code](https://code.visualstudio.com/) and the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
 2. Fork and clone this repository, then open the folder in VS Code
@@ -34,7 +39,7 @@ cd expressive-resume-ai
 
 > **API key users:** set `ANTHROPIC_API_KEY` in your host environment before opening the container — it is forwarded automatically via `containerEnv`.
 
-### Fill in your profile
+### 2.Fill in your profile
 
 The `profile/` files shipped with this repo are a fictional example. Replace them with your own data — this is what Claude reads when tailoring your CVs.
 
