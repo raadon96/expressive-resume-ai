@@ -113,7 +113,7 @@ Analyses a job description against the profile, writes a fit analysis to `descri
 
 ```
 /review-job                                          # interactive: paste description as next message
-/review-job applications/26.04.26_mleng@nexusai    # uses existing description.md in directory
+/review-job applications/26.04.26_mleng@ExampleCompany    # uses existing description.md in directory
 /review-job https://company.com/careers/some-role    # fetches via WebFetch (LinkedIn may require interactive fallback)
 ```
 
@@ -122,7 +122,7 @@ Analyses a job description against the profile, writes a fit analysis to `descri
 Creates tailored `resume.tex` and `coverletter.tex` from the fit analysis and profile. Called automatically by `/review-job` on confirmation, or manually to resume an interrupted session:
 
 ```
-/create-application applications/26.04.26_mleng@nexusai
+/create-application applications/26.04.26_mleng@ExampleCompany
 ```
 
 ## Workflow for New Job Applications
