@@ -1,0 +1,21 @@
+{
+    "editor.accessibilitySupport": "off",
+    "markdown.preview.fontSize": 17,
+    "editor.wordWrap": "bounded",
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "-r",
+                "%WORKSPACE_FOLDER%/.latexmkrc",
+                "%DOC%"
+            ]
+        }
+    ]
+}
