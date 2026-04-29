@@ -1,358 +1,128 @@
-<div align="center">
+# expressive-resume
 
-# Expressive Resume
+An AI-assisted LaTeX resume and cover letter system, built on [thehale/expressive-resume](https://github.com/thehale/expressive-resume). Use [Claude Code](https://claude.ai/code) as your AI engine to analyse job descriptions, assess fit, and generate tailored CVs and cover letters — all from a clean LaTeX source you control.
 
-A beautiful resume/cover letter LaTeX template pair that are extraordinarily
-easy to use.
+## Prerequisites
 
-<!-- BADGES -->
-[![](https://badgen.net/github/license/thehale/expressive-resume)](https://github.com/thehale/expressive-resume/blob/master/LICENSE)
-[![](https://badgen.net/badge/icon/Sponsor/pink?icon=github&label)](https://github.com/sponsors/thehale)
-[![Joseph Hale's software engineering blog](https://jhale.dev/badges/website.svg)](https://jhale.dev)
-[![](https://jhale.dev/badges/follow.svg)](https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=thehale)
+- **LaTeX** with `latexmk` — choose one setup path:
+  - **Linux/macOS (local):** install LaTeX directly
+    - Linux: `sudo apt install texlive-full latexmk`
+    - macOS: Install [MacTeX](https://www.tug.org/mactex/), then `brew install latexmk`
+  - **All platforms via Dev Container (recommended for Windows):** install [VS Code](https://code.visualstudio.com/) and the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension — LaTeX and Claude Code are pre-installed inside the container
+- **Claude Code** — [install instructions](https://claude.ai/code) (not needed if using the Dev Container)
 
-![Example Expressive Resume](/examples/expressive_resume_readme_banner.svg)
+## Setup (once)
 
-</div>
+### Option A — Local (Linux / macOS)
 
-
-**Why Expressive Resume??**
-
- - **Declarative:** Use semantically meaningful commands like `\experience`,
-   `\role`, and `\achievement` instead of worrying about LaTeX plumbing.
- - **Cover Letter:** Expressive includes both a resume template *and* a matching
-   cover letter template.
- - **Machine/ATS Friendly:** Expressive Resume was designed by an engineer with
-   experience building automated resume parsers for [Applicant Tracking Systems](https://www.indeed.com/hire/c/info/what-is-ats#:~:text=when%20the%20ats%20parses%20a%20resume%20and%20determines%20it%20meets%20your%20requirements%2C%20it%20automatically%20moves%20that%20applicant%20forward%20in%20the%20hiring%20process.)
- - **Maintainability:** Most LaTeX resume/cover letter templates start with 100-200
-   lines of formatting code (or more). With Expressive Resume, you simply specify
-   the `documentclass` and begin writing!
- - **Compatibility:** Expressive Resume is written in LaTeX2e, so it is compatible
-   with most LaTeX typesetting engines.
-
-## Quickstart
-
-The recommended way to use Expressive Resume is via the included "VS Code
-devcontainer" which has LaTeX pre-installed in an sandboxed environment
-compatible with Windows, Linux, and MacOS.
-
-If you already have LaTeX installed, you can clone the repository and skip
-straight to [Create Your Expressive Resume](#create-your-expressive-resume).
-### Installation + Setup
-
-Start by making sure [Docker](https://docs.docker.com/get-docker/) and [VS
-Code](https://code.visualstudio.com/) (including the [Remote Containers
-Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers))
-are installed on your machine.
-
-Then create a copy of Expressive Resume and open it in VS Code:
-1. Press the [Use this
-   template](https://github.com/jhale1805/expressive-resume/generate) button
-   **OR** [create a fork](https://github.com/jhale1805/expressive-resume/fork).
-2. Clone your copy of Expressive Resume onto your computer and open it in VS
-   Code.
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/expressive-resume.git
-cd expressive-resume
-code .
+# 1. Fork this repository, then clone your fork
+git clone https://github.com/<your-github-username>/expressive-resume-ai.git
+cd expressive-resume-ai
+
+# 2. Symlink the .cls files into ~/texmf so LaTeX can find them from any directory
+./setup.sh
+
+# 3. Fill in your profile (the files shipped are a fictional example — replace them)
+#    - profile/contact.md         ← your name, email, phone, LinkedIn, GitHub
+#    - profile/experience.md      ← your work history (LinkedIn Experience format)
+#    - profile/projects/*.md      ← one file per project you want to reference
+#    - profile/images/qr_code.png ← your LinkedIn QR code (or any URL QR)
+#    - profile/certificates.md    ← your degrees and certifications
 ```
 
-VS Code should prompt you to **Reopen in Container**. Accept that prompt.
-- If you don't see this pop-up, go to `View -> Command Palette ->
-  Remote-Containers: Re-Open Folder in Container`
+### Option B — Dev Container (all platforms, including Windows)
 
-- Note that opening Expressive Resume for the first time may take several
-  minutes as it downloads and prepares the 4 GB sandboxed LaTeX installation.
-  Successive launches will be much faster.
+1. Install [VS Code](https://code.visualstudio.com/) and the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
+2. Fork and clone this repository, then open the folder in VS Code
+3. When prompted, click **Reopen in Container** (or run `Remote-Containers: Reopen in Container` from the command palette)
+4. VS Code builds the container — LaTeX, Claude Code CLI, and all extensions are installed automatically
+5. Authenticate Claude Code: open the integrated terminal and run `claude` then `/login`
+6. Replace the fictional profile files (same list as Option A step 3 above)
 
-### Create Your Expressive Resume
+> **API key users:** set `ANTHROPIC_API_KEY` in your host environment before opening the container — it is forwarded automatically via `containerEnv`.
 
-Create an empty `.tex` file in the `src` folder alongside the `.cls` files.
+## Applying for a Job
 
-Use a `documentclass` of `ExpressiveResume`
-```tex
-\documentclass{ExpressiveResume}
+### Primary flow — paste directly into Claude Code
 
-\begin{document}
-
-% You will write your resume here.
-
-\end{document}
+```
+/review-job
 ```
 
-Create your resume header with the `resumeheader` command (all parameters are
-optional).
+Claude asks you to paste the job description. After you paste it, Claude will:
+1. Infer the role and company, propose a directory name, and ask you to confirm
+2. Write a fit analysis (`description.md`) — strengths table, gaps table, framing recommendation
+3. Ask whether to proceed with the CV and cover letter
 
-```tex
-\resumeheader[
-    firstname=,             % Your first name
-    middleinitial=,         % Your middle initial
-    lastname=,              % Your last name
-    email=,                 % Your email
-    phone=,                 % Your phone number, formatted as XXX-XXX-XXXX
-    linkedin=,              % Your LinkedIn handle (without the @)
-    github=,                % Your GitHub handle (without the @)
-    city=,                  % Your city of residence (ignored if no `state` is given)
-    state=,                 % Your state of residence
-    qrcode=,                % the path to a qr code to show in the top right corner
-]
+If you say yes, Claude creates `resume.tex` and `coverletter.tex` tailored to the role and appends a row to `applications.md`.
+
+> **Tip:** Use a "Copy as Markdown" browser extension when copying job descriptions — markdown formatting helps Claude parse requirements more accurately. Plain text works fine too.
+
+### Manual flow — directory first
+
+```bash
+# Create the directory with today's date prefix
+./new-application.sh <role> <company>
+# Example: ./new-application.sh pydev yousician
+# Creates: applications/26.04.26_pydev@yousician/
+
+# Paste the job description into the created description.md, then run:
+/review-job applications/26.04.26_pydev@yousician
 ```
 
-Then add any of the following components relevant to your experience and the job description.
+### Resume an interrupted session
 
-#### Summary/Objective Statement
+If a session ended after the fit analysis but before the files were created:
 
-```tex
-\objective{
-    % Write your objective statement here.
-}
-\summary{
-    % Write your summary statement here.
-}
+```
+/create-application applications/26.04.26_pydev@yousician
 ```
 
-#### Work/Volunteer Experience
+### Review a job by URL
 
-```tex
-\experience{Organization}{
-    \role{Job Title}{Start Date - End Date}{
-        \achievement{
-            % Describe your achievement here
-        }
-        \achievement{
-            % Describe another achievement here.
-        }
-    }
-}
+```
+/review-job https://company.com/careers/some-role
 ```
 
-If you have been promoted while at an organization, simply list multiple
-`\role`s
+> LinkedIn URLs require a login — Claude will fall back to asking you to paste the description.
 
-```tex
-\experience{Organization}{
-    \role{Promoted Title}{Start Date - End Date}{
-        \achievement{
-            % Describe your achievement here
-        }
-        \achievement{
-            % Describe another achievement here.
-        }
-    }
-    \role{Starting Title}{Start Date - End Date}{
-        \achievement{
-            % Describe your achievement here
-        }
-    }
-}
+## Building the PDF
+
+**VS Code (recommended):** Install the [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) extension. It auto-builds on save. No further configuration needed — the repo's `.vscode/settings.json` and `.latexmkrc` are already wired up.
+
+**Terminal:**
+```bash
+cd applications/YY.MM.DD_<role>@<company>
+latexmk -pdf -r "$(git rev-parse --show-toplevel)/.latexmkrc" resume.tex
+latexmk -pdf -r "$(git rev-parse --show-toplevel)/.latexmkrc" coverletter.tex
 ```
 
-If your actual job title doesn't match your duties, consider writing an
-`\equivalent` title instead.
+Build artifacts (`.aux`, `.log`, etc.) are deleted automatically after each successful build — only the `.pdf` is kept alongside the `.tex` source.
 
-```tex
-\role{Renamed Title \equivalent}{Start Date - End Date}{
-    \achievement{
-        % Describe your achievement here
-    }
-}
+## Repository Layout
+
+```
+src/                    # LaTeX document classes (do not modify)
+templates/
+  placeholder/          # Structural scaffold used by /create-application
+applications/           # One directory per job application
+  YY.MM.DD_role@company/
+    description.md      # Job description + fit analysis
+    resume.tex / .pdf
+    coverletter.tex / .pdf
+    notes.md            # Interview prep, conversation logs
+applications.md         # Application tracker (auto-updated by /create-application)
+profile/                # ⚠ Replace with your own data — shipped files are fictional
+  contact.md            # Your name, email, phone, LinkedIn, GitHub
+  experience.md         # Your work history (LinkedIn Experience format)
+  projects/             # Reusable project write-ups
+  images/               # qr_code.png — replace with your own LinkedIn QR
+  certificates.md       # Your degrees and certifications
 ```
 
-#### Technologies/Skills
+## Tracking Applications
 
-```tex
-% For example...
-\tech{Python}
-\tech{Docker}
-\tech{Terraform}
-```
+`applications.md` at the repo root is the single tracker. `/create-application` appends rows automatically. Update the `Status` column manually as applications progress.
 
-#### Educational degrees
-
-```tex
-\degree{Degree Name}{Institution}{Year}{
-    % Extra information, e.g. \achievement's
-}
-\degree{Degree Name \honors{e.g. Summa Cum Laude}}{Institution}{Year}{
-    % Extra information, e.g. \achievement's
-}
-```
-
-#### Awards
-
-```tex
-\award{Award Name}{Institution}{Year}{
-    % Extra information, e.g. \achievement's
-}
-```
-
-And that's it! Take a look at the [resume example](#example-expressive-resume)
-to see just how cleanly all of these pieces work together in a simple, readable
-`.tex` file to produce a beautiful resume.
-
-### Create Your Expressive Cover Letter
-
-Create an empty `.tex` file in the `src` folder alongside the `.cls` files.
-
-Use a `documentclass` of `ExpressiveCoverLetter`
-```tex
-\documentclass{ExpressiveCoverLetter}
-
-\begin{document}
-
-% You will write your cover letter here.
-
-\end{document}
-```
-
-Create your cover letter header with the `coverletterheader` command (all
-parameters are optional).
-
-```tex
-\coverletterheader[
-    firstname=,             % Your first name
-    middleinitial=,         % Your middle initial
-    lastname=,              % Your last name
-    email=,                 % Your email
-    phone=,                 % Your phone number, formatted as XXX-XXX-XXXX
-    linkedin=,              % Your LinkedIn handle (without the @)
-    github=,                % Your GitHub handle (without the @)
-    city=,                  % Your city of residence (ignored if no `state` is given)
-    state=,                 % Your state of residence
-]
-```
-
-From there, just write out the text of your cover letter, using a blank line
-between paragraphs.
-
-You can also easily add inline highlights for the technologies and skills
-relevant to the job position you are applying for.
-
-```tex
-\tech{
-    % Name your familiar technology or skill
-}
-```
-
-And that's it! Take a look at the [cover letter
-example](#example-expressive-cover-letter) to see just how cleanly all of these
-pieces work together in a simple, readable `.tex` file to produce a beautiful
-cover letter.
-
-## Examples
-### Example Expressive Resume
-![Example Expressive Resume](./examples/resume.png)
-
-```tex
-\documentclass{ExpressiveResume}
-
-% ----- Resume -----
-\begin{document}
-
-% ----- Name + Contact Information -----
-\resumeheader[
-    firstname=John,
-    middleinitial=N,
-    lastname=Doe,
-    email=john.doe@example.com,
-    % phone=123-456-7890,
-    linkedin=johndoe,
-    github=johndoe,
-    % city=Town,
-    % state=State,
-    qrcode=./images/qr.png
-]
-
-\objective{A software engineering graduate with 2 years of work
-    experience at various internships seeking opportunities to develop
-    web/mobile applications for Company XYZ.}
-
-% ----- Work Experience -----
-\section{Work Experience}
-
-\experience{Radiant Software Systems}{%
-    \role{Software Engineer}{2021 - 2024}{
-        \achievement{
-
-            Developed a mobile app in \tech{React Native} that was
-            downloaded 100k times on Google Play.
-
-        }
-    }
-    \role{Summer Intern}{2021}{
-        \achievement{
-
-            Collaborated in an \tech{Agile/Scrum} team of 8 engineers to
-            deliver new features every 2 weeks.
-
-        }
-    }
-}
-
-% ----- Technical Projects -----
-\section{Technical Projects}
-
-\project{Expressive Resume}{2021 - 2024}{
-    \achievement{
-
-        Created a \tech{\LaTeX} class that enables anyone to
-        quickly create a beautiful resume and cover letter.
-
-    }
-
-}
-
-% ----- Education -----
-\section{Education}
-
-\degree{B.S. Software Engineering \honors{Summa Cum Laude}}{Super Duper University}{2022}{
-    \achievement{Ranked \#15 out of 463 students}
-}
-
-% ----- Awards -----
-\section{Awards}
-
-\award{Employee of the Month}{Radiant Software Systems}{2023}{
-    \achievement{Did some amazing stuff that really benefitted the company}
-}
-
-\end{document}
-```
-
-### Example Expressive Cover Letter
-![Example Expressive Cover Letter](./examples/cover_letter.png)
-
-```tex
-\documentclass{ExpressiveCoverLetter}
-
-\begin{document}
-
-\coverletterheader[
-    firstname=John,
-    middleinitial=N,
-    lastname=Doe,
-    email=john.doe@example.com,
-    phone=123-456-7890,
-    linkedin=johndoe,
-    % github=johndoe,
-    city=Town,
-    state=State
-]
-
-\vspace{0.25in}
-\today
-\vspace{0.15in}
-
-
-To whom it may concern:
-
-Lorem ipsum dolor sit amet ...
-
-Sincerely,
-
-\vspace{.15in}
-
-John Doe
-
-\end{document}
-```
+Valid statuses: `Applied` · `Screening` · `Interview` · `Offer` · `Rejected` · `Withdrawn`
