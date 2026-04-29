@@ -1,0 +1,50 @@
+\documentclass{ExpressiveCoverLetter}
+
+\begin{document}
+
+\coverletterheader[
+    firstname=John,
+    lastname=Doe,
+    email=john.doe@example.com,
+    phone=+1-555-012-3456,
+    linkedin=johndoe,
+    github=johndoe,
+    city=San Francisco,
+    state=CA
+]
+
+\vspace{0.25in}
+\today
+\vspace{0.15in}
+
+To the Nexus AI Platform Team:
+
+Nexus AI's challenge of serving over 10 billion predictions per day at
+sub-50ms latency is exactly the kind of infrastructure problem I find most
+compelling. At Lumino AI, I have spent the last three years building and
+operating the model serving layer from the ground up~--- and I would like
+to bring that experience to your Platform team.
+
+The work I am most proud of maps directly to the core responsibilities of
+this role. I designed and shipped a real-time feature store (Redis +
+PostgreSQL) that eliminated $\sim$60\% of duplicate feature computation
+across three model teams, and I led the inference infrastructure overhaul
+that reduced p99 latency by 40\% through ONNX quantisation and dynamic
+batching. At DataStream, I built the ETL backbone for a 12-source data
+platform using FastAPI and Celery, with idempotent pipelines that cut
+failure rates by 35\%~--- which taught me that production data
+infrastructure is as much about failure modes as the happy path.
+
+Nexus AI's scale is a step beyond where I have operated, and that is
+precisely why I am interested. I am confident the fundamentals transfer,
+and I am motivated by the engineering challenges that come with another
+order of magnitude. I would welcome the chance to discuss how my
+experience maps to what your team is building.
+
+Sincerely,
+
+\vspace{.15in}
+
+John Doe
+
+\end{document}

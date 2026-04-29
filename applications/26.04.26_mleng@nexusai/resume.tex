@@ -1,0 +1,100 @@
+\documentclass{ExpressiveResume}
+
+% ----- Resume -----
+\begin{document}
+
+% ----- Name + Contact Information -----
+\resumeheader[
+    firstname=John,
+    lastname=Doe,
+    email=john.doe@example.com,
+    phone=+1-555-012-3456,
+    linkedin=johndoe,
+    github=johndoe,
+    city=San Francisco,
+    state=CA,
+    qrcode=../../profile/images/qr_code.png
+]
+
+\objective{ML Engineer with 4 years of experience designing and operating
+    production machine learning infrastructure. Seeking to bring low-latency
+    model serving and feature pipeline expertise to the Nexus AI Platform team.}
+
+% ----- Work Experience -----
+\section{Work Experience}
+
+\experience{Lumino AI}{%
+    \role{ML Engineer}{Jan 2022 -- Present}{
+        \achievement{
+            Led model serving infrastructure supporting 5 production \tech{ML}
+            services at $\sim$2k RPS, reducing p99 inference latency by
+            \textbf{40\%} through \tech{ONNX} quantisation and dynamic batching.
+        }
+        \achievement{
+            Designed real-time feature store (\tech{Redis} + \tech{PostgreSQL})
+            consumed by 3 model teams, cutting feature computation duplication
+            by $\sim$60\%.
+        }
+        \achievement{
+            Built \tech{Airflow} DAGs for automated daily retraining of two
+            high-churn models, eliminating $\sim$3h/week of manual retraining
+            overhead.
+        }
+        \achievement{
+            Implemented A/B testing and shadow mode rollout framework; caught 2
+            model regressions before they reached production.
+        }
+    }
+}
+
+\experience{DataStream GmbH}{%
+    \role{Python Backend Developer}{Mar 2020 -- Dec 2021}{
+        \achievement{
+            Built ETL backbone ingesting 12 third-party data feeds; reduced
+            pipeline failure rate by \textbf{35\%} via idempotent design and
+            structured alerting.
+        }
+        \achievement{
+            Designed webhook ingestion service (\tech{FastAPI} + \tech{Celery})
+            handling $\sim$5k events/day with deduplication and dead-letter
+            queuing.
+        }
+        \achievement{
+            Maintained integration test suite with 80\%+ ETL coverage; caught
+            3 data-loss bugs before they reached production.
+        }
+    }
+}
+
+% ----- Technical Projects -----
+\section{Technical Projects}
+
+\project{StreamBench}{2021}{
+    \achievement{
+        Open-source \tech{Python} benchmarking tool for streaming \tech{ML}
+        inference pipelines; measures throughput and p50/p95/p99 latency under
+        configurable load profiles. Used as a pre-deployment gate at Lumino AI.
+    }
+}
+
+\project{DataFlow Pipeline}{2020}{
+    \achievement{
+        \tech{Airflow}-based ETL orchestration framework with idempotent
+        extraction, schema validation, and dead-letter routing; migrated 12
+        data feeds at DataStream GmbH with zero customer-visible downtime.
+    }
+}
+
+% ----- Education -----
+\section{Education}
+
+\degree{M.Sc. Data Science}{Fictional State University}{2021}{}
+\degree{B.Sc. Computer Science}{Fictional State University}{2019}{}
+
+% ----- Certifications -----
+\section{Certifications}
+
+\award{AWS Certified Machine Learning -- Specialty}{Amazon Web Services}{2023}{}
+\award{Databricks Certified Associate Developer for Apache Spark}{Databricks}{2022}{}
+
+\end{document}
