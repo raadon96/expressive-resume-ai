@@ -1,4 +1,4 @@
-# expressive-resume
+# expressive-resume-ai
 
 An AI-assisted LaTeX resume and cover letter system, built on [thehale/expressive-resume](https://github.com/thehale/expressive-resume). Use [Claude Code](https://claude.ai/code) as your AI engine to analyse job descriptions, assess fit, and generate tailored CVs and cover letters — all from a clean LaTeX source you control.
 
@@ -107,7 +107,12 @@ src/                    # LaTeX document classes (do not modify)
 templates/
   placeholder/          # Structural scaffold used by /create-application
 applications/           # One directory per job application
-  YY.MM.DD_role@company/
+  26.04.26_mleng@ExampleCompany/  # ← included as a worked example
+    description.md      # Job description + fit analysis (fictional)
+    resume.tex / .pdf   # Tailored CV (fictional)
+    coverletter.tex / .pdf  # Cover letter (fictional)
+    notes.md            # Interview prep notes (fictional)
+  YY.MM.DD_role@company/    # Your applications go here
     description.md      # Job description + fit analysis
     resume.tex / .pdf
     coverletter.tex / .pdf
