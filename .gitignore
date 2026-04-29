@@ -3,8 +3,10 @@ docs/
 
 # PDF files generated from LaTeX source files. These are the final output documents and should not be tracked in version control, as they can be easily regenerated from the source files. Tracking them can lead to unnecessary merge conflicts and bloated repository size.
 applications/**/*.pdf
+!applications/26.04.26_mleng@ExampleCompany/*.pdf
 profile/**/*.pdf
 templates/**/*.pdf
+README_from_template.md
 
 # Created by https://www.gitignore.io/api/latex
 # Edit at https://www.gitignore.io/?templates=latex

@@ -1,15 +1,15 @@
 # Job Description
 
-## ML Engineer — Nexus AI
+## ML Engineer — Example Company
 
-**Company:** Nexus AI | San Francisco, CA (Hybrid)
+**Company:** Example Company | Berlin, Germany (Hybrid)
 **Posted:** April 2026
 
 ---
 
-### About Nexus AI
+### About Example Company
 
-Nexus AI builds real-time machine learning infrastructure for e-commerce and
+Example Company builds real-time machine learning infrastructure for e-commerce and
 logistics companies. Our platform processes over 10 billion prediction requests
 per day, helping clients personalise recommendations, detect fraud, and optimise
 delivery routes.
@@ -17,7 +17,7 @@ delivery routes.
 ### The Role
 
 We're looking for an ML Engineer to join our Platform team. You will design,
-build, and operate the infrastructure that powers Nexus AI's prediction serving
+build, and operate the infrastructure that powers Example Company's prediction serving
 layer — from feature pipelines to model deployment and monitoring.
 
 ### What You'll Do
