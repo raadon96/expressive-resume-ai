@@ -22,13 +22,6 @@ cd expressive-resume-ai
 
 # 2. Symlink the .cls files into ~/texmf so LaTeX can find them from any directory
 ./setup.sh
-
-# 3. Fill in your profile (the files shipped are a fictional example — replace them)
-#    - profile/contact.md         ← your name, email, phone, LinkedIn, GitHub
-#    - profile/experience.md      ← your work history (LinkedIn Experience format)
-#    - profile/projects/*.md      ← one file per project you want to reference
-#    - profile/images/qr_code.png ← your LinkedIn QR code (or any URL QR)
-#    - profile/certificates.md    ← your degrees and certifications
 ```
 
 ### Option B — Dev Container (all platforms, including Windows)
@@ -38,9 +31,20 @@ cd expressive-resume-ai
 3. When prompted, click **Reopen in Container** (or run `Remote-Containers: Reopen in Container` from the command palette)
 4. VS Code builds the container — LaTeX, Claude Code CLI, and all extensions are installed automatically
 5. Authenticate Claude Code: open the integrated terminal and run `claude` then `/login`
-6. Replace the fictional profile files (same list as Option A step 3 above)
 
 > **API key users:** set `ANTHROPIC_API_KEY` in your host environment before opening the container — it is forwarded automatically via `containerEnv`.
+
+### Fill in your profile
+
+The `profile/` files shipped with this repo are a fictional example. Replace them with your own data — this is what Claude reads when tailoring your CVs.
+
+| File | What to put in it |
+|------|-------------------|
+| `profile/contact.md` | Your name, email, phone, LinkedIn handle, GitHub handle, city, country |
+| `profile/experience.md` | Your work history in LinkedIn Experience section format |
+| `profile/projects/*.md` | One file per project you want Claude to reference — see the included examples for the expected structure |
+| `profile/certificates.md` | Your degrees and certifications |
+| `profile/images/qr_code.png` | Your LinkedIn QR code (or any URL QR you want on the resume) |
 
 ## Applying for a Job
 
