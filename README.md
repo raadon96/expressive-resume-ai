@@ -3,6 +3,7 @@
 # expressive-resume-ai
 
 Paste a job description. [Claude Code](https://claude.ai/code) analyses the fit against your profile, then generates a tailored CV and cover letter as clean LaTeX you own. Built on [thehale/expressive-resume](https://github.com/thehale/expressive-resume).
+![Example Expressive Resume](/artifacts/expressive_resume_readme_banner.svg)
 </div>
 
 ## Prerequisites
@@ -53,7 +54,7 @@ The `profile/` files shipped with this repo are a fictional example. Replace the
 
 ## Applying for a Job
 
-### Primary flow — paste directly into Claude Code
+### Primary flow — paste job description directly into Claude Code
 
 ```
 /review-job
@@ -73,11 +74,11 @@ If you say yes, Claude creates `resume.tex` and `coverletter.tex` tailored to th
 ```bash
 # Create the directory with today's date prefix
 ./new-application.sh <role> <company>
-# Example: ./new-application.sh pydev yousician
-# Creates: applications/26.04.26_pydev@yousician/
+# Example: ./new-application.sh pydev ExampleCompany
+# Creates: applications/26.04.26_pydev@ExampleCompany/
 
 # Paste the job description into the created description.md, then run:
-/review-job applications/26.04.26_pydev@yousician
+/review-job applications/26.04.26_pydev@ExampleCompany
 ```
 
 ### Resume an interrupted session
@@ -85,7 +86,7 @@ If you say yes, Claude creates `resume.tex` and `coverletter.tex` tailored to th
 If a session ended after the fit analysis but before the files were created:
 
 ```
-/create-application applications/26.04.26_pydev@yousician
+/create-application applications/26.04.26_pydev@ExampleCompany
 ```
 
 ### Review a job by URL
