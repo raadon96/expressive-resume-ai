@@ -7,8 +7,8 @@ applications/**/*.pdf
 profile/**/*.pdf
 templates/**/*.pdf
 README_from_template.md
-artifacts/demo.cast
-artifacts/demo.gif
+**/demo.*
+speedup.sh
 
 # Created by https://www.gitignore.io/api/latex
 # Edit at https://www.gitignore.io/?templates=latex

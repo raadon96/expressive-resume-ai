@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "ms-vscode-remote.remote-containers",
-        "James-Yu.latex-workshop"
+        "James-Yu.latex-workshop",
+        "anthropic.claude-code"
     ]
 }

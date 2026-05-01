@@ -32,15 +32,38 @@ cd expressive-resume-ai
 
 #### Option B — Dev Container (all platforms, including Windows)
 
+**Prerequisites:** Docker must be running before opening the container.
+- Linux: install [Docker Engine](https://docs.docker.com/engine/install/)
+- Windows / macOS: install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
 1. Install [VS Code](https://code.visualstudio.com/) and the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
 2. Fork and clone this repository, then open the folder in VS Code
 3. When prompted, click **Reopen in Container** (or run `Remote-Containers: Reopen in Container` from the command palette)
 4. VS Code builds the container — LaTeX, Claude Code CLI, and all extensions are installed automatically
-5. Authenticate Claude Code: open the integrated terminal and run `claude` then `/login`
+5. Authenticate Claude Code — see **Step 3** below
 
-> **API key users:** set `ANTHROPIC_API_KEY` in your host environment before opening the container — it is forwarded automatically via `containerEnv`.
+> **VS Code extension (recommended):** Install the [Claude Code](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code) extension to interact with Claude Code directly in the VS Code sidebar instead of the integrated terminal — avoids terminal crashes that can occur inside Dev Containers.
 
-### 2.Fill in your profile
+
+### 2. Authenticate Claude Code
+
+**Option A — Claude Pro / Max subscription** — run in a terminal (or the Claude Code panel if using the VS Code extension):
+```
+claude
+/login
+```
+
+Follow the browser prompt to authorise.
+
+**Option B — API key** — export your key before running Claude:
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...   # add to ~/.bashrc or ~/.zshrc to persist
+```
+
+Dev Container users: set `ANTHROPIC_API_KEY` in your **host** environment before opening the container — it is forwarded automatically via `containerEnv`.
+
+
+### 3.Fill in your profile
 
 The `profile/` files shipped with this repo are a fictional example. Replace them with your own data — this is what Claude reads when tailoring your CVs.
 
@@ -51,6 +74,8 @@ The `profile/` files shipped with this repo are a fictional example. Replace the
 | `profile/projects/*.md` | One file per project you want Claude to reference — see the included examples for the expected structure |
 | `profile/certificates.md` | Your degrees and certifications |
 | `profile/images/qr_code.png` | Your LinkedIn QR code (or any URL QR you want on the resume) |
+
+
 
 ## Applying for a Job
 
