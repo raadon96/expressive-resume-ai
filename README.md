@@ -21,12 +21,14 @@ Paste a job description. [Claude Code](https://claude.ai/code) analyses the fit 
 
 #### Option A — Local (Linux / macOS)
 
+**1. Fork this repository, then clone your fork**
 ```bash
-# 1. Fork this repository, then clone your fork
 git clone https://github.com/<your-github-username>/expressive-resume-ai.git
 cd expressive-resume-ai
+```
 
-# 2. Symlink the .cls files into ~/texmf so LaTeX can find them from any directory
+**2. Symlink the .cls files into ~/texmf so LaTeX can find them from any directory**
+```bash
 ./setup.sh
 ```
 
