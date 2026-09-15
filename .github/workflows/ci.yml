@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-templates:
+    runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build placeholder resume and cover letter
+        run: |
+          export TEXINPUTS=".:$GITHUB_WORKSPACE/src:"
+          cd templates/placeholder
+          latexmk -pdf -r ../../.latexmkrc resume.tex
+          latexmk -pdf -r ../../.latexmkrc coverletter.tex
+
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ShellCheck
+        run: shellcheck setup.sh new-application.sh
