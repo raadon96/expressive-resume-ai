@@ -9,6 +9,7 @@ templates/**/*.pdf
 README_from_template.md
 **/demo.*
 speedup.sh
+expressive-resume-ai.code-workspace
 
 # Created by https://www.gitignore.io/api/latex
 # Edit at https://www.gitignore.io/?templates=latex
