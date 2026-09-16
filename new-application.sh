@@ -19,8 +19,10 @@ fi
 ROLE="$1"
 COMPANY="$2"
 DATE_PREFIX="$(date +"%y.%m.%d")"
+DATE_ISO="$(date +"%Y-%m-%d")"
 DIR_NAME="${DATE_PREFIX}_${ROLE}@${COMPANY}"
 APP_DIR="$REPO_DIR/applications/$DIR_NAME"
+INDEX="$REPO_DIR/applications/README.md"
 
 if [ -d "$APP_DIR" ]; then
     fail "Directory already exists: applications/$DIR_NAME"
@@ -41,6 +43,28 @@ cat > "$APP_DIR/notes.md" << 'EOF'
 EOF
 
 ok "Created applications/$DIR_NAME"
+
+# ----- Applications index: prepend a Draft row (newest first) -----
+# /create-application flips the status to Applied once the documents exist.
+if [ ! -f "$INDEX" ]; then
+    cat > "$INDEX" << 'EOF'
+# Applications
+
+Newest first. `new-application.sh` prepends a row with status `Draft`; `/create-application` sets it to `Applied`. Update `Status` by hand as the application progresses: `Draft` · `Applied` · `Screening` · `Interview` · `Offer` · `Rejected` · `Withdrawn`.
+
+| Date | Role | Company | Path | Status |
+|------|------|---------|------|--------|
+EOF
+    ok "Created applications/README.md"
+fi
+
+ROW="| $DATE_ISO | $ROLE | $COMPANY | [$DIR_NAME]($DIR_NAME/) | Draft |"
+# Insert right after the table's header separator line.
+awk -v row="$ROW" '
+    { print }
+    !done && /^\|[-| ]*\|$/ { print row; done = 1 }
+' "$INDEX" > "$INDEX.tmp" && mv "$INDEX.tmp" "$INDEX"
+ok "Added Draft row to applications/README.md"
 echo ""
 echo "Next steps:"
 echo "  1. Paste the job description into applications/$DIR_NAME/description.md"

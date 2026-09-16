@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Layer 2 of the leak guard (see hooks/guard-lib.sh). Active only when pushing
+# to the remote named `upstream` — the Public Template Repo, as seen from a
+# Private Fork. Catches what slipped past pre-commit (--no-verify, other tooling,
+# a machine where the hooks were never installed).
+#
+#   - Refuses if any pushed commit changes a Personal Path.
+#   - Refuses if the pushed diff contains the personal strings from
+#     profile/contact.md.
+set -euo pipefail
+
+REMOTE="$1"
+[ "$REMOTE" = "upstream" ] || exit 0
+
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=hooks/guard-lib.sh
+source "$HOOK_DIR/guard-lib.sh"
+
+ZERO_SHA="0000000000000000000000000000000000000000"
+
+while read -r _local_ref local_sha _remote_ref remote_sha; do
+    # Deleting a remote branch pushes nothing.
+    [ "$local_sha" = "$ZERO_SHA" ] && continue
+
+    if [ "$remote_sha" = "$ZERO_SHA" ]; then
+        # New branch: everything not already on the remote.
+        range=("$local_sha" --not --remotes="$REMOTE")
+    else
+        range=("$remote_sha..$local_sha")
+    fi
+
+    if ! guard_range "${range[@]}"; then
+        echo "" >&2
+        echo "  Nothing was pushed to $REMOTE. Fix the branch (git rebase -i / drop the commit) and push again." >&2
+        exit 1
+    fi
+done
+
+exit 0

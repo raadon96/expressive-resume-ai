@@ -5,11 +5,20 @@ docs/
 expressive-resume-ai.code-workspace
 CLAUDE.md
 
+# Personal Paths (declared in sync.conf): empty in the Public Template Repo, only the
+# .gitkeep is tracked. A Private Fork un-ignores each one with a nested .gitignore
+# containing `!*` — see "Keeping your Private Fork in sync" in the README.
+profile/*
+!profile/.gitkeep
+applications/*
+!applications/.gitkeep
+templates/*
+!templates/.gitkeep
+
 # PDF files generated from LaTeX source files. These are the final output documents and should not be tracked in version control, as they can be easily regenerated from the source files. Tracking them can lead to unnecessary merge conflicts and bloated repository size.
-applications/**/*.pdf
-!applications/26.04.26_mleng@ExampleCompany/*.pdf
-profile/**/*.pdf
-templates/**/*.pdf
+examples/**/*.pdf
+!examples/applications/26.04.26_mleng@ExampleCompany/*.pdf
+src/scaffold/*.pdf
 README_from_template.md
 **/demo.*
 speedup.sh

@@ -7,22 +7,45 @@ on:
     branches: [main]
 
 jobs:
-  build-templates:
+  build-scaffold:
     runs-on: ubuntu-latest
     container:
       image: texlive/texlive:latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build placeholder resume and cover letter
+      - name: Bootstrap profile from the example (the scaffold links profile/images/qr_code.png)
+        run: cp -R examples/profile/. profile/
+      - name: Build scaffold resume and cover letter
         run: |
           export TEXINPUTS=".:$GITHUB_WORKSPACE/src:"
-          cd templates/placeholder
+          cd src/scaffold
           latexmk -pdf -r ../../.latexmkrc resume.tex
           latexmk -pdf -r ../../.latexmkrc coverletter.tex
+
+  personal-paths-empty:
+    # Layer 3 of the leak guard: in the Public Template Repo every Personal Path
+    # (sync.conf) holds only its .gitkeep, so any tracked file under one is a
+    # leak or a mistake. Path-only — CI cannot know personal strings.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Personal Paths contain only .gitkeep
+        run: |
+          source sync.conf
+          status=0
+          for p in "${PERSONAL_PATHS[@]}"; do
+            extra="$(git ls-files -- "$p" | grep -v -x "$p/.gitkeep" || true)"
+            if [ -n "$extra" ]; then
+              echo "::error::Personal Path '$p/' must contain only .gitkeep, found:"
+              echo "$extra"
+              status=1
+            fi
+          done
+          exit "$status"
 
   shellcheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Run ShellCheck
-        run: shellcheck setup.sh new-application.sh
+        run: shellcheck -s bash setup.sh new-application.sh sync-down.sh sync-up.sh sync.conf hooks/*

@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Layer 1 of the leak guard (see hooks/guard-lib.sh). Installed by setup.sh via
+# `git config core.hooksPath hooks`; runs in a Private Fork and in the Public
+# Template Repo alike.
+#
+#   - Refuses a commit that stages both a Personal Path and anything else.
+#   - For a shared-only commit, refuses if the staged diff contains the personal
+#     strings from profile/contact.md.
+set -euo pipefail
+
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=hooks/guard-lib.sh
+source "$HOOK_DIR/guard-lib.sh"
+
+split_paths < <(git diff --cached --name-only --no-renames)
+
+if [ "${#PERSONAL_FILES[@]}" -gt 0 ] && [ "${#SHARED_FILES[@]}" -gt 0 ]; then
+    report_mixed
+    echo "" >&2
+    echo "  Unstage one side (git restore --staged <path>) and commit them separately." >&2
+    exit 1
+fi
+
+# Personal-only commits never leave the Private Fork; nothing more to check.
+[ "${#SHARED_FILES[@]}" -gt 0 ] || exit 0
+
+if hits="$(git diff --cached --no-color --no-renames -U0 | grep_added_lines)"; then
+    report_strings "$hits"
+    echo "" >&2
+    echo "  Move the data into a Personal Path, or fix the shared file, then commit again." >&2
+    exit 1
+fi

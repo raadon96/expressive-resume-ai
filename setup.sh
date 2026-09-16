@@ -81,6 +81,33 @@ else
     exit 1
 fi
 
+# ----- 5. Bootstrap profile from the example -----
+# A fresh checkout has an empty profile/ (a Personal Path — see sync.conf).
+# Seed it from examples/profile/ so there is something to edit in place and
+# nobody edits the Examples by mistake. Never touches a profile/ that has content.
+echo ""
+echo "--- Bootstrapping profile/ ---"
+PROFILE_DIR="$REPO_DIR/profile"
+EXAMPLE_PROFILE_DIR="$REPO_DIR/examples/profile"
+if [ -n "$(find "$PROFILE_DIR" -mindepth 1 -not -name .gitkeep -print -quit 2>/dev/null)" ]; then
+    ok "profile/ already has content, leaving it alone"
+else
+    cp -R "$EXAMPLE_PROFILE_DIR/." "$PROFILE_DIR/"
+    ok "profile/ seeded from examples/profile/ — replace the fictional data with your own"
+fi
+
+# ----- 6. Install git hooks -----
+# hooks/pre-commit and hooks/pre-push keep Personal Paths and personal strings
+# out of any commit that could travel to the Public Template Repo.
+echo ""
+echo "--- Installing git hooks ---"
+if git -C "$REPO_DIR" config core.hooksPath hooks; then
+    ok "core.hooksPath = hooks (pre-commit + pre-push leak guard active)"
+else
+    warn "could not set core.hooksPath — run: git config core.hooksPath hooks"
+    all_ok=false
+fi
+
 # ----- Summary -----
 echo ""
 if [ "$all_ok" = true ]; then

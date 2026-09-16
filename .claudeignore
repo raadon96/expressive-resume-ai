@@ -6,6 +6,8 @@ artifacts/
 applications/**/*.pdf
 profile/**/*.pdf
 templates/**/*.pdf
+examples/**/*.pdf
+src/scaffold/*.pdf
 
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:

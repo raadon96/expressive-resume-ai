@@ -20,7 +20,7 @@ The argument (`$ARGUMENTS`) determines the mode:
    - If invoked with a directory path: use that path
    - Otherwise: construct `applications/YY.MM.DD_<role>@<company>/` using today's date. Normalize `<role>` and `<company>` to lowercase with no spaces (e.g. `pydev`, `octopusenergy`). In interactive mode, propose the name and wait for user confirmation before proceeding.
 
-4. **Create the application directory** if it does not already exist.
+4. **Create the application directory** if it does not already exist, by running `./new-application.sh <role> <company>` from the repo root. It creates the directory (today's date prefix), a placeholder `description.md` and `notes.md`, and prepends a `Draft` row to `applications/README.md`. Never `mkdir` the directory by hand — the index row would be missing.
 
 5. **Write `description.md`** with the following structure:
    ```
