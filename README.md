@@ -33,7 +33,7 @@ cd expressive-resume
 ```bash
 ./setup.sh
 ```
-It symlinks the `.cls` files into `~/texmf` so LaTeX finds them from any directory, seeds `profile/` from the fictional example in `examples/profile/`, and installs the git hooks that keep personal data out of anything you might push back to this template.
+It symlinks the `.cls` files into `~/texmf` so LaTeX finds them from any directory, seeds `profile/` with an empty skeleton to fill in, and installs the git hooks that keep your personal files out of anything you might push back to this template.
 
 #### Option B — Dev Container (all platforms, including Windows)
 
@@ -70,13 +70,13 @@ Dev Container users: set `ANTHROPIC_API_KEY` in your **host** environment before
 
 ### 3.Fill in your profile
 
-`setup.sh` seeded `profile/` with a fictional example (the same files live under `examples/profile/` for reference). Replace the contents with your own data — this is what Claude reads when tailoring your CVs. `profile/` is a Personal Path: in this template it is empty and git-ignored, so nothing you put there can end up in the public repo by accident.
+`setup.sh` seeded `profile/` with a skeleton: the right files and headings, no content. Fill them in with your own data — this is what Claude reads when tailoring your CVs. A complete fictional profile lives under `examples/profile/` to show what a filled-in one looks like. `profile/` is a Personal Path: in this template it is empty and git-ignored, so nothing you put there can end up in the public repo by accident.
 
 | File | What to put in it |
 |------|-------------------|
 | `profile/contact.md` | Your name, email, phone, LinkedIn handle, GitHub handle, city, country |
 | `profile/experience.md` | Your work history in LinkedIn Experience section format |
-| `profile/projects/*.md` | One file per project you want Claude to reference — see the included examples for the expected structure |
+| `profile/projects/*.md` | One file per project you want Claude to reference — see `examples/profile/projects/` for the expected structure |
 | `profile/certificates.md` | Your degrees and certifications |
 | `profile/images/qr_code.png` | Your LinkedIn QR code (or any URL QR you want on the resume) |
 
@@ -145,8 +145,9 @@ Build artifacts (`.aux`, `.log`, etc.) are deleted automatically after each succ
 ```
 src/                    # Shared: LaTeX document classes (do not modify)
   scaffold/             # Structural resume.tex / coverletter.tex that /create-application starts from
-examples/               # Shared: fictional data showing the expected shape of the Personal Paths
-  profile/              # Copied into profile/ by setup.sh
+  profile-skeleton/     # Empty profile structure, copied into profile/ by setup.sh
+examples/               # Shared: fictional data showing what filled-in Personal Paths look like
+  profile/              # A complete fictional profile
   applications/
     README.md           # Example application tracker
     26.04.26_mleng@ExampleCompany/  # Worked example: description, resume, cover letter, notes
@@ -156,7 +157,7 @@ sync-down.sh            # Pull template improvements into your Private Fork
 sync-up.sh              # Send shared improvements from your Private Fork back as a PR
 
 # Personal Paths — empty and git-ignored in this template, yours in your Private Fork
-profile/                # Your data — seeded from examples/profile/ by setup.sh
+profile/                # Your data — seeded from src/profile-skeleton/ by setup.sh
   contact.md            # Your name, email, phone, LinkedIn, GitHub
   experience.md         # Your work history (LinkedIn Experience format)
   projects/             # Reusable project write-ups
@@ -180,7 +181,7 @@ Valid statuses: `Draft` · `Applied` · `Screening` · `Interview` · `Offer` ·
 
 ## Keeping your Private Fork in sync
 
-Your copy holds two kinds of content. **Personal Paths** (`profile/`, `applications/`, `templates/`, declared once in `sync.conf`) are yours and never leave your repo. Everything else is a **Shared Path** that flows both ways: template improvements down to you, your fixes back up as a PR. The layout makes the split structural, and three guards enforce it.
+Your copy holds two kinds of content. **Personal Paths** (`profile/`, `applications/`, `templates/`, declared once in `sync.conf`) are yours and never leave your repo. Everything else is a **Shared Path** that flows both ways: template improvements down to you, your fixes back up as a PR. The layout makes the split structural, and three path guards enforce it.
 
 ### Create the private copy (once)
 
@@ -234,8 +235,8 @@ Once the PR is merged, `./sync-down.sh` brings it back and the branch can be del
 
 | Layer | Where | What it refuses |
 |---|---|---|
-| pre-commit | `hooks/pre-commit`, installed by `setup.sh` | A commit that mixes a Personal Path with anything else; a shared commit whose diff contains your name, email, phone or handles from `profile/contact.md` |
-| pre-push | `hooks/pre-push`, only for the `upstream` remote | Any pushed commit touching a Personal Path; the same string check over the whole push |
+| pre-commit | `hooks/pre-commit`, installed by `setup.sh` | A commit that mixes a Personal Path with anything else |
+| pre-push | `hooks/pre-push`, only for the `upstream` remote | Any pushed commit touching a Personal Path |
 | CI | this repo's `personal-paths-empty` job | Any PR that tracks a file under a Personal Path other than `.gitkeep` |
 
-The string check is inert while `profile/contact.md` is still the shipped example, so working in a checkout of the template itself never trips it.
+All three are path rules: they never inspect file contents, so keep personal data in the Personal Paths and nothing else is needed.

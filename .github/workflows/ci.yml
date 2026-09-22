@@ -13,8 +13,8 @@ jobs:
       image: texlive/texlive:latest
     steps:
       - uses: actions/checkout@v4
-      - name: Bootstrap profile from the example (the scaffold links profile/images/qr_code.png)
-        run: cp -R examples/profile/. profile/
+      - name: Bootstrap profile from the skeleton (the scaffold links profile/images/qr_code.png)
+        run: cp -R src/profile-skeleton/. profile/
       - name: Build scaffold resume and cover letter
         run: |
           export TEXINPUTS=".:$GITHUB_WORKSPACE/src:"
@@ -25,7 +25,7 @@ jobs:
   personal-paths-empty:
     # Layer 3 of the leak guard: in the Public Template Repo every Personal Path
     # (sync.conf) holds only its .gitkeep, so any tracked file under one is a
-    # leak or a mistake. Path-only — CI cannot know personal strings.
+    # leak or a mistake.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

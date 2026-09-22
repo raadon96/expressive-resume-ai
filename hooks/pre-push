@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 # Layer 2 of the leak guard (see hooks/guard-lib.sh). Active only when pushing
 # to the remote named `upstream` — the Public Template Repo, as seen from a
-# Private Fork. Catches what slipped past pre-commit (--no-verify, other tooling,
-# a machine where the hooks were never installed).
-#
-#   - Refuses if any pushed commit changes a Personal Path.
-#   - Refuses if the pushed diff contains the personal strings from
-#     profile/contact.md.
+# Private Fork. Refuses if any pushed commit changes a Personal Path — catching
+# what slipped past pre-commit (--no-verify, other tooling, a machine where the
+# hooks were never installed).
 set -euo pipefail
 
 REMOTE="$1"
