@@ -13,10 +13,10 @@ jobs:
       image: texlive/texlive:latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build placeholder resume and cover letter
+      - name: Build scaffold resume and cover letter
         run: |
           export TEXINPUTS=".:$GITHUB_WORKSPACE/src:"
-          cd templates/placeholder
+          cd src/scaffold
           latexmk -pdf -r ../../.latexmkrc resume.tex
           latexmk -pdf -r ../../.latexmkrc coverletter.tex
 

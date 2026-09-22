@@ -141,8 +141,7 @@ Build artifacts (`.aux`, `.log`, etc.) are deleted automatically after each succ
 
 ```
 src/                    # LaTeX document classes (do not modify)
-templates/
-  placeholder/          # Structural scaffold used by /create-application
+  scaffold/             # Structural scaffold used by /create-application
 applications/           # One directory per job application
   26.04.26_mleng@ExampleCompany/  # ← included as a worked example
     description.md      # Job description + fit analysis (fictional)
