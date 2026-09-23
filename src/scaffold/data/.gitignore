@@ -1,0 +1,11 @@
+# LaTeX auxiliary files. The root .latexmkrc deletes these after each
+# successful build; this is the safety net for failed builds.
+# PDFs are tracked on purpose: keep the version you sent.
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.synctex(busy)
+*.toc
