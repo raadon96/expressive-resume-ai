@@ -14,13 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build scaffold resume and cover letter
-        # Mirror the data/ layout so the scaffold's ../../profile/ QR path resolves.
+        # The scaffold's QR path points at example/profile/.
         run: |
           export TEXINPUTS=".:$GITHUB_WORKSPACE/src:"
-          mkdir -p "$RUNNER_TEMP/data/applications/scaffold"
-          cp -R example/profile "$RUNNER_TEMP/data/profile"
-          cp src/scaffold/application/*.tex "$RUNNER_TEMP/data/applications/scaffold/"
-          cd "$RUNNER_TEMP/data/applications/scaffold"
+          cd src/scaffold/application
           latexmk -pdf -r "$GITHUB_WORKSPACE/.latexmkrc" resume.tex
           latexmk -pdf -r "$GITHUB_WORKSPACE/.latexmkrc" coverletter.tex
       - name: Build example application
