@@ -12,14 +12,18 @@ _Avoid_: "the application" for the software/repo itself — always say "this rep
 The user's canonical personal/career source data (`profile/`), kept once and drawn on by every Application. Not itself an Application, and not a generated document.
 _Avoid_: resume data, master resume.
 
-**Public Template Repo**:
-This repo, expressive-resume-ai, kept generic and free of personal data so anyone can fork it.
-_Avoid_: the template, the base repo, upstream (on its own, ambiguous about direction).
+**Tool Repo**:
+expressive-resume-ai, the public, generic code (document classes, Scaffold, slash-commands, scripts), kept free of personal data. Also any user's fork or clone of it; say "upstream Tool Repo" when the original specifically is meant.
+_Avoid_: Public Template Repo, the template, the base repo, upstream (on its own).
+
+**Data Repo**:
+A user's own private repo holding their Profile, Applications and Role Templates, kept inside their Tool Repo folder but never part of it.
+_Avoid_: personal repo, private copy, fork (a fork is a Tool Repo).
 
 **Scaffold**:
 The structural `resume.tex` and `coverletter.tex` that `/create-application` starts every generated document from. Lives alongside the class files in `src/scaffold/`.
 _Avoid_: template (ambiguous).
 
 **Role Template**:
-A user's own pre-tailored resume for a job family (e.g. PyDev, MLOps), kept with the user's own data (location decided by the map "Connecting the tool repo and user data"). Belongs to the user, not to this repo. Whether Role Templates take part in the application workflow at all is decided by the map "Workflow model".
+A user's own pre-tailored resume for a job family (e.g. PyDev, MLOps), kept in the user's Data Repo. Belongs to the user, not to this repo. Whether Role Templates take part in the application workflow at all is decided by the map "Workflow model".
 _Avoid_: template on its own.
