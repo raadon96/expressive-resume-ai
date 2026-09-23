@@ -1,6 +1,6 @@
 # Expressive Resume AI
 
-An AI-assisted LaTeX resume and cover-letter generator, driven by Claude Code slash-commands, meant to be forked and used for a real job search.
+An AI-assisted LaTeX resume and cover-letter generator, driven by Claude Code slash-commands, meant to be cloned/forked and used for a real job search.
 
 ## Language
 
