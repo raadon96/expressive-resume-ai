@@ -204,7 +204,6 @@ data/                   # Your Data Repo: its own git repo, ignored by the tool
       description.md    # Job description + fit analysis
       resume.tex / .pdf
       coverletter.tex / .pdf
-      notes.md          # Interview prep, conversation logs
 ```
 
 ## Application Index

@@ -39,12 +39,6 @@ cat > "$APP_DIR/description.md" << 'EOF'
 <!-- Paste the job description here -->
 EOF
 
-cat > "$APP_DIR/notes.md" << 'EOF'
-# Notes
-
-<!-- Interview prep, conversation logs, follow-up items -->
-EOF
-
 ok "Created data/applications/$DIR_NAME"
 echo ""
 echo "Next steps:"
