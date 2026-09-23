@@ -126,8 +126,8 @@ Your `data/` isn't affected by either.
 /review-job
 ```
 
-Claude asks you to paste the job description. After you paste it, Claude will:
-1. Infer the role and company, propose a directory name, and ask you to confirm
+Claude asks you to paste the job description. You can also pass it inline: `/review-job <job description>`. Claude will then:
+1. Infer the role and company and create `data/applications/YY.MM.DD_<role>@<company>/`
 2. Write a fit analysis (`description.md`) — strengths table, gaps table, framing recommendation
 3. Ask whether to proceed with the CV and cover letter
 
