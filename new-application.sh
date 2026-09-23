@@ -20,10 +20,15 @@ ROLE="$1"
 COMPANY="$2"
 DATE_PREFIX="$(date +"%y.%m.%d")"
 DIR_NAME="${DATE_PREFIX}_${ROLE}@${COMPANY}"
-APP_DIR="$REPO_DIR/applications/$DIR_NAME"
+DATA_DIR="$REPO_DIR/data"
+APP_DIR="$DATA_DIR/applications/$DIR_NAME"
+
+if [ ! -d "$DATA_DIR" ]; then
+    fail "no data/ found; run ./setup.sh first"
+fi
 
 if [ -d "$APP_DIR" ]; then
-    fail "Directory already exists: applications/$DIR_NAME"
+    fail "Directory already exists: data/applications/$DIR_NAME"
 fi
 
 mkdir -p "$APP_DIR"
@@ -40,9 +45,9 @@ cat > "$APP_DIR/notes.md" << 'EOF'
 <!-- Interview prep, conversation logs, follow-up items -->
 EOF
 
-ok "Created applications/$DIR_NAME"
+ok "Created data/applications/$DIR_NAME"
 echo ""
 echo "Next steps:"
-echo "  1. Paste the job description into applications/$DIR_NAME/description.md"
-echo "  2. Run: /review-job applications/$DIR_NAME"
+echo "  1. Paste the job description into data/applications/$DIR_NAME/description.md"
+echo "  2. Run: /review-job data/applications/$DIR_NAME"
 echo "  Or:   /review-job  (interactive — paste description directly into Claude)"
