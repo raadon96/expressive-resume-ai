@@ -4,21 +4,28 @@ Analyse a job description against the user's profile, write a fit analysis, and 
 
 The argument (`$ARGUMENTS`) determines the mode:
 
-- **No argument** — interactive: ask the user to paste the job description as the next message. After receiving it, infer `<role>` and `<company>` from the content, propose a directory name in the format `YY.MM.DD_<role>@<company>` (using today's date), and ask for confirmation before creating anything.
-- **Directory path** (e.g. `applications/26.04.24_pydev@yousician`) — read `description.md` already present in that directory.
+- **Pasted text** (any other argument) — treat the argument itself as the job description.
+- **Directory path** (e.g. `data/applications/26.04.24_pydev@yousician`) — read `description.md` already present in that directory.
 - **URL** (starts with `http`) — fetch the page via WebFetch and extract the job description from the content. If the page requires authentication (e.g. LinkedIn), inform the user and ask them to paste the description manually instead.
+- **No argument** — interactive: ask the user to paste the job description as the next message.
+
+## Data Repo
+
+All user data lives in `data/`, the user's Data Repo: a separate git repo that the Tool Repo gitignores. Grep and `grep`/`ugrep` skip `data/` when searching from the repo root, so always read and search with explicit `data/…` paths (e.g. search in `data/profile/`, not in `.`).
+
+If `data/` does not exist, stop and tell the user: "no data/ found; run ./setup.sh first". Do not create `data/` yourself.
 
 ## Steps
 
 1. **Obtain the job description** via the appropriate mode above.
 
 2. **Read the user's profile:**
-   - `profile/experience.md`
-   - All files in `profile/projects/`
+   - `data/profile/experience.md`
+   - All files in `data/profile/projects/`
 
 3. **Determine the application directory:**
    - If invoked with a directory path: use that path
-   - Otherwise: construct `applications/YY.MM.DD_<role>@<company>/` using today's date. Normalize `<role>` and `<company>` to lowercase with no spaces (e.g. `pydev`, `octopusenergy`). In interactive mode, propose the name and wait for user confirmation before proceeding.
+   - Otherwise: construct `data/applications/YY.MM.DD_<role>@<company>/` using today's date. `<role>` is a short lowercase slug with no spaces; abbreviate if helpful (e.g. `pydev` for Python Developer, `mleng` for Machine Learning Engineer). `<company>` is the company name in lowercase with no spaces (e.g. `octopusenergy`). Don't ask the user to confirm the name; create the directory directly. If the company is ambiguous (e.g. a recruiter with an unnamed client), use the named company and note the likely client in `description.md`.
 
 4. **Create the application directory** if it does not already exist.
 
@@ -51,9 +58,7 @@ The argument (`$ARGUMENTS`) determines the mode:
    <One sentence: recommend applying or not, and why>
    ```
 
-6. **Create `notes.md`** (with a `# Notes` heading) if it does not already exist.
-
-7. **End with this exact prompt:**
+6. **End with this exact prompt:**
 
    ```
    Proceed with creating a tailored CV and cover letter?
@@ -63,4 +68,4 @@ The argument (`$ARGUMENTS`) determines the mode:
    ```
 
    - If **Yes**: run `/create-application <directory_path>` inline.
-   - If **No**: confirm that `description.md` and `notes.md` are saved. Do not offer to delete the directory.
+   - If **No**: confirm that `description.md` is saved. Do not offer to delete the directory.

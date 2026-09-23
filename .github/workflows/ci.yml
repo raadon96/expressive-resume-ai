@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [dev, main]
   pull_request:
-    branches: [main]
+    branches: [dev, main]
 
 jobs:
   build-templates:
@@ -13,12 +13,19 @@ jobs:
       image: texlive/texlive:latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build placeholder resume and cover letter
+      - name: Build scaffold resume and cover letter
+        # The scaffold's QR path points at example/profile/.
         run: |
           export TEXINPUTS=".:$GITHUB_WORKSPACE/src:"
-          cd templates/placeholder
-          latexmk -pdf -r ../../.latexmkrc resume.tex
-          latexmk -pdf -r ../../.latexmkrc coverletter.tex
+          cd src/scaffold/application
+          latexmk -pdf -r "$GITHUB_WORKSPACE/.latexmkrc" resume.tex
+          latexmk -pdf -r "$GITHUB_WORKSPACE/.latexmkrc" coverletter.tex
+      - name: Build example application
+        run: |
+          export TEXINPUTS=".:$GITHUB_WORKSPACE/src:"
+          cd "example/applications/26.04.26_mleng@ExampleCompany"
+          latexmk -pdf -r "$GITHUB_WORKSPACE/.latexmkrc" resume.tex
+          latexmk -pdf -r "$GITHUB_WORKSPACE/.latexmkrc" coverletter.tex
 
   shellcheck:
     runs-on: ubuntu-latest
