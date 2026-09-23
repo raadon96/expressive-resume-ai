@@ -36,7 +36,7 @@ If `data/` does not exist, stop and tell the user: "no data/ found; run ./setup.
      - **Close** — express genuine enthusiasm, invite next steps, professional sign-off
 
 4. **Prepend a row to the Application Index, `data/index.md`:**
-   Parse the date (`YY.MM.DD` → `20YY-MM-DD`), company, and role from the directory name. Insert the row directly below the table's header separator line (`|------|…`), so the newest application comes first. The folder is a link relative to `data/index.md`:
+   Parse the date (`YY.MM.DD` → `20YY-MM-DD`) from the directory name. For the company and role, use the proper company name and the full job title from `$ARGUMENTS/description.md` (e.g. `Octopus Energy`, `Python Developer`), not the lowercase slugs in the directory name. Insert the row directly below the table's header separator line (`|------|…`), so the newest application comes first. The folder is a link relative to `data/index.md`:
    ```
    | YYYY-MM-DD | <Company> | <Role> | [<dir>](applications/<dir>/) |
    ```

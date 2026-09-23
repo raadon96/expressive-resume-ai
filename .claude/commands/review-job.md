@@ -25,7 +25,7 @@ If `data/` does not exist, stop and tell the user: "no data/ found; run ./setup.
 
 3. **Determine the application directory:**
    - If invoked with a directory path: use that path
-   - Otherwise: construct `data/applications/YY.MM.DD_<role>@<company>/` using today's date. Normalize `<role>` and `<company>` to lowercase with no spaces (e.g. `pydev`, `octopusenergy`). Don't ask the user to confirm the name; create the directory directly. If the company is ambiguous (e.g. a recruiter with an unnamed client), use the named company and note the likely client in `description.md`.
+   - Otherwise: construct `data/applications/YY.MM.DD_<role>@<company>/` using today's date. `<role>` is a short lowercase slug with no spaces; abbreviate if helpful (e.g. `pydev` for Python Developer, `mleng` for Machine Learning Engineer). `<company>` is the company name in lowercase with no spaces (e.g. `octopusenergy`). Don't ask the user to confirm the name; create the directory directly. If the company is ambiguous (e.g. a recruiter with an unnamed client), use the named company and note the likely client in `description.md`.
 
 4. **Create the application directory** if it does not already exist.
 
