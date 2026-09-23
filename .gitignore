@@ -6,6 +6,9 @@ expressive-resume-ai.code-workspace
 CLAUDE.md
 .claude/worktrees
 
+src/scaffold/resume.pdf
+src/scaffold/coverletter.pdf
+
 # PDF files generated from LaTeX source files. These are the final output documents and should not be tracked in version control, as they can be easily regenerated from the source files. Tracking them can lead to unnecessary merge conflicts and bloated repository size.
 applications/**/*.pdf
 !applications/26.04.26_mleng@ExampleCompany/*.pdf
