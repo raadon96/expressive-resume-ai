@@ -15,22 +15,40 @@ Paste a job description. [Claude Code](https://claude.ai/code) analyses the fit 
   - **All platforms via Dev Container (recommended for Windows):** install [VS Code](https://code.visualstudio.com/) and the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension — LaTeX and Claude Code are pre-installed inside the container
 - **Claude Code** — [install instructions](https://claude.ai/code) (not needed if using the Dev Container)
 
-## Setup (once)
+## How it's organised
 
-### 1.Install
+Two git repos share one folder:
 
-#### Option A — Local (Linux / macOS)
+- **The tool** (this repo, or your fork or clone of it): document classes, the Scaffold, the Claude Code commands and scripts. It never holds personal data.
+- **Your data** in `data/`: your profile, your applications and the Application Index. It's a separate git repo that the tool ignores, so a `git add .` in the tool can't publish it. You can back it up to a private GitHub repo.
 
-**1. Fork this repository, then clone your fork**
+`example/` has the same layout as `data/` and holds a fictional profile and a worked example application.
+
+## Setup, first time
+
+### 1. Get the tool
+
+**Fork** this repository on GitHub, then clone your fork. Forking keeps the project history, lets you get updates with one click (**Sync fork**), and lets you open pull requests:
 ```bash
 git clone https://github.com/<your-github-username>/expressive-resume-ai.git
 cd expressive-resume-ai
 ```
 
-**2. Symlink the .cls files into ~/texmf so LaTeX can find them from any directory**
+No GitHub account? **Clone** this repository directly instead:
+```bash
+git clone https://github.com/raadon96/expressive-resume-ai.git
+cd expressive-resume-ai
+```
+
+### 2. Run setup
+
+#### Option A — Local (Linux / macOS)
+
 ```bash
 ./setup.sh
 ```
+
+This creates `data/` from `src/scaffold/data/` and the example profile, and runs `git init` there without making a commit. It also symlinks the `.cls` files into `~/texmf` so LaTeX can find them from any directory. It's safe to re-run: an existing `data/` is left untouched.
 
 #### Option B — Dev Container (all platforms, including Windows)
 
@@ -39,15 +57,14 @@ cd expressive-resume-ai
 - Windows / macOS: install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 1. Install [VS Code](https://code.visualstudio.com/) and the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
-2. Fork and clone this repository, then open the folder in VS Code
+2. Open the folder in VS Code
 3. When prompted, click **Reopen in Container** (or run `Remote-Containers: Reopen in Container` from the command palette)
-4. VS Code builds the container — LaTeX, Claude Code CLI, and all extensions are installed automatically
-5. Authenticate Claude Code — see **Step 3** below
+4. VS Code builds the container. LaTeX, Claude Code CLI and all extensions are installed automatically, and `./setup.sh` runs on creation.
+5. Authenticate Claude Code (see **step 3** below)
 
 > **VS Code extension (recommended):** Install the [Claude Code](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code) extension to interact with Claude Code directly in the VS Code sidebar instead of the integrated terminal — avoids terminal crashes that can occur inside Dev Containers.
 
-
-### 2. Authenticate Claude Code
+### 3. Authenticate Claude Code
 
 **Option A — Claude Pro / Max subscription** — run in a terminal (or the Claude Code panel if using the VS Code extension):
 ```
@@ -64,20 +81,42 @@ export ANTHROPIC_API_KEY=sk-ant-...   # add to ~/.bashrc or ~/.zshrc to persist
 
 Dev Container users: set `ANTHROPIC_API_KEY` in your **host** environment before opening the container — it is forwarded automatically via `containerEnv`.
 
+### 4. Replace the example profile
 
-### 3.Fill in your profile
-
-The `profile/` files shipped with this repo are a fictional example. Replace them with your own data — this is what Claude reads when tailoring your CVs.
+`data/profile/` starts as a copy of the fictional example. Replace it with your own data. This is what Claude reads when tailoring your CVs.
 
 | File | What to put in it |
 |------|-------------------|
-| `profile/contact.md` | Your name, email, phone, LinkedIn handle, GitHub handle, city, country |
-| `profile/experience.md` | Your work history in LinkedIn Experience section format |
-| `profile/projects/*.md` | One file per project you want Claude to reference — see the included examples for the expected structure |
-| `profile/certificates.md` | Your degrees and certifications |
-| `profile/images/qr_code.png` | Your LinkedIn QR code (or any URL QR you want on the resume) |
+| `data/profile/contact.md` | Your name, email, phone, LinkedIn handle, GitHub handle, city, country |
+| `data/profile/experience.md` | Your work history in LinkedIn Experience section format |
+| `data/profile/projects/*.md` | One file per project you want Claude to reference. **Delete the example projects**, or their fictional content can end up in your resumes |
+| `data/profile/certificates.md` | Your degrees and certifications |
+| `data/profile/images/qr_code.png` | Your LinkedIn QR code (or any URL QR you want on the resume) |
 
+### 5. Back up `data/` (optional)
 
+Push `data/` to a **private** GitHub repo so you can restore it on another machine. `data/README.md` has the steps.
+
+> [!WARNING]
+> `git clean -ffdx` in the tool folder deletes `data/`, including its history. Keep `data/` pushed. Claude Code is blocked from running `git clean` here by `.claude/settings.json`.
+
+## Setup, another machine
+
+If you already have a Data Repo:
+
+1. Get the tool: clone your fork, or clone this repository.
+2. Clone your data into `data/` **before** running setup:
+   ```bash
+   git clone <your-data-repo> data
+   ```
+3. Run `./setup.sh`. It leaves your `data/` untouched and only sets up LaTeX.
+
+## Getting updates
+
+- **Fork:** click **Sync fork** on your fork's `main` branch on GitHub, then `git pull`. Or, from the command line: `git pull upstream main`.
+- **Clone:** `git pull`.
+
+Your `data/` isn't affected by either.
 
 ## Applying for a Job
 
@@ -87,12 +126,12 @@ The `profile/` files shipped with this repo are a fictional example. Replace the
 /review-job
 ```
 
-Claude asks you to paste the job description. After you paste it, Claude will:
-1. Infer the role and company, propose a directory name, and ask you to confirm
+Claude asks you to paste the job description. You can also pass it inline: `/review-job <job description>`. Claude will then:
+1. Infer the role and company and create `data/applications/YY.MM.DD_<role>@<company>/`
 2. Write a fit analysis (`description.md`) — strengths table, gaps table, framing recommendation
 3. Ask whether to proceed with the CV and cover letter
 
-If you say yes, Claude creates `resume.tex` and `coverletter.tex` tailored to the role and appends a row to `applications.md`.
+If you say yes, Claude creates `resume.tex` and `coverletter.tex` tailored to the role, builds both PDFs, and adds a row to the Application Index, `data/index.md`.
 
 > **Tip:** Use a "Copy as Markdown" browser extension when copying job descriptions — markdown formatting helps Claude parse requirements more accurately. Plain text works fine too.
 
@@ -102,10 +141,10 @@ If you say yes, Claude creates `resume.tex` and `coverletter.tex` tailored to th
 # Create the directory with today's date prefix
 ./new-application.sh <role> <company>
 # Example: ./new-application.sh pydev ExampleCompany
-# Creates: applications/26.04.26_pydev@ExampleCompany/
+# Creates: data/applications/26.04.26_pydev@ExampleCompany/
 
 # Paste the job description into the created description.md, then run:
-/review-job applications/26.04.26_pydev@ExampleCompany
+/review-job data/applications/26.04.26_pydev@ExampleCompany
 ```
 
 ### Resume an interrupted session
@@ -113,7 +152,7 @@ If you say yes, Claude creates `resume.tex` and `coverletter.tex` tailored to th
 If a session ended after the fit analysis but before the files were created:
 
 ```
-/create-application applications/26.04.26_pydev@ExampleCompany
+/create-application data/applications/26.04.26_pydev@ExampleCompany
 ```
 
 ### Review a job by URL
@@ -124,16 +163,20 @@ If a session ended after the fit analysis but before the files were created:
 
 > LinkedIn URLs require a login — Claude will fall back to asking you to paste the description.
 
+Your applications are files in `data/`. Commit them there (`cd data && git add . && git commit`), not in the tool.
+
 ## Building the PDF
 
 **VS Code (recommended):** Install the [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) extension. It auto-builds on save. No further configuration needed — the repo's `.vscode/settings.json` and `.latexmkrc` are already wired up.
 
 **Terminal:**
 ```bash
-cd applications/YY.MM.DD_<role>@<company>
-latexmk -pdf -r "$(git rev-parse --show-toplevel)/.latexmkrc" resume.tex
-latexmk -pdf -r "$(git rev-parse --show-toplevel)/.latexmkrc" coverletter.tex
+cd data/applications/YY.MM.DD_<role>@<company>
+latexmk -pdf -r ../../../.latexmkrc resume.tex
+latexmk -pdf -r ../../../.latexmkrc coverletter.tex
 ```
+
+`../../../.latexmkrc` is the tool's build config at the tool root. Don't use `$(git rev-parse --show-toplevel)` here: inside `data/` it points at your Data Repo, not the tool.
 
 Build artifacts (`.aux`, `.log`, etc.) are deleted automatically after each successful build — only the `.pdf` is kept alongside the `.tex` source.
 
@@ -141,29 +184,32 @@ Build artifacts (`.aux`, `.log`, etc.) are deleted automatically after each succ
 
 ```
 src/                    # LaTeX document classes (do not modify)
-  scaffold/             # Structural scaffold used by /create-application
-applications/           # One directory per job application
-  26.04.26_mleng@ExampleCompany/  # ← included as a worked example
-    description.md      # Job description + fit analysis (fictional)
-    resume.tex / .pdf   # Tailored CV (fictional)
-    coverletter.tex / .pdf  # Cover letter (fictional)
-    notes.md            # Interview prep notes (fictional)
-  YY.MM.DD_role@company/    # Your applications go here
-    description.md      # Job description + fit analysis
-    resume.tex / .pdf
-    coverletter.tex / .pdf
-    notes.md            # Interview prep, conversation logs
-applications.md         # Application tracker (auto-updated by /create-application)
-profile/                # ⚠ Replace with your own data — shipped files are fictional
-  contact.md            # Your name, email, phone, LinkedIn, GitHub
-  experience.md         # Your work history (LinkedIn Experience format)
-  projects/             # Reusable project write-ups
-  images/               # qr_code.png — replace with your own LinkedIn QR
-  certificates.md       # Your degrees and certifications
+  scaffold/
+    application/        # resume.tex, coverletter.tex: copied by /create-application
+    data/               # README.md, .gitignore, index.md: copied into data/ by setup.sh
+example/                # Fictional example, same layout as data/
+  index.md
+  profile/
+  applications/26.04.26_mleng@ExampleCompany/
+data/                   # Your Data Repo: its own git repo, ignored by the tool
+  index.md              # Application Index (updated by /create-application)
+  profile/              # ⚠ Starts as the fictional example: replace with your own data
+    contact.md          # Your name, email, phone, LinkedIn, GitHub
+    experience.md       # Your work history (LinkedIn Experience format)
+    projects/           # Reusable project write-ups
+    images/             # qr_code.png — replace with your own LinkedIn QR
+    certificates.md     # Your degrees and certifications
+  applications/
+    YY.MM.DD_role@company/
+      description.md    # Job description + fit analysis
+      resume.tex / .pdf
+      coverletter.tex / .pdf
 ```
 
-## Tracking Applications
+## Application Index
 
-`applications.md` at the repo root is the single tracker. `/create-application` appends rows automatically. Update the `Status` column manually as applications progress.
+`data/index.md` lists your applications, newest first: one row per application with its date, company, role and a link to its folder. `/create-application` adds the row. It records that you created an application, not whether you sent it or how it's going.
 
-Valid statuses: `Applied` · `Screening` · `Interview` · `Offer` · `Rejected` · `Withdrawn`
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). In short: branch off `dev` and open PRs against `dev`.

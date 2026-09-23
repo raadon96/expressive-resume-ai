@@ -5,6 +5,7 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLS_DIR="$REPO_DIR/src"
 TEXMF_DIR="$HOME/texmf/tex/latex/expressive-resume-ai"
 CLS_FILES=("Expressive.cls" "ExpressiveResume.cls" "ExpressiveCoverLetter.cls")
+DATA_DIR="$REPO_DIR/data"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -19,7 +20,21 @@ echo ""
 echo "=== expressive-resume-ai setup ==="
 echo ""
 
-# ----- 1. Check LaTeX -----
+# ----- 1. Data Repo -----
+echo "--- Setting up data/ ---"
+if [ -e "$DATA_DIR" ]; then
+    ok "found existing data/, leaving it untouched"
+else
+    mkdir -p "$DATA_DIR"
+    cp -R "$REPO_DIR/src/scaffold/data/." "$DATA_DIR/"
+    cp -R "$REPO_DIR/example/profile" "$DATA_DIR/profile"
+    git -C "$DATA_DIR" init --quiet
+    ok "created data/ from the scaffold and the example profile (git repo, no commits)"
+    warn "data/profile/ is a fictional example: replace it with your own data (see data/README.md)"
+fi
+
+# ----- 2. Check LaTeX -----
+echo ""
 echo "--- Checking LaTeX installation ---"
 if command -v latexmk &> /dev/null; then
     ok "latexmk found: $(command -v latexmk)"
@@ -32,7 +47,7 @@ else
     exit 1
 fi
 
-# ----- 2. Symlink setup -----
+# ----- 3. Symlink setup -----
 echo ""
 echo "--- Setting up .cls symlinks ---"
 
@@ -62,7 +77,7 @@ for cls in "${CLS_FILES[@]}"; do
     fi
 done
 
-# ----- 3. Refresh texmf index -----
+# ----- 4. Refresh texmf index -----
 echo ""
 echo "--- Refreshing texmf index ---"
 if mktexlsr "$HOME/texmf" &> /dev/null; then
@@ -71,7 +86,7 @@ else
     warn "mktexlsr failed — you may need to run it manually: mktexlsr ~/texmf"
 fi
 
-# ----- 4. Verify -----
+# ----- 5. Verify -----
 echo ""
 echo "--- Verifying ---"
 if kpsewhich ExpressiveResume.cls &> /dev/null; then
