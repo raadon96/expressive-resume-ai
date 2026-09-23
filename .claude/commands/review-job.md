@@ -5,20 +5,26 @@ Analyse a job description against the user's profile, write a fit analysis, and 
 The argument (`$ARGUMENTS`) determines the mode:
 
 - **No argument** — interactive: ask the user to paste the job description as the next message. After receiving it, infer `<role>` and `<company>` from the content, propose a directory name in the format `YY.MM.DD_<role>@<company>` (using today's date), and ask for confirmation before creating anything.
-- **Directory path** (e.g. `applications/26.04.24_pydev@yousician`) — read `description.md` already present in that directory.
+- **Directory path** (e.g. `data/applications/26.04.24_pydev@yousician`) — read `description.md` already present in that directory.
 - **URL** (starts with `http`) — fetch the page via WebFetch and extract the job description from the content. If the page requires authentication (e.g. LinkedIn), inform the user and ask them to paste the description manually instead.
+
+## Data Repo
+
+All user data lives in `data/`, the user's Data Repo: a separate git repo that the Tool Repo gitignores. Grep and `grep`/`ugrep` skip `data/` when searching from the repo root, so always read and search with explicit `data/…` paths (e.g. search in `data/profile/`, not in `.`).
+
+If `data/` does not exist, stop and tell the user: "no data/ found; run ./setup.sh first". Do not create `data/` yourself.
 
 ## Steps
 
 1. **Obtain the job description** via the appropriate mode above.
 
 2. **Read the user's profile:**
-   - `profile/experience.md`
-   - All files in `profile/projects/`
+   - `data/profile/experience.md`
+   - All files in `data/profile/projects/`
 
 3. **Determine the application directory:**
    - If invoked with a directory path: use that path
-   - Otherwise: construct `applications/YY.MM.DD_<role>@<company>/` using today's date. Normalize `<role>` and `<company>` to lowercase with no spaces (e.g. `pydev`, `octopusenergy`). In interactive mode, propose the name and wait for user confirmation before proceeding.
+   - Otherwise: construct `data/applications/YY.MM.DD_<role>@<company>/` using today's date. Normalize `<role>` and `<company>` to lowercase with no spaces (e.g. `pydev`, `octopusenergy`). In interactive mode, propose the name and wait for user confirmation before proceeding.
 
 4. **Create the application directory** if it does not already exist.
 
