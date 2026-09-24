@@ -29,5 +29,5 @@ The files in the Tool Repo copied to start something new: the `resume.tex` and `
 _Avoid_: template (ambiguous), skeleton.
 
 **Role Template**:
-A user's own pre-tailored resume for a job family (e.g. PyDev, MLOps), kept in the user's Data Repo. Belongs to the user, not to this repo. Whether Role Templates take part in the application workflow at all is decided by the map "Workflow model".
+A user's own pre-tailored, reviewed resume for a job family (e.g. PyDev, MLOps), kept in the user's Data Repo (`templates/<Name>/`), in one or more languages. An Application's resume starts from the closest Role Template in the job posting's language and is tailored from there; without a match it is written from the Profile. Belongs to the user, not to this repo.
 _Avoid_: template on its own.
