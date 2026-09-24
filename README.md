@@ -163,6 +163,14 @@ If a session ended after the fit analysis but before the files were created:
 
 > LinkedIn URLs require a login — Claude will fall back to asking you to paste the description.
 
+### Translate a document
+
+```
+/translate data/applications/26.04.26_pydev@ExampleCompany/coverletter.tex german
+```
+
+Claude writes `coverletter_de.tex` next to the original, phrased the way a native speaker would write it rather than word for word, and builds the PDF. The original is never overwritten. It works on any `.tex` or `.md` file, e.g. a project in `data/profile/projects/`. Given text instead of a path, it returns the translation.
+
 Your applications are files in `data/`. Commit them there (`cd data && git add . && git commit`), not in the tool.
 
 ## Building the PDF

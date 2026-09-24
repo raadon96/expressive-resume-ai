@@ -1,16 +1,17 @@
 # Directories to ignore
-docs/
+.scratch/
 
 # Files to ignore
 expressive-resume-ai.code-workspace
+src/scaffold/application/resume.pdf
+src/scaffold/application/coverletter.pdf
+
+# AI agent related files
 CLAUDE.md
 .claude/worktrees
 
-# Data Repo: the user's own git repo, created by setup.sh
+# Data Repo: the user's own git repo containing application files, created by setup.sh
 /data/
-
-src/scaffold/application/resume.pdf
-src/scaffold/application/coverletter.pdf
 
 # PDF files generated from LaTeX source files. These are the final output documents and should not be tracked in version control, as they can be easily regenerated from the source files. Tracking them can lead to unnecessary merge conflicts and bloated repository size.
 example/applications/**/*.pdf
