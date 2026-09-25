@@ -131,7 +131,36 @@ Claude asks you to paste the job description. You can also pass it inline: `/rev
 2. Write a fit analysis (`description.md`) — strengths table, gaps table, framing recommendation
 3. Ask whether to proceed with the CV and cover letter
 
-If you say yes, Claude creates `resume.tex` and `coverletter.tex` tailored to the role, builds both PDFs, and adds a row to the Application Index, `data/index.md`.
+If you have Role Templates (see below), the fit analysis also recommends the closest one, or none, in which case the resume is written from your profile. At the prompt you can accept it, pick another one, or ask for the resume to be written from scratch.
+
+If you say yes, Claude creates `resume.tex` and `coverletter.tex` tailored to the role, builds both PDFs, and adds a row to the Application Index, `data/index.md`. The cover letter is always written from scratch.
+
+If the posting is in another language than your profile (e.g. a German posting, an English profile), Claude writes the documents in your profile's language and translates them with `/translate`, keeping both: `resume.tex` and `resume_de.tex`, `coverletter.tex` and `coverletter_de.tex`. If the Role Template already has a version in the posting's language (`resume_de.tex`), the resume is tailored from that directly, and there's no English resume.
+
+### Role Templates
+
+A Role Template is your own reviewed resume for a job family you apply to often, e.g. `PyDev` or `MLOps`. Most of your resumes repeat the same bullets, so instead of writing each one from scratch, Claude copies the closest Role Template and tailors it: it rewrites the objective, and reorders, removes, or adds bullets from your profile. **It never rewords a bullet that's already in the Role Template,** so your reviewed wording stays as it is, and a diff shows exactly what changed:
+
+```bash
+diff data/templates/MLOps/resume.tex data/applications/26.04.26_mlops@ExampleCompany/resume.tex
+```
+
+Role Templates are optional. Without them, or when none fits, the resume is written from scratch, using your profile.
+
+**Create one by hand:**
+
+1. Pick a resume you're happy with, e.g. from a past application, and copy it into `data/templates/<Name>/resume.tex`. The name is the job family, e.g. `MLOps`.
+2. Make it generic: write an objective without a company name, and keep the bullets that fit most postings in this family.
+3. Build it and proofread it carefully. Every application from this family reuses its wording.
+   ```bash
+   cd data/templates/<Name>
+   latexmk -pdf -r ../../../.latexmkrc resume.tex
+   ```
+4. Optional: add a version in another language as `resume_<code>.tex`, e.g. with `/translate data/templates/<Name>/resume.tex german`, then proofread it too.
+
+`resume.tex` is in your profile's language. `example/templates/MLEng/` is a Role Template built from the fictional example profile. `setup.sh` doesn't copy it into `data/`.
+
+When your profile gains something new, e.g. a new role or certificate, update your Role Templates by hand. Nothing checks this for you.
 
 > **Tip:** Use a "Copy as Markdown" browser extension when copying job descriptions — markdown formatting helps Claude parse requirements more accurately. Plain text works fine too.
 
@@ -198,6 +227,7 @@ src/                    # LaTeX document classes (do not modify)
 example/                # Fictional example, same layout as data/
   index.md
   profile/
+  templates/MLEng/      # example Role Template (not copied by setup.sh)
   applications/26.04.26_mleng@ExampleCompany/
 data/                   # Your Data Repo: its own git repo, ignored by the tool
   index.md              # Application Index (updated by /create-application)
@@ -207,11 +237,16 @@ data/                   # Your Data Repo: its own git repo, ignored by the tool
     projects/           # Reusable project write-ups
     images/             # qr_code.png — replace with your own LinkedIn QR
     certificates.md     # Your degrees and certifications
+  templates/            # Optional Role Templates, one folder per job family
+    <Name>/
+      resume.tex        # in your profile's language
+      resume_de.tex     # optional, in another language
   applications/
     YY.MM.DD_role@company/
       description.md    # Job description + fit analysis
       resume.tex / .pdf
       coverletter.tex / .pdf
+      resume_de.tex / coverletter_de.tex   # when the posting's language differs
 ```
 
 ## Application Index
