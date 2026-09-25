@@ -6,6 +6,7 @@ This folder is your **Data Repo**: your profile and applications for [expressive
 data/
 ├── index.md          # Application Index: one row per application, newest first
 ├── profile/          # your profile, which Claude reads when tailoring documents
+├── templates/        # optional Role Templates: your reviewed resume per job family
 └── applications/     # one folder per application, created by /review-job
 ```
 

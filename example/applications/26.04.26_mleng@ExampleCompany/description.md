@@ -89,6 +89,9 @@ production-grade data engineering instincts. Acknowledge the Kubernetes gap
 proactively if asked; note that Docker experience is present and K8s is learnable
 in context.
 
+- **Role Template:** MLEng (model serving and feature pipelines are the core of the role)
+- **Posting language:** English (Profile: English)
+
 ## Verdict
 
 Strong fit — 7 of 9 core requirements match directly. Recommend applying.

@@ -17,6 +17,7 @@ CLAUDE.md
 example/applications/**/*.pdf
 !example/applications/26.04.26_mleng@ExampleCompany/*.pdf
 example/profile/**/*.pdf
+example/templates/**/*.pdf
 README_from_template.md
 **/demo.*
 speedup.sh
