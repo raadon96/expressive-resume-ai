@@ -52,7 +52,7 @@ flowchart TD
 
    **From a Role Template:** copy the Role Template's file, then tailor it:
    - Reorder experience, projects and bullets so the top 3–5 requirements come first; remove what's irrelevant or over the page count.
-   - For requirements the Role Template doesn't cover, search the Profile (`grep -ril '<keyword>' data/profile/`) and read only the matching files. Add bullets in the Role Template's style. In case B, write them in the source language and translate them following `/translate` in text mode (`.claude/commands/translate.md`).
+   - For requirements the Role Template doesn't cover, search the Profile (`grep -il '<keyword>' data/profile/*.md data/profile/projects/*.md`, the same files as the `stat` in step 1) and read only the matching files. Add bullets in the Role Template's style. In case B, write them in the source language and translate them following `/translate` in text mode (`.claude/commands/translate.md`).
    - **Never reword a bullet already in the Role Template**, not even for a typo or a keyword. Its wording is reviewed, and unchanged bullets keep the diff against the Role Template small. If one looks wrong, tell the user to fix it in the Role Template.
    - Leave commented-out entries in the Role Template commented out and unchanged; don't uncomment or replace them.
    - Check `\resumeheader[...]` against `contact.md`, which wins.
