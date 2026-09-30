@@ -24,7 +24,7 @@ This command knows nothing about Applications, Role Templates, or the Profile. I
 
 3. **Text mode:** return only the translation, with no preamble or commentary, so a calling command can insert it as is. Stop here.
 
-4. **File mode, write the result** next to the source as `<name>_<code>.<ext>`, e.g. `resume.tex` → `resume_de.tex`, `FJSS.md` → `FJSS_de.md`. If the source name already ends in a language suffix, replace it: `resume_de.tex` → `resume_en.tex`. Never overwrite the source. If the target file already exists, show the user its path and ask before overwriting it.
+4. **File mode, write the result** next to the source as `<name>_<code>.<ext>`, e.g. `resume.tex` → `resume_de.tex`, `FJSS.md` → `FJSS_de.md`. If the source name already ends in a language suffix, replace it: `resume_de.tex` → `resume_en.tex`. Never overwrite the source. If the target file already exists, show the user its path and ask before overwriting it, unless the calling command already asked (e.g. `/create-application`).
 
 5. **File mode, build `.tex` files** from the repo root:
    ```bash
