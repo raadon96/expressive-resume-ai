@@ -21,7 +21,7 @@ data/
 | `profile/contact.md` | Your name, email, phone, LinkedIn handle, GitHub handle, city, country |
 | `profile/experience.md` | Your work history in LinkedIn Experience section format |
 | `profile/projects/*.md` | One file per project Claude can reference. **Delete the example projects**, or their fictional content can end up in your real resumes |
-| `profile/certificates.md` | Your degrees and certifications |
+| `profile/qualifications.md` | Your degrees, certifications and spoken languages |
 | `profile/images/qr_code.png` | Your LinkedIn QR code (or a QR code for any URL you want on the resume) |
 
 Then make your first commit:

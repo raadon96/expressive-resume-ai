@@ -32,9 +32,11 @@ flowchart TD
 
 1. **Read** `$ARGUMENTS/description.md` and `data/profile/contact.md` (the canonical header details). Skip `description.md` if this session already wrote or read it and it hasn't changed since (e.g. `/review-job` just wrote it). Read the rest of the Profile only as the steps below say.
 
+   **Job title:** the objective, the cover letter and the index row use the job title as written in the posting. If the posting has none (e.g. a LinkedIn paste starting at "About the job"), infer it from the responsibilities and say so in the final report.
+
    **Profile reads:** before reading Profile files, run `stat -c '%Y %n' data/profile/*.md data/profile/projects/*.md` and keep the output. If this session already read a file (e.g. in `/review-job`), compare against the earlier output and skip it unless its timestamp is newer or you no longer have its text (e.g. after compaction).
 
-2. **Choose the case** from the `**Role Template:**` and `**Posting language:**` lines in the fit analysis. If they're missing (an older `description.md`), recommend a Role Template as `/review-job` does, add both lines, and ask the user to confirm. If the named Role Template isn't in `data/templates/`, list the ones that are and ask.
+2. **Choose the case** from the `**Role Template:**` and `**Posting language:**` lines in the fit analysis. If they're missing, read the Role Templates as in `/review-job` step 3, choose one by the rule in its step 6, add both lines at the end of `### Framing Recommendation` as its template shows, and ask with its step 7 prompt. On "No", stop without writing anything else. If the named Role Template isn't in `data/templates/`, list the ones that are and ask.
 
    Source language = the Profile's; target = the posting's; `<code>` = the target's code from the table in `.claude/commands/translate.md`.
 
@@ -44,15 +46,19 @@ flowchart TD
    | **B** | languages differ, Role Template has `resume_<code>.tex` | tailor `data/templates/<Name>/resume_<code>.tex`; no source-language resume | `resume_<code>.tex`, `coverletter.tex`, `coverletter_<code>.tex` |
    | **C** | languages differ, no Role Template in the target language | tailor `data/templates/<Name>/resume.tex`, or from scratch; then translate | `resume.tex`, `resume_<code>.tex`, `coverletter.tex`, `coverletter_<code>.tex` |
 
+   **Existing files:** if any `.tex` file in the case's Output column already exists in `$ARGUMENTS/` (e.g. when resuming, or running again), list them all and ask once: "These files already exist and will be overwritten: … Overwrite them?" If the user says no, stop without writing anything. If yes, overwrite them and their PDFs; step 6 doesn't ask again.
+
 3. **Write the resume** in `$ARGUMENTS/` (`resume.tex`, or `resume_<code>.tex` in case B).
 
    **From a Role Template:** copy the Role Template's file, then tailor it:
    - Reorder experience, projects and bullets so the top 3–5 requirements come first; remove what's irrelevant or over the page count.
    - For requirements the Role Template doesn't cover, search the Profile (`grep -ril '<keyword>' data/profile/`) and read only the matching files. Add bullets in the Role Template's style. In case B, write them in the source language and translate them following `/translate` in text mode (`.claude/commands/translate.md`).
    - **Never reword a bullet already in the Role Template**, not even for a typo or a keyword. Its wording is reviewed, and unchanged bullets keep the diff against the Role Template small. If one looks wrong, tell the user to fix it in the Role Template.
+   - Leave commented-out entries in the Role Template commented out and unchanged; don't uncomment or replace them.
    - Check `\resumeheader[...]` against `contact.md`, which wins.
+   - In case B, if the copied file lacks the `babel` line or the objective relabel from the LaTeX rules in `.claude/commands/translate.md`, add them and tell the user to add them to the Role Template too.
 
-   **From scratch:** read `data/profile/experience.md`, `certificates.md` and all of `projects/`. Start from `src/scaffold/application/resume.tex`, fill `\resumeheader[...]` from `contact.md`, and emphasise the top 3–5 requirements in the most relevant experience entries.
+   **From scratch:** read `data/profile/experience.md`, `qualifications.md` and all of `projects/`. Start from `src/scaffold/application/resume.tex`, fill `\resumeheader[...]` from `contact.md`, and emphasise the top 3–5 requirements in the most relevant experience entries.
 
    **Both:**
    - Rewrite `\objective{}` to name the role and the company.
@@ -72,9 +78,9 @@ flowchart TD
    ```
    The subshell keeps the working directory at the repo root. `../../../.latexmkrc` is the Tool Repo's rc file; don't use `git rev-parse --show-toplevel`, which resolves to `data/`. If a build fails, show the full error and the manual build command.
 
-6. **Translate** (cases B and C) following `/translate` in file mode with the target language: `coverletter.tex`, and in case C also `resume.tex`. It writes and builds the `_<code>` files and flags page growth. Keep both versions.
+6. **Translate** (cases B and C) following `/translate` in file mode with the target language: `coverletter.tex`, and in case C also `resume.tex`. It writes and builds the `_<code>` files and flags page growth. Keep both versions. Skip `/translate`'s overwrite question: step 2 already asked.
 
-7. **Prepend a row to `data/index.md`,** directly below the header separator (`|------|…`), newest first. Date from the directory name (`YY.MM.DD` → `20YY-MM-DD`); the company and full job title as written in the posting (`Octopus Energy`, `Python Developer`), not the slugs. Skip if a row for this folder exists.
+7. **Add a row to `data/index.md`,** keeping it newest first: insert it above the first row with an older date, or at the end if none is older. Usually that's directly below the header separator (`|------|…`). Date from the directory name (`YY.MM.DD` → `20YY-MM-DD`); the company and full job title as written in the posting (`Octopus Energy`, `Python Developer`), not the slugs. Skip if a row for this folder exists.
    ```
    | YYYY-MM-DD | <Company> | <Role> | [<dir>](applications/<dir>/) |
    ```

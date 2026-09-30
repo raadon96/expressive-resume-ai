@@ -33,7 +33,7 @@ User data lives in `data/`, a separate git repo that the Tool Repo gitignores, s
 
 1. **Get the job description** by the mode above.
 
-2. **Read the Profile:** `data/profile/experience.md`, `data/profile/certificates.md`, and all files in `data/profile/projects/`. First run `stat -c '%Y %n' data/profile/*.md data/profile/projects/*.md` and keep the output. If this session already read the Profile, compare against the earlier output and read only files that are new or have a newer timestamp; re-read any file whose text you no longer have (e.g. after compaction).
+2. **Read the Profile:** `data/profile/experience.md`, `data/profile/qualifications.md`, and all files in `data/profile/projects/`. First run `stat -c '%Y %n' data/profile/*.md data/profile/projects/*.md` and keep the output. If this session already read the Profile, compare against the earlier output and read only files that are new or have a newer timestamp; re-read any file whose text you no longer have (e.g. after compaction).
 
    The Profile's language is the language of `experience.md`; the posting's language is the language of the job description.
 
@@ -43,7 +43,7 @@ User data lives in `data/`, a separate git repo that the Tool Repo gitignores, s
 
 5. **Create the directory** if it doesn't exist.
 
-6. **Write `description.md`:**
+6. **Write `description.md`:** in directory mode, keep the job description as it is, adding `# Job Description` above it if missing, and replace any existing `## Fit Analysis` and `## Verdict`.
    ```
    # Job Description
 
@@ -85,5 +85,5 @@ User data lives in `data/`, a separate git repo that the Tool Repo gitignores, s
    - Or ask me anything about the analysis
    ```
    - **Yes:** run `/create-application <directory>` inline.
-   - **Another Role Template or from scratch:** if the named Role Template doesn't exist, list the ones that do. Replace the `**Role Template:**` line with the choice plus `(chosen by the user)`, then run `/create-application <directory>` inline.
+   - **Another Role Template or from scratch:** if the named Role Template doesn't exist, list the ones that do and ask again; don't change `description.md` until the user names one that exists or chooses from scratch. Replace the `**Role Template:**` line with the choice plus `(chosen by the user)`, then run `/create-application <directory>` inline.
    - **No:** confirm that `description.md` is saved. Don't offer to delete the directory.
