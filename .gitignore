@@ -7,6 +7,7 @@ src/scaffold/application/resume.pdf
 src/scaffold/application/coverletter.pdf
 
 # AI agent related files
+CLAUDE.local.md
 .claude/worktrees
 
 # Data Repo: the user's own git repo containing application files, created by setup.sh

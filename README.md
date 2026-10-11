@@ -6,35 +6,51 @@ Paste a job description. [Claude Code](https://claude.ai/code) analyses the fit 
 ![Example Expressive Resume](/artifacts/expressive_resume_readme_banner.svg)
 </div>
 
+## Features
+
+- **Fit analysis:** your strengths and gaps for the posting, and how to frame your experience, saved next to the job description.
+- **Tailored resume and cover letter** as LaTeX, built to PDF.
+- **Role Templates:** start each resume from your own reviewed resume for that job family. Claude tailors it without rewording your bullets.
+- **Translation:** for a posting in another language, you get your documents in both languages.
+- **Your data stays private:** your profile and applications live in their own git repo, separate from the tool.
+
+See the fictional [example application](example/applications/26.04.26_mleng@ExampleCompany/): its [fit analysis](example/applications/26.04.26_mleng@ExampleCompany/description.md), [resume](example/applications/26.04.26_mleng@ExampleCompany/resume.pdf) and [cover letter](example/applications/26.04.26_mleng@ExampleCompany/coverletter.pdf).
+
+## Quick start
+
+1. Fork this repository and clone your fork.
+2. Open the folder in the Dev Container, or run `./setup.sh` for a local install.
+3. Replace the example profile in `data/profile/` with your own.
+4. Start Claude Code in the folder and run `/review-job`.
+5. Paste a job description, and confirm when Claude asks to create the documents.
+
+The sections below cover each step.
+
 ## Prerequisites
 
-- **LaTeX** with `latexmk` — choose one setup path:
-  - **Linux/macOS (local):** install LaTeX directly
-    - Linux: `sudo apt install texlive-full latexmk`
-    - macOS: Install [MacTeX](https://www.tug.org/mactex/), then `brew install latexmk`
-  - **All platforms via Dev Container (recommended for Windows):** install [VS Code](https://code.visualstudio.com/) and the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension — LaTeX and Claude Code are pre-installed inside the container
-- **Claude Code** — [install instructions](https://claude.ai/code) (not needed if using the Dev Container)
+Everyone needs **git** and a **Claude Pro or Max subscription or an Anthropic API key** (billed per use). Then pick one way to run the tool:
 
-## How it's organised
+| | Dev Container (recommended) | Local |
+|---|---|---|
+| Platforms | Windows, macOS, Linux | Linux, macOS |
+| You install | Docker, VS Code and the Dev Containers extension | LaTeX with `latexmk`, Claude Code |
+| Comes ready | LaTeX, Claude Code, VS Code extensions; `./setup.sh` runs automatically | — |
 
-Two git repos share one folder:
+Choose the Dev Container on Windows, or if you don't want LaTeX on your machine. The first container build downloads a LaTeX image of several GB and takes a few minutes; later starts are fast.
 
-- **The tool** (this repo, or your fork or clone of it): document classes, the Scaffold, the Claude Code commands and scripts. It never holds personal data.
-- **Your data** in `data/`: your profile, your applications and the Application Index. It's a separate git repo that the tool ignores, so a `git add .` in the tool can't publish it. You can back it up to a private GitHub repo.
-
-`example/` has the same layout as `data/` and holds a fictional profile and a worked example application.
-
-## Setup, first time
+## Setup
 
 ### 1. Get the tool
 
-**Fork** this repository on GitHub, then clone your fork. Forking keeps the project history, lets you get updates with one click (**Sync fork**), and lets you open pull requests:
+**Fork** this repository on GitHub, then clone your fork. Forking lets you get updates with one click (**Sync fork**) and keep your own changes to the tool:
+
 ```bash
 git clone https://github.com/<your-github-username>/expressive-resume-ai.git
 cd expressive-resume-ai
 ```
 
 No GitHub account? **Clone** this repository directly instead:
+
 ```bash
 git clone https://github.com/raadon96/expressive-resume-ai.git
 cd expressive-resume-ai
@@ -42,31 +58,31 @@ cd expressive-resume-ai
 
 ### 2. Run setup
 
-#### Option A — Local (Linux / macOS)
+#### Option A — Dev Container (recommended)
 
-```bash
-./setup.sh
-```
+1. Install and start Docker: [Docker Engine](https://docs.docker.com/engine/install/) on Linux, [Docker Desktop](https://www.docker.com/products/docker-desktop/) on Windows and macOS.
+2. Install [VS Code](https://code.visualstudio.com/) and the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
+3. Open the folder in VS Code and click **Reopen in Container** when prompted, or run **Dev Containers: Reopen in Container** from the command palette.
 
-This creates `data/` from `src/scaffold/data/` and the example profile, and runs `git init` there without making a commit. It also symlinks the `.cls` files into `~/texmf` so LaTeX can find them from any directory. It's safe to re-run: an existing `data/` is left untouched.
+The container runs `./setup.sh` when it's created, which sets up `data/` as described in Option B. Use Claude Code from the [Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code) in the sidebar: the integrated terminal can crash inside Dev Containers.
 
-#### Option B — Dev Container (all platforms, including Windows)
+#### Option B — Local (Linux, macOS)
 
-**Prerequisites:** Docker must be running before opening the container.
-- Linux: install [Docker Engine](https://docs.docker.com/engine/install/)
-- Windows / macOS: install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+1. Install LaTeX with `latexmk`:
+   - Linux: `sudo apt install texlive-full latexmk`
+   - macOS: install [MacTeX](https://www.tug.org/mactex/), then `brew install latexmk`
+2. [Install Claude Code](https://claude.ai/code) (if not installed yet).
+3. Run setup:
+   ```bash
+   ./setup.sh
+   ```
 
-1. Install [VS Code](https://code.visualstudio.com/) and the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
-2. Open the folder in VS Code
-3. When prompted, click **Reopen in Container** (or run `Remote-Containers: Reopen in Container` from the command palette)
-4. VS Code builds the container. LaTeX, Claude Code CLI and all extensions are installed automatically, and `./setup.sh` runs on creation.
-5. Authenticate Claude Code (see **step 3** below)
+Setup creates `data/`, the folder for your profile and applications, starting from a fictional example profile. It also makes the document classes available to LaTeX. It's safe to re-run: an existing `data/` is left untouched.
 
-> **VS Code extension (recommended):** Install the [Claude Code](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code) extension to interact with Claude Code directly in the VS Code sidebar instead of the integrated terminal — avoids terminal crashes that can occur inside Dev Containers.
+### 3. Log in to Claude Code
 
-### 3. Authenticate Claude Code
+**Claude Pro or Max subscription:** run in a terminal, or in the Claude Code panel of the VS Code extension:
 
-**Option A — Claude Pro / Max subscription** — run in a terminal (or the Claude Code panel if using the VS Code extension):
 ```
 claude
 /login
@@ -74,16 +90,17 @@ claude
 
 Follow the browser prompt to authorise.
 
-**Option B — API key** — export your key before running Claude:
+**API key:** export your key before running Claude:
+
 ```bash
 export ANTHROPIC_API_KEY=sk-ant-...   # add to ~/.bashrc or ~/.zshrc to persist
 ```
 
-Dev Container users: set `ANTHROPIC_API_KEY` in your **host** environment before opening the container — it is forwarded automatically via `containerEnv`.
+In the Dev Container, set `ANTHROPIC_API_KEY` on your **host** before opening the container. It's forwarded automatically.
 
 ### 4. Replace the example profile
 
-`data/profile/` starts as a copy of the fictional example. Replace it with your own data. This is what Claude reads when tailoring your CVs.
+`data/profile/` starts as a copy of the fictional example. Replace it with your own data. This is what Claude reads when tailoring your documents.
 
 | File | What to put in it |
 |------|-------------------|
@@ -91,53 +108,84 @@ Dev Container users: set `ANTHROPIC_API_KEY` in your **host** environment before
 | `data/profile/experience.md` | Your work history in LinkedIn Experience section format |
 | `data/profile/projects/*.md` | One file per project you want Claude to reference. **Delete the example projects**, or their fictional content can end up in your resumes |
 | `data/profile/qualifications.md` | Your degrees, certifications and spoken languages |
-| `data/profile/images/qr_code.png` | Your LinkedIn QR code (or any URL QR you want on the resume) |
+| `data/profile/images/qr_code.png` | Your LinkedIn QR code (or a QR code for any URL you want on the resume) |
 
-### 5. Back up `data/` (optional)
+`data/` is its own git repo, separate from the tool, so a `git add .` in the tool can't publish your data. Commit your profile there:
 
-Push `data/` to a **private** GitHub repo so you can restore it on another machine. `data/README.md` has the steps.
+```bash
+cd data
+git add .
+git commit -m "Add my profile"
+```
+
+### 5. Back up your data (recommended)
+
+`data/` isn't part of the tool's repository, so your fork doesn't hold it. Push it to its own **private** repository: that keeps it safe if your disk fails or `data/` gets deleted, and lets you [use it on another machine](#setup-on-another-machine). With the [GitHub CLI](https://cli.github.com/), from the tool folder:
+
+```bash
+gh repo create <name> --private --source=data --push
+```
+
+Or create an empty **private** repository in the GitHub UI, then:
+
+```bash
+cd data
+git remote add origin git@github.com:<you>/<name>.git
+git push -u origin HEAD
+```
+
+Use a new repository for this, not a fork: a fork of a public repository is always public.
 
 > [!WARNING]
-> `git clean -ffdx` in the tool folder deletes `data/`, including its history. Keep `data/` pushed. Claude Code is blocked from running `git clean` here by `.claude/settings.json`.
+> `git clean -ffdx` in the tool folder deletes `data/`, including its history. Keep `data/` pushed.
 
-## Setup, another machine
-
-If you already have a Data Repo:
-
-1. Get the tool: clone your fork, or clone this repository.
-2. Clone your data into `data/` **before** running setup:
-   ```bash
-   git clone <your-data-repo> data
-   ```
-3. Run `./setup.sh`. It leaves your `data/` untouched and only sets up LaTeX.
-
-## Getting updates
-
-- **Fork:** click **Sync fork** on your fork's `main` branch on GitHub, then `git pull`. Or, from the command line: `git pull upstream main`.
-- **Clone:** `git pull`.
-
-Your `data/` isn't affected by either.
-
-## Applying for a Job
-
-### Primary flow — paste job description directly into Claude Code
+## Applying for a job
 
 ```
 /review-job
 ```
 
-Claude asks you to paste the job description. You can also pass it inline: `/review-job <job description>`. Claude will then:
-1. Infer the role and company and create `data/applications/YY.MM.DD_<role>@<company>/`
-2. Write a fit analysis (`description.md`) — strengths table, gaps table, framing recommendation
-3. Ask whether to proceed with the CV and cover letter
+Claude asks you to paste the job description, then:
 
-If you have Role Templates (see below), the fit analysis also recommends the closest one, or none, in which case the resume is written from your profile. At the prompt you can accept it, pick another one, or ask for the resume to be written from scratch.
+1. creates `data/applications/YY.MM.DD_<role>@<company>/`
+2. writes the fit analysis to `description.md`: strengths, gaps, how to frame your experience, which Role Template to start from, and the posting's language
+3. asks whether to create the documents
 
-If you say yes, Claude creates `resume.tex` and `coverletter.tex` tailored to the role, builds both PDFs, and adds a row to the Application Index, `data/index.md`. The cover letter is always written from scratch.
+Confirm, and Claude writes `resume.tex` and `coverletter.tex`, builds the PDFs and adds a row to your Application Index, `data/index.md`. At the prompt you can also pick another Role Template, or ask for the resume to be written from scratch. Cover letters are always written from scratch.
 
-If the posting is in another language than your profile (e.g. a German posting, an English profile), Claude writes the documents in your profile's language and translates them with `/translate`, keeping both: `resume.tex` and `resume_de.tex`, `coverletter.tex` and `coverletter_de.tex`. If the Role Template already has a version in the posting's language (`resume_de.tex`), the resume is tailored from that directly, and there's no English resume.
+> **Tip:** copy job descriptions with a "Copy as Markdown" browser extension. Claude reads requirements more accurately from Markdown, but plain text works too.
 
-### Role Templates
+Other ways to pass the job description:
+
+| Command | Job description |
+|---------|-----------------|
+| `/review-job <job description>` | pasted inline |
+| `/review-job https://company.com/careers/some-role` | fetched from the URL. LinkedIn needs a login, so Claude asks you to paste it instead |
+| `/review-job data/applications/<folder>` | read from `description.md` in that folder |
+
+To create the folder yourself first, run `./new-application.sh <role> <company>`, paste the job description into its `description.md`, and run `/review-job` on the folder.
+
+If a session ends after the fit analysis but before the documents are written, continue with:
+
+```
+/create-application data/applications/26.04.26_pydev@ExampleCompany
+```
+
+Your applications are files in `data/`. Commit them there: `cd data && git add . && git commit`.
+
+### Postings in another language
+
+If the posting's language differs from your profile's (e.g. a German posting, an English profile), Claude writes the documents in your profile's language and translates them, keeping both: `resume.tex` and `resume_de.tex`, `coverletter.tex` and `coverletter_de.tex`. If the Role Template already has a version in the posting's language (`resume_de.tex`), the resume is tailored from that directly, and there's only `resume_de.tex`.
+
+You can also translate any `.tex` or `.md` file yourself:
+
+```
+/translate data/applications/26.04.26_pydev@ExampleCompany/coverletter.tex german
+```
+
+Claude writes `coverletter_de.tex` next to the original, phrased the way a native speaker would write it rather than word for word, and builds the PDF. The original is never overwritten. Given text instead of a path, it returns the translation.
+
+## Role Templates
 
 A Role Template is your own reviewed resume for a job family you apply to often, e.g. `PyDev` or `MLOps`. Most of your resumes repeat the same bullets, so instead of writing each one from scratch, Claude copies the closest Role Template and tailors it: it rewrites the objective, and reorders, removes, or adds bullets from your profile. **It never rewords a bullet that's already in the Role Template,** so your reviewed wording stays as it is, and a diff shows exactly what changed:
 
@@ -145,7 +193,7 @@ A Role Template is your own reviewed resume for a job family you apply to often,
 diff data/templates/MLOps/resume.tex data/applications/26.04.26_mlops@ExampleCompany/resume.tex
 ```
 
-Role Templates are optional. Without them, or when none fits, the resume is written from scratch, using your profile.
+Role Templates are optional. Without them, or when none fits, the resume is written from your profile.
 
 **Create one by hand:**
 
@@ -158,101 +206,54 @@ Role Templates are optional. Without them, or when none fits, the resume is writ
    ```
 4. Optional: add a version in another language as `resume_<code>.tex`, e.g. with `/translate data/templates/<Name>/resume.tex german`, then proofread it too.
 
-`resume.tex` is in your profile's language. `example/templates/MLEng/` is a Role Template built from the fictional example profile. `setup.sh` doesn't copy it into `data/`.
+`resume.tex` is in your profile's language. `example/templates/MLEng/` is a Role Template built from the fictional example profile.
 
 When your profile gains something new, e.g. a new role or certificate, update your Role Templates by hand. Nothing checks this for you.
 
-> **Tip:** Use a "Copy as Markdown" browser extension when copying job descriptions — markdown formatting helps Claude parse requirements more accurately. Plain text works fine too.
+## Building the PDFs
 
-### Manual flow — directory first
+Claude builds the PDFs when it writes the documents. To rebuild after your own edits:
 
-```bash
-# Create the directory with today's date prefix
-./new-application.sh <role> <company>
-# Example: ./new-application.sh pydev ExampleCompany
-# Creates: data/applications/26.04.26_pydev@ExampleCompany/
+**VS Code:** the [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) extension rebuilds on save, with no further configuration. It comes preinstalled in the Dev Container; on a local install, install it yourself.
 
-# Paste the job description into the created description.md, then run:
-/review-job data/applications/26.04.26_pydev@ExampleCompany
-```
+**Terminal**, from the application folder:
 
-### Resume an interrupted session
-
-If a session ended after the fit analysis but before the files were created:
-
-```
-/create-application data/applications/26.04.26_pydev@ExampleCompany
-```
-
-### Review a job by URL
-
-```
-/review-job https://company.com/careers/some-role
-```
-
-> LinkedIn URLs require a login — Claude will fall back to asking you to paste the description.
-
-### Translate a document
-
-```
-/translate data/applications/26.04.26_pydev@ExampleCompany/coverletter.tex german
-```
-
-Claude writes `coverletter_de.tex` next to the original, phrased the way a native speaker would write it rather than word for word, and builds the PDF. The original is never overwritten. It works on any `.tex` or `.md` file, e.g. a project in `data/profile/projects/`. Given text instead of a path, it returns the translation.
-
-Your applications are files in `data/`. Commit them there (`cd data && git add . && git commit`), not in the tool.
-
-## Building the PDF
-
-**VS Code (recommended):** Install the [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) extension. It auto-builds on save. No further configuration needed — the repo's `.vscode/settings.json` and `.latexmkrc` are already wired up.
-
-**Terminal:**
 ```bash
 cd data/applications/YY.MM.DD_<role>@<company>
 latexmk -pdf -r ../../../.latexmkrc resume.tex
 latexmk -pdf -r ../../../.latexmkrc coverletter.tex
 ```
 
-`../../../.latexmkrc` is the tool's build config at the tool root. Don't use `$(git rev-parse --show-toplevel)` here: inside `data/` it points at your Data Repo, not the tool.
+Only the `.pdf` is kept next to the `.tex` source; build artifacts are deleted after each successful build.
 
-Build artifacts (`.aux`, `.log`, etc.) are deleted automatically after each successful build — only the `.pdf` is kept alongside the `.tex` source.
+## Getting updates
 
-## Repository Layout
+- **Fork:** click **Sync fork** on your fork's `main` branch on GitHub, then `git pull`.
+- **Clone:** `git pull`.
 
-```
-src/                    # LaTeX document classes (do not modify)
-  scaffold/
-    application/        # resume.tex, coverletter.tex: copied by /create-application
-    data/               # README.md, .gitignore, index.md: copied into data/ by setup.sh
-example/                # Fictional example, same layout as data/
-  index.md
-  profile/
-  templates/MLEng/      # example Role Template (not copied by setup.sh)
-  applications/26.04.26_mleng@ExampleCompany/
-data/                   # Your Data Repo: its own git repo, ignored by the tool
-  index.md              # Application Index (updated by /create-application)
-  profile/              # ⚠ Starts as the fictional example: replace with your own data
-    contact.md          # Your name, email, phone, LinkedIn, GitHub
-    experience.md       # Your work history (LinkedIn Experience format)
-    projects/           # Reusable project write-ups
-    images/             # qr_code.png — replace with your own LinkedIn QR
-    qualifications.md   # Your degrees, certifications and languages
-  templates/            # Optional Role Templates, one folder per job family
-    <Name>/
-      resume.tex        # in your profile's language
-      resume_de.tex     # optional, in another language
-  applications/
-    YY.MM.DD_role@company/
-      description.md    # Job description + fit analysis
-      resume.tex / .pdf
-      coverletter.tex / .pdf
-      resume_de.tex / coverletter_de.tex   # when the posting's language differs
-```
+Your `data/` isn't affected by either.
 
-## Application Index
+## Setup on another machine
 
-`data/index.md` lists your applications, newest first: one row per application with its date, company, role and a link to its folder. `/create-application` adds the row. It records that you created an application, not whether you sent it or how it's going.
+To use your backed-up `data/` on another machine, or to get it back after losing your local copy:
 
-## Contributing
+1. Get the tool: clone your fork, or clone this repository.
+2. Clone your data into `data/` **before** running setup, or before opening the folder in the Dev Container, which runs setup when it's created:
+   ```bash
+   git clone <your-data-repo> data
+   ```
+3. Run `./setup.sh`, or open the folder in the Dev Container. Setup leaves your `data/` untouched and only sets up LaTeX.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). In short: branch off `dev` and open PRs against `dev`.
+If setup ran first, it created a `data/` from the example, and the clone fails. Delete that `data/` and clone again.
+
+## Issues and changes
+
+Found a bug or have an idea? [Open an issue](https://github.com/raadon96/expressive-resume-ai/issues). Pull requests aren't accepted: to change the tool, change it in your own fork.
+
+## Acknowledgments
+
+The LaTeX document classes come from [Expressive Resume](https://github.com/thehale/expressive-resume).
+
+## License
+
+MIT. See [LICENSE](LICENSE).
