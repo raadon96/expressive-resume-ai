@@ -1,12 +1,24 @@
-# AGENTS.md
+## Agent skills
 
-This file provides guidance to AI coding agents working in this repository.
+### Issue tracker
+
+Issues live in GitHub Issues for `raadon96/expressive-resume-ai`, managed with the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Uses the five default labels: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+---
 
 ## What This Repo Is
 
 A LaTeX resume and cover letter system based on the [Expressive Resume](https://github.com/thehale/expressive-resume) template (Adnene Boumessouer, ML Engineer).
 
-Two git repos share this folder (terms in `CONTEXT.md`, decision in `docs/adr/0001-nested-data-repo.md`):
+Two git repos share this folder (terms in `GLOSSARY.md`, decision in `docs/adr/0001-nested-data-repo.md`):
 
 - **Tool Repo** (this repo): document classes, Scaffold, commands, scripts. No personal data.
 - **Data Repo** (`data/`): the user's Profile, Applications and Application Index. Its own git repo, gitignored by the Tool Repo. Commit data changes inside `data/`, tool changes in the outer repo.
