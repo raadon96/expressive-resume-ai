@@ -1,24 +1,17 @@
-version: "3.2"
-
 services:
   vscode:
-    build: .
-    image: latexdevcontainer
+    # No `build:`: see "Files" in README.md
+    image: qmcgaw/latexdevcontainer:latest-full
     volumes:
       - ../:/workspace
-      # Docker socket to access Docker server
-      - /var/run/docker.sock:/var/run/docker.sock
-      # SSH directory
-      - ~/.ssh:/root/.ssh
-      # For Windows without WSL, a copy will be made
-      # from /tmp/.ssh to ~/.ssh to fix permissions
-      # - ~/.ssh:/tmp/.ssh:ro
-      # Shell history persistence
-      - ~/.zsh_history:/root/.zsh_history:z
-      # Git config
-      - ~/.gitconfig:/root/.gitconfig
-      # Claude Code credentials (persists /login auth across container rebuilds)
-      - ~/.claude:/root/.claude
+      # Claude Code login and global config (persists /login across rebuilds)
+      - claude-code:/root/.claude
     environment:
       - TZ=
+      # Keeps Claude Code's global config (.claude.json) in the volume too
+      - CLAUDE_CONFIG_DIR=/root/.claude
     entrypoint: ["zsh", "-c", "while sleep 1000; do :; done"]
+
+volumes:
+  claude-code:
+    name: expressive-resume-ai-claude-code
