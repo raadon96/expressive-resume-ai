@@ -1,70 +1,40 @@
-# Development container
+# Dev Container
 
-Development container that can be used with VSCode.
+The Dev Container for expressive-resume-ai: LaTeX, Claude Code and the VS Code extensions the tool uses, ready in one container. Setup and login are in the main [README](../README.md#option-a--dev-container-recommended).
 
-It works on Linux, Windows and OSX.
+Based on [qdm12/latexdevcontainer](https://github.com/qdm12/latexdevcontainer) by Quentin McGaw, under the MIT licence in [LICENSE](LICENSE).
 
-## Requirements
+## What the container gets from the host
 
-- [VS code](https://code.visualstudio.com/download) installed
-- [VS code remote containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
-- [Docker](https://www.docker.com/products/docker-desktop) installed and running
-- [Docker Compose](https://docs.docker.com/compose/install/) installed
+- **The workspace**, bind-mounted at `/workspace`. This is the only host folder the container sees.
+- **Git identity**: VS Code copies your host `~/.gitconfig` into the container.
+- **SSH**: VS Code forwards your host SSH agent, so `git push` over SSH works without mounting `~/.ssh`. Add your key to the agent on the host (`ssh-add`) if it isn't already.
+- **`ANTHROPIC_API_KEY`**, if set on the host.
 
-## Setup
+The Docker socket is not mounted, so the container can't control the host's Docker.
 
-1. Create the following files on your host if you don't have them:
+## Claude Code state
 
-    ```sh
-    touch ~/.gitconfig ~/.zsh_history
-    ```
+Claude Code keeps its login and global config in the named volume `expressive-resume-ai-claude-code`, mounted at `/root/.claude`. `CLAUDE_CONFIG_DIR` points there, so the global config file `.claude.json` lands in the volume too. A `/login` made in the container survives rebuilds, and none of your host Claude Code setup (settings, plugins, user `CLAUDE.md`, history) enters the container.
 
-    Note that the development container will create the empty directories `~/.docker` and `~/.ssh` if you don't have them.
+To log out for good and start fresh, close the container and remove the volume:
 
-1. **For Docker on OSX or Windows without WSL**: ensure your home directory `~` is accessible by Docker.
-1. **For Docker on Windows without WSL:** if you want to use SSH keys, bind mount your host `~/.ssh` to `/tmp/.ssh` instead of `~/.ssh` by changing the `volumes` section in the [docker-compose.yml](docker-compose.yml).
-1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P).
-1. Select `Remote-Containers: Open Folder in Container...` and choose the project directory.
-
-## Customization
-
-### Customize the image
-
-You can make changes to the [Dockerfile](Dockerfile) and then rebuild the image. For example, your Dockerfile could be:
-
-```Dockerfile
-FROM qmcgaw/latexdevcontainer
-RUN apk add curl
+```sh
+docker volume rm expressive-resume-ai-claude-code
 ```
 
-To rebuild the image, either:
+## Files
 
-- With VSCode through the command palette, select `Remote-Containers: Rebuild and reopen in container`
-- With a terminal, go to this directory and `docker-compose build`
+- [Dockerfile](Dockerfile): the LaTeX base image plus Node.js and Claude Code.
+- [docker-compose.yml](docker-compose.yml): the workspace mount, the Claude Code volume and environment.
+- [devcontainer.json](devcontainer.json): VS Code extensions and settings under `customizations.vscode`, the `ANTHROPIC_API_KEY` forwarding, and `./setup.sh` as the post-create step.
 
-### Customize VS code settings
+After editing any of them, run **Dev Containers: Rebuild Container** from the command palette.
 
-You can customize **settings** and **extensions** in the [devcontainer.json](devcontainer.json) definition file.
+## Checking a change
 
-### Entrypoint script
+The automated checks don't cover the VS Code integration. Before merging a change to this folder, open the folder in the container and check:
 
-You can bind mount a shell script to `/home/vscode/.welcome.sh` to replace the [current welcome script](shell/.welcome.sh).
-
-### Publish a port
-
-To access a port from your host to your development container, publish a port in [docker-compose.yml](docker-compose.yml). You can also now do it directly with VSCode without restarting the container.
-
-### Run other services
-
-1. Modify [docker-compose.yml](docker-compose.yml) to launch other services at the same time as this development container, such as a test database:
-
-    ```yml
-      database:
-        image: postgres
-        restart: always
-        environment:
-          POSTGRES_PASSWORD: password
-    ```
-
-1. In [devcontainer.json](devcontainer.json), change the line `"runServices": ["vscode"],` to `"runServices": ["vscode", "database"],`.
-1. In the VS code command palette, rebuild the container.
+1. `git config user.name` shows your host identity (`.gitconfig` copied by VS Code).
+2. `git push` over SSH works from inside the container (SSH agent forwarding).
+3. After `/login` in the container, **Dev Containers: Rebuild Container** brings back neither a login prompt nor first-run prompts.

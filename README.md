@@ -90,6 +90,8 @@ claude
 
 Follow the browser prompt to authorise.
 
+In the Dev Container, log in inside the container; your host login isn't shared with it. The login is kept in the Docker volume `expressive-resume-ai-claude-code`, so it survives container rebuilds. To reset it, close the container and run `docker volume rm expressive-resume-ai-claude-code` on the host.
+
 **API key:** export your key before running Claude:
 
 ```bash
