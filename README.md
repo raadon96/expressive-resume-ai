@@ -36,7 +36,7 @@ Everyone needs **git** and a **Claude Pro or Max subscription or an Anthropic AP
 | You install | Docker, VS Code and the Dev Containers extension | LaTeX with `latexmk`, Claude Code |
 | Comes ready | LaTeX, Claude Code, VS Code extensions; `./setup.sh` runs automatically | — |
 
-Choose the Dev Container on Windows, or if you don't want LaTeX on your machine. The first container build downloads a LaTeX image of several GB and takes a few minutes; later starts are fast.
+Choose the Dev Container on Windows, or if you don't want LaTeX on your machine. The first container start downloads a LaTeX image of several GB and takes a few minutes; later starts are fast.
 
 ## Setup
 
@@ -64,7 +64,7 @@ cd expressive-resume-ai
 2. Install [VS Code](https://code.visualstudio.com/) and the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
 3. Open the folder in VS Code and click **Reopen in Container** when prompted, or run **Dev Containers: Reopen in Container** from the command palette.
 
-The container runs `./setup.sh` when it's created, which sets up `data/` as described in Option B. Use Claude Code from the [Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code) in the sidebar: the integrated terminal can crash inside Dev Containers.
+When the container is created, it installs Claude Code and runs `./setup.sh`, which sets up `data/` as described in Option B. Use Claude Code from the [Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code) in the sidebar: the integrated terminal can crash inside Dev Containers.
 
 The container sees only this folder. VS Code copies your host git identity into it and forwards your SSH agent, so `git push` over SSH works if your key is loaded on the host (`ssh-add`). See [.devcontainer/README.md](.devcontainer/README.md) for details.
 

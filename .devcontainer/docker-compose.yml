@@ -1,7 +1,7 @@
 services:
   vscode:
-    build: .
-    image: latexdevcontainer
+    # No `build:`: see "Files" in README.md
+    image: qmcgaw/latexdevcontainer:latest-full
     volumes:
       - ../:/workspace
       # Claude Code login and global config (persists /login across rebuilds)

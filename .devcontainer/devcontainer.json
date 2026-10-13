@@ -9,7 +9,12 @@
     ],
     "shutdownAction": "stopCompose",
     "workspaceFolder": "/workspace",
-    "postCreateCommand": "./setup.sh",
+    // Claude Code's native installer; the base image has wget but no curl
+    "postCreateCommand": "bash -c 'set -o pipefail; wget -qO- https://claude.ai/install.sh | bash' && ./setup.sh",
+    "remoteEnv": {
+        // The native installer puts `claude` here
+        "PATH": "/root/.local/bin:${containerEnv:PATH}"
+    },
     "containerEnv": {
         "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
     },

@@ -21,9 +21,12 @@ To reset the login, remove the volume as described in the main [README](../READM
 
 ## Files
 
-- [Dockerfile](Dockerfile): the LaTeX base image plus Node.js and Claude Code.
-- [docker-compose.yml](docker-compose.yml): the workspace mount, the Claude Code volume and environment.
-- [devcontainer.json](devcontainer.json): VS Code extensions and settings under `customizations.vscode`, the `ANTHROPIC_API_KEY` forwarding, and `./setup.sh` as the post-create step.
+- [docker-compose.yml](docker-compose.yml): the LaTeX base image `qmcgaw/latexdevcontainer:latest-full`, the workspace mount, the Claude Code volume and environment.
+- [devcontainer.json](devcontainer.json): VS Code extensions and settings under `customizations.vscode`, the `ANTHROPIC_API_KEY` forwarding, `/root/.local/bin` on `PATH`, and the post-create step: Claude Code's native installer, then `./setup.sh`.
+
+There is no Dockerfile, so keep the service free of `build:`. Dev Containers builds such a service through a Dockerfile it generates under `/tmp`, and recent Compose versions (v5.6), which build through `buildx bake`, refuse to read a file outside the build context.
+
+Claude Code lives in the container's filesystem, so every rebuild reinstalls the current version. Its auto-updates between rebuilds are lost on the next rebuild.
 
 After editing any of them, run **Dev Containers: Rebuild Container** from the command palette.
 
