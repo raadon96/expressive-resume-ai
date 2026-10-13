@@ -1,6 +1,6 @@
 # Dev Container
 
-The Dev Container for expressive-resume-ai: LaTeX, Claude Code and the VS Code extensions the tool uses, ready in one container. Setup and login are in the main [README](../README.md#option-a--dev-container-recommended).
+The Dev Container for expressive-resume-ai: LaTeX, Claude Code and the VS Code extensions the tool uses, ready in one container. Setup is in the main [README](../README.md#option-a--dev-container-recommended).
 
 Based on [qdm12/latexdevcontainer](https://github.com/qdm12/latexdevcontainer) by Quentin McGaw, under the MIT licence in [LICENSE](LICENSE).
 
@@ -17,11 +17,7 @@ The Docker socket is not mounted, so the container can't control the host's Dock
 
 Claude Code keeps its login and global config in the named volume `expressive-resume-ai-claude-code`, mounted at `/root/.claude`. `CLAUDE_CONFIG_DIR` points there, so the global config file `.claude.json` lands in the volume too. A `/login` made in the container survives rebuilds, and none of your host Claude Code setup (settings, plugins, user `CLAUDE.md`, history) enters the container.
 
-To log out for good and start fresh, close the container and remove the volume:
-
-```sh
-docker volume rm expressive-resume-ai-claude-code
-```
+To reset the login, remove the volume as described in the main [README](../README.md#option-a--dev-container-recommended).
 
 ## Files
 
@@ -33,7 +29,7 @@ After editing any of them, run **Dev Containers: Rebuild Container** from the co
 
 ## Checking a change
 
-The automated checks don't cover the VS Code integration. Before merging a change to this folder, open the folder in the container and check:
+CI doesn't cover the VS Code integration. After changing anything in this folder, rebuild the container and check:
 
 1. `git config user.name` shows your host identity (`.gitconfig` copied by VS Code).
 2. `git push` over SSH works from inside the container (SSH agent forwarding).

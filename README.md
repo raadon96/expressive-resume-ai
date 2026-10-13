@@ -66,6 +66,15 @@ cd expressive-resume-ai
 
 The container runs `./setup.sh` when it's created, which sets up `data/` as described in Option B. Use Claude Code from the [Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code) in the sidebar: the integrated terminal can crash inside Dev Containers.
 
+The container sees only this folder. VS Code copies your host git identity into it and forwards your SSH agent, so `git push` over SSH works if your key is loaded on the host (`ssh-add`). See [.devcontainer/README.md](.devcontainer/README.md) for details.
+
+A Claude Code login made in the container is kept in the Docker volume `expressive-resume-ai-claude-code`, so it survives container rebuilds. To reset it, close the VS Code window, then on the host remove the container using the volume, and the volume itself:
+
+```bash
+docker rm -f $(docker ps -aq --filter volume=expressive-resume-ai-claude-code)
+docker volume rm expressive-resume-ai-claude-code
+```
+
 #### Option B — Local (Linux, macOS)
 
 1. Install LaTeX with `latexmk`:
@@ -90,7 +99,7 @@ claude
 
 Follow the browser prompt to authorise.
 
-In the Dev Container, log in inside the container; your host login isn't shared with it. The login is kept in the Docker volume `expressive-resume-ai-claude-code`, so it survives container rebuilds. To reset it, close the container and run `docker volume rm expressive-resume-ai-claude-code` on the host.
+In the Dev Container, log in inside the container; your host login isn't shared with it.
 
 **API key:** export your key before running Claude:
 
