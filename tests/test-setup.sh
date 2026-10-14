@@ -26,7 +26,7 @@ build_pdf() {
     local dir="$1" tex="$2"
     local pdf="${tex%.tex}.pdf"
     rm -f "$dir/$pdf"
-    (cd "$dir" && latexmk -pdf -interaction=nonstopmode -r ../../../.latexmkrc "$tex")
+    (cd "$dir" && latexmk -pdf -interaction=nonstopmode -r ../../../src/latexmkrc "$tex")
     [ -f "$dir/$pdf" ] || fail "no PDF built for $(rel "$dir")/$tex"
     pass "built $(rel "$dir")/$pdf"
 }

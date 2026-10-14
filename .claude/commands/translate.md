@@ -28,9 +28,9 @@ This command knows nothing about Applications, Role Templates, or the Profile. I
 
 5. **File mode, build `.tex` files** from the repo root:
    ```bash
-   (cd <dir> && latexmk -pdf -r ../../../.latexmkrc <name>_<code>.tex)
+   (cd <dir> && latexmk -pdf -r ../../../src/latexmkrc <name>_<code>.tex)
    ```
-   `../../../.latexmkrc` points at the Tool Repo's `.latexmkrc` from any `data/applications/<dir>/`, `data/templates/<Name>/`, or `example/applications/<dir>/`. For a file at another depth, adjust the number of `../`. Don't use `git rev-parse --show-toplevel`, which resolves to `data/` inside the Data Repo.
+   `../../../src/latexmkrc` points at the Tool Repo's rc file from any `data/applications/<dir>/`, `data/templates/<Name>/`, or `example/applications/<dir>/`. For a file at another depth, adjust the number of `../`. Don't use `git rev-parse --show-toplevel`, which resolves to `data/` inside the Data Repo.
    If the build fails, show the full error output and print the manual build command so the user can retry after fixing the issue.
    Translations usually run longer than the source. If the source's PDF exists and the translated PDF has more pages (`pdfinfo <file>.pdf | grep Pages`), tell the user, so they can shorten it by hand.
 
