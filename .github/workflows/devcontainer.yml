@@ -1,0 +1,39 @@
+# Option A. Not a required check: the path filter skips it on most PRs.
+name: Dev Container
+
+on:
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - ".devcontainer/**"
+      - "setup.sh"
+      - "tests/**"
+      - ".github/workflows/devcontainer.yml"
+  # Container creation installs the Claude Code of the day on a floating base
+  # image, so the Dev Container can break with no commit. Runs on main.
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  devcontainer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Recent Compose versions build through buildx bake, which fails on Dev
+      # Containers' generated Dockerfile: see "Files" in .devcontainer/README.md
+      - name: docker-compose.yml has no build key
+        run: docker compose -f .devcontainer/docker-compose.yml config --format json | jq -e '.services | all(has("build") | not)'
+      - name: Install the Dev Container CLI
+        run: npm install -g @devcontainers/cli
+      - name: devcontainer up
+        run: devcontainer up --workspace-folder .
+      - name: postCreateCommand created data/
+        run: devcontainer exec --workspace-folder . test -d /workspace/data
+      - name: claude is on PATH
+        run: devcontainer exec --workspace-folder . bash -c 'command -v claude'
+      - name: Run tests/test-setup.sh
+        run: devcontainer exec --workspace-folder . tests/test-setup.sh
