@@ -3,7 +3,7 @@
 # expressive-resume-ai
 
 Paste a job description. [Claude Code](https://claude.ai/code) analyses the fit against your profile, then generates a tailored CV and cover letter as clean LaTeX you own. Built on [thehale/expressive-resume](https://github.com/thehale/expressive-resume).
-![Example Expressive Resume](/artifacts/expressive_resume_readme_banner.svg)
+![Example Expressive Resume](/docs/images/expressive_resume_readme_banner.svg)
 </div>
 
 ## Features
