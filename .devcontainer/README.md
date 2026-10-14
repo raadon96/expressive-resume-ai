@@ -34,6 +34,27 @@ After editing any of them, run **Dev Containers: Rebuild Container** from the co
 
 The `Dev Container` workflow creates the container with the Dev Container CLI and runs `tests/test-setup.sh` inside it, on PRs that touch this folder, `setup.sh`, `tests/` or the workflow, and weekly.
 
+To run the same job locally before pushing, work on a throwaway copy of the repo, including uncommitted changes:
+
+```bash
+T=~/.cache/devc-test
+mkdir -p "$T" && git ls-files -z -co --exclude-standard | xargs -0 cp --parents -t "$T"
+git -C "$T" init -q
+sed -i 's/name: expressive-resume-ai-claude-code/name: devc-test-claude-code/' "$T/.devcontainer/docker-compose.yml"
+npx -y @devcontainers/cli up --workspace-folder "$T"
+npx -y @devcontainers/cli exec --workspace-folder "$T" tests/test-setup.sh
+
+# Teardown
+docker compose -p devc-test_devcontainer -f ~/.cache/devc-test/.devcontainer/docker-compose.yml down -v
+rm -rf ~/.cache/devc-test
+```
+
+- **Under `$HOME`, not `/tmp`:** Docker Desktop shares only `/home` with its VM, so `up` fails on a copy in `/tmp`.
+- **`git init`:** `tests/test-setup.sh` lists the files to copy with `git ls-files`.
+- **The `sed`:** the Claude Code volume has a fixed name, so without it the copy mounts your real login volume and `down -v` deletes it.
+- **Project name:** the CLI names the Compose project `<folder>_devcontainer`, here `devc-test_devcontainer`.
+- **Slow first `up`:** the post-create step downloads Claude Code (about 265 MB), so it can look stuck on a slow connection.
+
 CI can't drive VS Code. After changing anything in this folder, rebuild the container and check:
 
 1. `git config user.name` shows your host identity (`.gitconfig` copied by VS Code).
