@@ -32,7 +32,9 @@ After editing any of them, run **Dev Containers: Rebuild Container** from the co
 
 ## Checking a change
 
-CI doesn't cover the VS Code integration. After changing anything in this folder, rebuild the container and check:
+The `Dev Container` workflow creates the container with the Dev Container CLI and runs `tests/test-setup.sh` inside it, on PRs that touch this folder, `setup.sh`, `tests/` or the workflow, and weekly.
+
+CI can't drive VS Code. After changing anything in this folder, rebuild the container and check:
 
 1. `git config user.name` shows your host identity (`.gitconfig` copied by VS Code).
 2. `git push` over SSH works from inside the container (SSH agent forwarding).
