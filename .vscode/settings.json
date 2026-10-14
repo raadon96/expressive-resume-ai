@@ -13,7 +13,7 @@
                 "-file-line-error",
                 "-pdf",
                 "-r",
-                "%WORKSPACE_FOLDER%/.latexmkrc",
+                "%WORKSPACE_FOLDER%/src/latexmkrc",
                 "%DOC%"
             ]
         }

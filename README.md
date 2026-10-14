@@ -3,7 +3,7 @@
 # expressive-resume-ai
 
 Paste a job description. [Claude Code](https://claude.ai/code) analyses the fit against your profile, then generates a tailored CV and cover letter as clean LaTeX you own. Built on [thehale/expressive-resume](https://github.com/thehale/expressive-resume).
-![Example Expressive Resume](/artifacts/expressive_resume_readme_banner.svg)
+![Example Expressive Resume](/docs/images/expressive_resume_readme_banner.svg)
 </div>
 
 ## Features
@@ -213,7 +213,7 @@ Role Templates are optional. Without them, or when none fits, the resume is writ
 3. Build it and proofread it carefully. Every application from this family reuses its wording.
    ```bash
    cd data/templates/<Name>
-   latexmk -pdf -r ../../../.latexmkrc resume.tex
+   latexmk -pdf -r ../../../src/latexmkrc resume.tex
    ```
 4. Optional: add a version in another language as `resume_<code>.tex`, e.g. with `/translate data/templates/<Name>/resume.tex german`, then proofread it too.
 
@@ -231,8 +231,8 @@ Claude builds the PDFs when it writes the documents. To rebuild after your own e
 
 ```bash
 cd data/applications/YY.MM.DD_<role>@<company>
-latexmk -pdf -r ../../../.latexmkrc resume.tex
-latexmk -pdf -r ../../../.latexmkrc coverletter.tex
+latexmk -pdf -r ../../../src/latexmkrc resume.tex
+latexmk -pdf -r ../../../src/latexmkrc coverletter.tex
 ```
 
 Only the `.pdf` is kept next to the `.tex` source; build artifacts are deleted after each successful build.

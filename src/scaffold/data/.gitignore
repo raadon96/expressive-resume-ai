@@ -1,4 +1,4 @@
-# LaTeX auxiliary files. The root .latexmkrc deletes these after each
+# LaTeX auxiliary files. The Tool Repo's src/latexmkrc deletes these after each
 # successful build; this is the safety net for failed builds.
 # PDFs are tracked on purpose: keep the version you sent.
 *.aux

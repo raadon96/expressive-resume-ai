@@ -24,7 +24,7 @@ Searches from the repo root skip the gitignored `data/`, so search explicit `dat
 From the document's directory:
 
 ```bash
-latexmk -pdf -r ../../../.latexmkrc resume.tex
+latexmk -pdf -r ../../../src/latexmkrc resume.tex
 ```
 
-`../../../.latexmkrc` reaches the Tool Repo root from any `data/applications/<dir>/`, `data/templates/<Name>/` or `example/applications/<dir>/`. `git rev-parse --show-toplevel` resolves to `data/` inside the Data Repo, where latexmk fails with "RC file does not exist". The `.cls` files resolve through `~/texmf` symlinks created by `./setup.sh`.
+`../../../src/latexmkrc` reaches the Tool Repo's rc file from any `data/applications/<dir>/`, `data/templates/<Name>/` or `example/applications/<dir>/`. `git rev-parse --show-toplevel` resolves to `data/` inside the Data Repo, where latexmk fails with "RC file does not exist". The `.cls` files resolve through `~/texmf` symlinks created by `./setup.sh`.

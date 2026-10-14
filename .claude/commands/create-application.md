@@ -73,10 +73,10 @@ flowchart TD
 
 5. **Build the PDFs** from the repo root, the resume from step 3 (`resume.tex`, or `resume_<code>.tex` in case B) and the cover letter:
    ```bash
-   (cd $ARGUMENTS && latexmk -pdf -r ../../../.latexmkrc <resume>.tex)
-   (cd $ARGUMENTS && latexmk -pdf -r ../../../.latexmkrc coverletter.tex)
+   (cd $ARGUMENTS && latexmk -pdf -r ../../../src/latexmkrc <resume>.tex)
+   (cd $ARGUMENTS && latexmk -pdf -r ../../../src/latexmkrc coverletter.tex)
    ```
-   The subshell keeps the working directory at the repo root. `../../../.latexmkrc` is the Tool Repo's rc file; don't use `git rev-parse --show-toplevel`, which resolves to `data/`. If a build fails, show the full error and the manual build command.
+   The subshell keeps the working directory at the repo root. `../../../src/latexmkrc` is the Tool Repo's rc file; don't use `git rev-parse --show-toplevel`, which resolves to `data/`. If a build fails, show the full error and the manual build command.
 
 6. **Translate** (cases B and C) following `/translate` in file mode with the target language: `coverletter.tex`, and in case C also `resume.tex`. It writes and builds the `_<code>` files and flags page growth. Keep both versions. Skip `/translate`'s overwrite question: step 2 already asked.
 

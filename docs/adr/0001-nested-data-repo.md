@@ -16,7 +16,7 @@ Each user's Profile, Applications and Role Templates live in a private Data Repo
 ## Consequences
 
 - Grep and Claude's `grep` skip the gitignored data folder when searching from the root, so commands must search explicit data-folder paths.
-- Inside the Data Repo, `git rev-parse --show-toplevel` resolves to the data folder, so build commands must not use it to find the root `.latexmkrc`.
+- Inside the Data Repo, `git rev-parse --show-toplevel` resolves to the data folder, so build commands must not use it to find `src/latexmkrc` in the Tool Repo.
 - `git clean -ffdx` in the outer repo deletes the Data Repo. Keep it pushed; a tracked `.claude/settings.json` denies `git clean`.
 - Agents isolated in a worktree don't see the data folder, so tool changes are tested against real data in the main folder.
 
