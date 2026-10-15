@@ -12,9 +12,10 @@ Searches from the repo root skip the gitignored `data/`, so search explicit `dat
 
 ## Editing documents
 
-`/review-job`, `/create-application` and `/translate` carry their own steps. When editing resumes or cover letters outside them:
+`/review-job`, `/create-application`, `/translate` and `/copyedit` carry their own steps. When editing resumes or cover letters outside them:
 
 - Read the Profile in `data/profile/` first. `experience.md` is the source of truth for work history; `contact.md` holds the header details and wins over any `.tex` file.
+- Write prose following `.claude/skills/copyedit/rules.md`.
 - Keep bullets that come from a Role Template word for word; wording fixes belong in `data/templates/<Name>/`.
 - For LaTeX syntax, read the Scaffold in `src/scaffold/application/` and the worked example in `example/applications/`.
 - Change layout in the `.tex` documents. The `.cls` files in `src/` come from upstream Expressive Resume and stay unchanged.
