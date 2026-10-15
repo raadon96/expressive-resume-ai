@@ -1,46 +1,22 @@
-Create tailored `resume.tex` and `coverletter.tex` for a job application, then record it in `data/index.md`.
+---
+name: create-application
+description: Create an Application's tailored resume and cover letter from its Fit Analysis, then record it in the Application Index. Use once /review-job is confirmed, or to resume or redo an Application.
+argument-hint: <Application directory>
+---
 
-## Argument
+`$ARGUMENTS` is the Application directory, e.g. `data/applications/26.04.24_pydev@yousician`.
 
-`$ARGUMENTS` is the application directory, e.g. `data/applications/26.04.24_pydev@yousician`. `/review-job` calls this command after confirmation; the user can also call it to resume an interrupted session.
-
-## Data Repo
-
-User data lives in `data/`, a separate git repo that the Tool Repo gitignores, so search it with explicit `data/…` paths: searches from the repo root skip it. If `data/` doesn't exist, stop and tell the user: "no data/ found; run ./setup.sh first". Don't create it.
-
-## Overview
-
-The steps below are authoritative; this diagram is a map of them. `de` stands for the posting's language code.
-
-```mermaid
-flowchart TD
-    S1["1. Read description.md and contact.md"] --> T{"2. Role Template chosen?"}
-    T -- no --> BS["3. from scratch, using the Profile<br/>→ resume.tex (A or C)"]
-    T -- yes --> L1{"languages differ?"}
-    L1 -- "no (A)" --> A["3. tailor &lt;Name&gt;/resume.tex<br/>→ resume.tex"]
-    L1 -- yes --> DE{"&lt;Name&gt;/resume_de.tex<br/>exists?"}
-    DE -- "yes (B)" --> B["3. tailor it; bullets added from the<br/>Profile are translated one by one<br/>→ resume_de.tex"]
-    DE -- "no (C)" --> C["3. tailor &lt;Name&gt;/resume.tex<br/>→ resume.tex"]
-    BS & A & B & C --> S4["4. coverletter.tex<br/>always from scratch, in the Profile's language<br/>→ /copyedit"]
-    S4 --> S5["5. Build the PDFs"]
-    S5 --> S6["6. /translate if languages differ<br/>B: coverletter.tex<br/>C: resume.tex + coverletter.tex<br/>→ /copyedit coverletter_de.tex"]
-    S6 --> S7["7. Add a row to data/index.md"]
-    S7 --> S8["8. Report the files + diff command"]
-```
+If `data/` doesn't exist, stop and tell the user to run `./setup.sh` first.
 
 ## Steps
 
-1. **Read** `$ARGUMENTS/description.md` and `data/profile/contact.md` (the canonical header details). Skip `description.md` if this session already wrote or read it and it hasn't changed since (e.g. `/review-job` just wrote it). Read the rest of the Profile only as the steps below say.
+1. **Read** `$ARGUMENTS/description.md` (the Job Posting and its Fit Analysis), `data/profile/contact.md` (the header details) and `.claude/skills/copyedit/rules.md` (steps 3 and 4 write by it). Read Profile files only as the steps below say, and only those you haven't read this session or whose text you no longer have.
 
-   **Job title:** the objective, the cover letter and the index row use the job title as written in the posting. If the posting has none (e.g. a LinkedIn paste starting at "About the job"), infer it from the responsibilities and say so in the final report.
+   **Job title:** the objective, the cover letter and the index row use the job title as written in the Job Posting. If it has none (e.g. a LinkedIn paste starting at "About the job"), infer it from the responsibilities and say so in the final report.
 
-   **Prose rules:** read `.claude/skills/copyedit/rules.md`. Steps 3 and 4 write by it, and `/copyedit` checks against it.
+2. **Choose the case** from the `**Role Template:**` and `**Posting language:**` lines in the Fit Analysis. If they're missing, read `.claude/skills/review-job/fit-analysis.md` and the Role Templates (each `data/templates/<Name>/` is one, named after its directory; its `resume.tex` is in the Profile's language and `resume_<code>.tex` in another), then write the two lines and confirm as it says; on "No", stop. If the named Role Template isn't in `data/templates/`, list the ones that are and ask.
 
-   **Profile reads:** before reading Profile files, run `stat -c '%Y %n' data/profile/*.md data/profile/projects/*.md` and keep the output. If this session already read a file (e.g. in `/review-job`), compare against the earlier output and skip it unless its timestamp is newer or you no longer have its text (e.g. after compaction).
-
-2. **Choose the case** from the `**Role Template:**` and `**Posting language:**` lines in the fit analysis. If they're missing, read the Role Templates as in `/review-job` step 3, choose one by the rule in its step 6, add both lines at the end of `### Framing Recommendation` as its template shows, and ask with its step 7 prompt. On "No", stop without writing anything else. If the named Role Template isn't in `data/templates/`, list the ones that are and ask.
-
-   Source language = the Profile's; target = the posting's; `<code>` = the target's code from the table in `.claude/skills/translate/SKILL.md`.
+   The source language is the Profile's, the target the Job Posting's, and `<code>` the target's ISO 639-1 code (`de`).
 
    | Case | When | Resume | Output |
    |------|------|--------|--------|
@@ -48,45 +24,47 @@ flowchart TD
    | **B** | languages differ, Role Template has `resume_<code>.tex` | tailor `data/templates/<Name>/resume_<code>.tex`; no source-language resume | `resume_<code>.tex`, `coverletter.tex`, `coverletter_<code>.tex` |
    | **C** | languages differ, no Role Template in the target language | tailor `data/templates/<Name>/resume.tex`, or from scratch; then translate | `resume.tex`, `resume_<code>.tex`, `coverletter.tex`, `coverletter_<code>.tex` |
 
-   **Existing files:** if any `.tex` file in the case's Output column already exists in `$ARGUMENTS/` (e.g. when resuming, or running again), list them all and ask once: "These files already exist and will be overwritten: … Overwrite them?" If the user says no, stop without writing anything. If yes, overwrite them and their PDFs; step 6 doesn't ask again.
+   **Existing files:** if any file in the case's Output column already exists in `$ARGUMENTS/`, list them all and ask once: "These files already exist and will be overwritten: … Overwrite them?" On no, stop. Done when the case is known and every Output file is free to write.
 
-3. **Write the resume** in `$ARGUMENTS/` (`resume.tex`, or `resume_<code>.tex` in case B).
+3. **Write the resume** in `$ARGUMENTS/`: `resume.tex`, or `resume_<code>.tex` in case B.
 
-   **From a Role Template:** copy the Role Template's file, then tailor it:
+   **From a Role Template:** copy the Role Template's file, then tailor it.
    - Reorder experience, projects and bullets so the top 3–5 requirements come first; remove what's irrelevant or over the page count.
-   - For requirements the Role Template doesn't cover, search the Profile (`grep -il '<keyword>' data/profile/*.md data/profile/projects/*.md`, the same files as the `stat` in step 1) and read only the matching files. Add bullets in the Role Template's style. In case B, write them in the source language and translate them following `/translate` in text mode (`.claude/skills/translate/SKILL.md`).
-   - **Never reword a bullet already in the Role Template**, not even for a typo or a keyword. Its wording is reviewed, and unchanged bullets keep the diff against the Role Template small. If one looks wrong, tell the user to fix it in the Role Template.
-   - Leave commented-out entries in the Role Template commented out and unchanged; don't uncomment or replace them.
+   - For requirements the Role Template doesn't cover, search the Profile (`grep -il '<keyword>' data/profile/*.md data/profile/projects/*.md`) and read only the matching files. Add bullets in the Role Template's style. In case B, write them in the source language, then translate all of them in one call: `/translate <bullets> <language>` with the Skill tool, replacing each with its returned line.
+   - **Copy Role Template bullets verbatim.** Their wording is reviewed, and unchanged bullets keep the diff against the Role Template small (ADR 0002). Never reword one, not even for a typo or a keyword; if one looks wrong, tell the user to fix it in `data/templates/<Name>/`.
+   - Keep the Role Template's commented-out entries commented out and unchanged.
    - Check `\resumeheader[...]` against `contact.md`, which wins.
-   - In case B, if the copied file lacks the `babel` line or the objective relabel from the LaTeX rules in `.claude/skills/translate/SKILL.md`, add them and tell the user to add them to the Role Template too.
+   - In case B, if the copied file lacks the `babel` line or the objective label from the Preamble in `.claude/skills/translate/latex.md`, add them and tell the user to add them to the Role Template too.
 
    **From scratch:** read `data/profile/experience.md`, `qualifications.md` and all of `projects/`. Start from `src/scaffold/application/resume.tex`, fill `\resumeheader[...]` from `contact.md`, and emphasise the top 3–5 requirements in the most relevant experience entries.
 
    **Both:**
    - Rewrite `\objective{}` to name the role and the company.
-   - Use only achievements from the Profile; don't invent or embellish.
+   - Every achievement comes from the Profile as it stands there.
    - `qrcode=../../profile/images/qr_code.png` (Applications and Role Templates are both one level below `data/<folder>/`).
-   - Write `$\sim$` for "approximately", never `\~` (an accent command that breaks the build).
-   - **Copyedit what you wrote.** From a Role Template: call `/copyedit` once in text mode on the `\objective{}` line and the bullets you added, as they stand in the file (in case B, the translated bullets), and replace each with its returned line. The Role Template's own bullets stay out of the call. From scratch: `/copyedit $ARGUMENTS/<resume>.tex`.
+   - Write `$\sim$` for "approximately"; `\~` is an accent command and breaks the build.
+   - **Copyedit what you wrote.** From a Role Template: call `/copyedit` once in text mode on the `\objective{}` line and the bullets you added, as they stand in the file, and replace each with its returned line; the Role Template's own bullets stay out of the call. From scratch: `/copyedit $ARGUMENTS/<resume>.tex`.
 
-4. **Write `$ARGUMENTS/coverletter.tex`**, always from scratch and in the source language. Start from `src/scaffold/application/coverletter.tex` and fill `\coverletterheader[...]` from `contact.md`. If `data/profile/voice.md` exists and holds more than comments, read it and write in that voice. Three paragraphs:
-   - **Hook:** tie something concrete in the posting to the user's own work.
-   - **Evidence:** usually two quantified achievements that address the top requirements. Take them from the resume and the fit analysis' Strengths; look up the Profile only if those aren't enough.
-   - **Close:** one sentence on what the user would like to work on or ask about, then the scaffold's contact line filled from `contact.md`, and the sign-off.
+   Done when each of the top 3–5 requirements is addressed in the resume or listed as a Gap in the Fit Analysis.
+
+4. **Write `$ARGUMENTS/coverletter.tex`**, always from scratch and in the source language. Start from `src/scaffold/application/coverletter.tex` and fill `\coverletterheader[...]` from `contact.md`. If `data/profile/voice.md` holds more than comments, read it and write in that voice. Three paragraphs:
+   - **Hook:** tie something concrete in the Job Posting to the user's own work.
+   - **Evidence:** usually two quantified achievements that address the top requirements. Take them from the resume and the Fit Analysis' Strengths; look up the Profile only if those aren't enough.
+   - **Close:** one sentence on what the user would like to work on or ask about, then the Scaffold's contact line filled from `contact.md`, and the sign-off.
 
    Then call `/copyedit $ARGUMENTS/coverletter.tex data/profile/voice.md`, leaving out the voice file when it's missing or holds only comments.
 
-5. **Build the PDFs** from the repo root, the resume from step 3 (`resume.tex`, or `resume_<code>.tex` in case B) and the cover letter:
+5. **Build the PDFs** from the repo root:
    ```bash
    src/build.sh $ARGUMENTS/<resume>.tex $ARGUMENTS/coverletter.tex
    ```
-   If a build fails, show the script's output and the same command so the user can retry after fixing the issue.
+   If a build fails, show the script's output and the same command so the user can retry after fixing the issue. Done when both print a page count.
 
-6. **Translate** (cases B and C) following `/translate` in file mode with the target language: `coverletter.tex`, and in case C also `resume.tex`. It writes and builds the `_<code>` files and flags page growth. Keep both versions. Skip `/translate`'s overwrite question: step 2 already asked.
+6. **Translate** (cases B and C): call `/translate $ARGUMENTS/coverletter.tex <language> overwrite` with the Skill tool, and in case C also `/translate $ARGUMENTS/resume.tex <language> overwrite`; step 2 already asked about overwriting. Each writes and builds its `_<code>` file. Pass on any page growth or build failure it reports.
 
-   Then call `/copyedit $ARGUMENTS/coverletter_<code>.tex` with the voice file as in step 4, and rebuild it with `src/build.sh $ARGUMENTS/coverletter_<code>.tex`. Leave `resume_<code>.tex` as `/translate` wrote it: most of its bullets come from the Role Template.
+   Then call `/copyedit $ARGUMENTS/coverletter_<code>.tex` with the voice file as in step 4, and rebuild it with `src/build.sh $ARGUMENTS/coverletter_<code>.tex`. `resume_<code>.tex` stays as `/translate` wrote it: most of its bullets come from the Role Template.
 
-7. **Add a row to `data/index.md`,** keeping it newest first: insert it above the first row with an older date, or at the end if none is older. Usually that's directly below the header separator (`|------|…`). Date from the directory name (`YY.MM.DD` → `20YY-MM-DD`); the company and full job title as written in the posting (`Octopus Energy`, `Python Developer`), not the slugs. Skip if a row for this folder exists.
+7. **Add a row to `data/index.md`,** keeping it newest first: insert it above the first row with an older date, or at the end if none is older; usually that's directly below the header separator (`|------|…`). The date comes from the directory name (`YY.MM.DD` → `20YY-MM-DD`); the company and full job title as written in the Job Posting (`Octopus Energy`, `Python Developer`), not the slugs. Skip if a row for this directory exists.
    ```
    | YYYY-MM-DD | <Company> | <Role> | [<dir>](applications/<dir>/) |
    ```
