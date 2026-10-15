@@ -1,84 +1,49 @@
-Translate a file or a piece of text into another language, adapting the phrasing idiomatically rather than literally.
+---
+name: translate
+description: Translate a file or a few lines of text into another language, phrased the way a native speaker writes it. Use for a resume, cover letter, Role Template or Profile file, or bullets added to a resume in another language.
+argument-hint: <file | text> <language> [overwrite]
+context: fork
+---
 
-This command knows nothing about Applications, Role Templates, or the Profile. It translates what it's given; the caller decides which files to translate. `/create-application` calls it, and the user can call it directly.
+Translate the input into the target language. You see only this file, the files it points to and the input; the conversation that asked for the translation isn't available, and nothing else is needed. The caller decides what to translate; translate exactly that.
 
 ## Argument
 
-`$ARGUMENTS` is `<file | text> <language>`. The last word is the target language, e.g. `german`, `french`, `english`. Everything before it is the input:
+`$ARGUMENTS` is `<file | text> <language> [overwrite]`.
 
-- **File mode:** the input is the path to an existing file, e.g. `data/templates/MLOps/resume.tex german` or `data/profile/projects/FJSS.md german`.
-- **Text mode:** anything else is the text to translate, e.g. `\achievement{Cut machine downtime by 17\%} german`. Another command can use this mode to translate a single bullet.
+- **`overwrite`:** if the last word is `overwrite`, remove it; the caller allows replacing an existing target file.
+- **Language:** the last remaining word, in English, e.g. `german`, `french`, `english`. Its **code** is its ISO 639-1 code (`de`, `fr`, `en`).
+- **File mode:** the rest is the path to an existing file, e.g. `data/templates/MLOps/resume.tex`.
+- **Text mode:** anything else is the text itself, one or more lines, e.g. two `\achievement{...}` bullets.
 
 ## Steps
 
-1. **Resolve the language code** from the target language using this table. If the language isn't listed, use its ISO 639-1 code and its babel language name.
+1. **Read the rules:** `.claude/skills/copyedit/rules.md`; `${CLAUDE_SKILL_DIR}/languages/<language>.md` if it exists; `${CLAUDE_SKILL_DIR}/latex.md` for a `.tex` file or LaTeX text. In file mode, also read the file.
 
-   | Language | Code | babel name |
-   |----------|------|------------|
-   | english  | en   | english    |
-   | german   | de   | ngerman    |
-   | french   | fr   | french     |
-   | spanish  | es   | spanish    |
+2. **Check the target** (file mode). It sits next to the source as `<name>_<code>.<ext>`: `resume.tex` → `resume_de.tex`, `FJSS.md` → `FJSS_de.md`. A source name that already ends in a language suffix swaps it: `resume_de.tex` → `resume_en.tex`. If that makes the target the source itself, write nothing and reply that the file is already in that language. If the target exists and `overwrite` wasn't given, write nothing and reply only: `<target> already exists. Call /translate again with overwrite to replace it.`
 
-2. **Translate** following the rules below.
+3. **Translate** until every rule below and in the files from step 1 is applied. Done when a final read as a native-speaking recruiter finds no sentence that reads as translated.
 
-3. **Text mode:** return only the translation, with no preamble or commentary, so a calling command can insert it as is. Stop here.
+4. **Return:**
+   - **Text mode:** reply with only the translated lines, the same number and order as the input, with no preamble or commentary, so the caller can insert them as is.
+   - **File mode:** write the target. For a `.tex` file, build it from the repo root with the source in the same call, so both page counts print:
+     ```bash
+     src/build.sh <dir>/<name>.tex <dir>/<name>_<code>.tex
+     ```
+     Reply with the file, its PDF and the page counts, e.g. `Created <dir>/resume_de.tex → <dir>/resume_de.pdf (2 pages; the source has 1)`. If the translation has more pages than the source, say so: the user shortens it by hand. If the build fails, reply with the script's output and the command, so the user can retry after fixing it.
 
-4. **File mode, write the result** next to the source as `<name>_<code>.<ext>`, e.g. `resume.tex` → `resume_de.tex`, `FJSS.md` → `FJSS_de.md`. If the source name already ends in a language suffix, replace it: `resume_de.tex` → `resume_en.tex`. Never overwrite the source. If the target file already exists, show the user its path and ask before overwriting it, unless the calling command already asked (e.g. `/create-application`).
-
-5. **File mode, build `.tex` files** from the repo root:
-   ```bash
-   src/build.sh <dir>/<name>_<code>.tex
-   ```
-   It prints `<dir>/<name>_<code>.pdf: N pages`. If the build fails, show the script's output and the same command so the user can retry after fixing the issue.
-   Translations usually run longer than the source. If the source's page count wasn't printed earlier in this session, add the source to the same call (`src/build.sh <dir>/<name>.tex <dir>/<name>_<code>.tex`). If the translated PDF has more pages than the source, tell the user, so they can shorten it by hand.
-
-6. **File mode, confirm completion** with each file created and its build status:
-   ```
-   Created:
-   - <dir>/<name>_<code>.tex  →  <dir>/<name>_<code>.pdf (2 pages; the source has 1)
-   ```
-
-## Translation rules
+## Rules
 
 ### All inputs
 
-- **Adapt, don't transliterate.** Rewrite each sentence the way a native speaker would phrase the same content, instead of carrying over the source's sentence structure word for word. A literal translation reads stiff even when every word is correct. That is the failure this command exists to avoid.
-- **Don't change the content.** Add no claims, drop none, and keep every number, metric, and date.
-- **Keep the style.** Keep the tone, length, and paragraph structure. Terse, parallel resume bullets stay terse and parallel.
-- **Follow `.claude/skills/copyedit/rules.md`** in the target language, so the translation reads as written by a person in that language, not as a translated application.
-- **Keep unchanged:** company, product, and person names; technology names; URLs; email addresses; code and commands.
-- Leave established English technical terms in English when a native speaker would (e.g. `Pipeline`, `Deployment`, `Machine Learning` in German).
+- **Adapt.** Rewrite each sentence the way a native speaker phrases the same content, in that language's own sentence structure. A literal translation reads stiff even when every word is correct; that is the failure this skill exists to prevent.
+- **Content is fixed.** Every claim, number, metric and date stays; add none.
+- **Keep the style:** tone, length and paragraph structure. Terse, parallel resume bullets stay terse and parallel.
+- **Write by `rules.md`** in the target language, so the result reads as written in that language, not as a translated application.
+- **Keep unchanged:** company, product and person names; technology names; URLs; email addresses; code and commands.
+- **Keep established English technical terms** in English where a native speaker would (`Pipeline`, `Deployment`, `Machine Learning` in German).
 
-### LaTeX (`.tex` files and LaTeX text)
+### Markdown
 
-- For a target language other than English, add `babel` directly below `\documentclass{...}`, with the babel name from the table in step 1:
-  ```tex
-  \usepackage[shorthands=off,<babel name>]{babel}
-  ```
-  Without it, words are hyphenated by English rules (`Reg-istrierung`) and `\today` prints an English date. `shorthands=off` keeps `"` a plain quote character.
-- For a resume, also relabel the objective, since the class prints "Objective" whatever the language. Below the `babel` line:
-  ```tex
-  \renewcommand{\objective}[1]{\tagline{<label>}{#1}}
-  ```
-  The label is `Profil` in German; for other languages use the usual heading for a resume summary.
-- Keep macro names, arguments, and document structure unchanged. Translate only the human-readable text inside the macros.
-- Keep `\tech{}` values unchanged, and keep every `\resumeheader[...]` and `\coverletterheader[...]` field unchanged.
-- Translate section titles, role titles where the target language has an established equivalent, and date text (month names, "Present").
-- Write accented characters as raw UTF-8 (the class loads `inputenc[utf8]`). LaTeX accents already in the source, like `\"{a}`, can stay.
-- Use straight quotes (`"..."`). The class doesn't load `T1` font encoding, so typographic quotes like German `„…“` fail to build.
-- Use `$\sim$` for "approximately", never `\~`.
-
-### Markdown (`.md` files)
-
-- Keep headings, lists, tables, links, and front matter structure. Translate heading text and prose.
-- Leave fenced code blocks and inline code unchanged, except for comments in natural language.
-
-### Language-specific
-
-**German:**
-- Salutation and sign-off follow German convention, not a literal rendering: "Dear X Team" → "Liebes X-Team" (or "Sehr geehrte Damen und Herren" when the source is formal and addresses no one), "Sincerely" → "Mit freundlichen Grüßen".
-- Thin space before the percent sign in LaTeX: `17\,\%`. In Markdown: `17 %`.
-- Decimal comma: `1.5` → `1,5`. Thousands separator: `110k+` stays as is, `10,000` → `10.000`.
-- Compound nouns join with hyphens when they mix an English term and a German one: `Machine-Learning-Pipeline`, `Python-Entwickler`.
-- Use the formal "Sie" when addressing the reader.
+- Keep headings, lists, tables, links and front matter structure; translate heading text and prose.
+- Keep fenced code blocks and inline code as they are, translating only comments in natural language.
