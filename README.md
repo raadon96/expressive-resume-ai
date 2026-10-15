@@ -212,8 +212,7 @@ Role Templates are optional. Without them, or when none fits, the resume is writ
 2. Make it generic: write an objective without a company name, and keep the bullets that fit most postings in this family.
 3. Build it and proofread it carefully. Every application from this family reuses its wording.
    ```bash
-   cd data/templates/<Name>
-   latexmk -pdf -r ../../../src/latexmkrc resume.tex
+   src/build.sh data/templates/<Name>/resume.tex
    ```
 4. Optional: add a version in another language as `resume_<code>.tex`, e.g. with `/translate data/templates/<Name>/resume.tex german`, then proofread it too.
 
@@ -227,15 +226,13 @@ Claude builds the PDFs when it writes the documents. To rebuild after your own e
 
 **VS Code:** the [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) extension rebuilds on save, with no further configuration. It comes preinstalled in the Dev Container; on a local install, install it yourself.
 
-**Terminal**, from the application folder:
+**Terminal**, from the repo root:
 
 ```bash
-cd data/applications/YY.MM.DD_<role>@<company>
-latexmk -pdf -r ../../../src/latexmkrc resume.tex
-latexmk -pdf -r ../../../src/latexmkrc coverletter.tex
+src/build.sh data/applications/YY.MM.DD_<role>@<company>/resume.tex data/applications/YY.MM.DD_<role>@<company>/coverletter.tex
 ```
 
-Only the `.pdf` is kept next to the `.tex` source; build artifacts are deleted after each successful build.
+It prints each PDF with its page count, or the LaTeX errors if a build fails. Only the `.pdf` is kept next to the `.tex` source; build artifacts are deleted after each successful build.
 
 ## Getting updates
 

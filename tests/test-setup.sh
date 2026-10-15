@@ -21,14 +21,21 @@ snapshot_data() {
     (cd "$WORK_DIR/data" && find . -printf '%p %s %T@\n' | sort)
 }
 
-# Builds a .tex file the documented way and checks its PDF exists
-build_pdf() {
-    local dir="$1" tex="$2"
-    local pdf="${tex%.tex}.pdf"
-    rm -f "$dir/$pdf"
-    (cd "$dir" && latexmk -pdf -interaction=nonstopmode -r ../../../src/latexmkrc "$tex")
-    [ -f "$dir/$pdf" ] || fail "no PDF built for $(rel "$dir")/$tex"
-    pass "built $(rel "$dir")/$pdf"
+# Builds .tex files through src/build.sh from a working directory and checks
+# each PDF exists and its page count line was printed
+build_pdfs() {
+    local cwd="$1" tex pdf output
+    shift
+    for tex in "$@"; do rm -f "$cwd/${tex%.tex}.pdf"; done
+    output="$(cd "$cwd" && "$WORK_DIR/src/build.sh" "$@")" ||
+        { echo "$output"; fail "src/build.sh $* failed in $(rel "$cwd")"; }
+    echo "$output"
+    for tex in "$@"; do
+        pdf="${tex%.tex}.pdf"
+        [ -f "$cwd/$pdf" ] || fail "no PDF built for $(rel "$cwd/$tex")"
+        [[ "$output" == *"$pdf: "[0-9]*" page"* ]] || fail "no page count printed for $pdf"
+        pass "built $(rel "$cwd/$pdf")"
+    done
 }
 
 # The working tree minus everything gitignored, as CI would see it after committing.
@@ -65,14 +72,18 @@ diff -r "$WORK_DIR/example/profile" "$WORK_DIR/data/profile" > /dev/null ||
     fail "data/profile/ differs from example/profile/"
 pass "data/ is a git repo with the Scaffold files and the example profile"
 
-step "2. Building with latexmk and the ~/texmf symlinks"
-build_pdf "$WORK_DIR/src/scaffold/application" resume.tex
-build_pdf "$WORK_DIR/src/scaffold/application" coverletter.tex
+step "2. Building with src/build.sh and the ~/texmf symlinks"
+build_pdfs "$WORK_DIR" src/scaffold/application/resume.tex src/scaffold/application/coverletter.tex
 mkdir -p "$WORK_DIR/data/applications"
 cp -R "$WORK_DIR/example/applications/$EXAMPLE_APP" "$WORK_DIR/data/applications/"
-build_pdf "$WORK_DIR/data/applications/$EXAMPLE_APP" resume.tex
-build_pdf "$WORK_DIR/data/applications/$EXAMPLE_APP" coverletter.tex
-build_pdf "$WORK_DIR/example/templates/MLEng" resume.tex
+build_pdfs "$WORK_DIR" "data/applications/$EXAMPLE_APP/resume.tex"
+# From inside the Data Repo, where git rev-parse can't find the Tool Repo
+build_pdfs "$WORK_DIR/data" "applications/$EXAMPLE_APP/coverletter.tex"
+build_pdfs "$WORK_DIR" example/templates/MLEng/resume.tex
+if (cd "$WORK_DIR" && src/build.sh missing.tex > /dev/null); then
+    fail "src/build.sh succeeded on a missing file"
+fi
+pass "src/build.sh fails on a missing file"
 
 step "3. ./new-application.sh test acme"
 "$WORK_DIR/new-application.sh" test acme

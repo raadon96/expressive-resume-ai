@@ -5,11 +5,24 @@ our $cleanup_after_build = 1;
 $success_cmd = 'internal cleanup_build_artifacts';
 
 sub cleanup_build_artifacts {
-    return unless $cleanup_after_build;
     (my $base = $root_filename) =~ s/\.tex$//;
+    print_page_count($base);
+    return unless $cleanup_after_build;
     my @exts = qw(aux fdb_latexmk fls log out synctex.gz);
     for my $ext (@exts) {
         my $file = "$base.$ext";
         unlink $file if -e $file;
     }
+}
+
+# Prints "<base>.pdf: N pages" from the log, which is the only record of the
+# count once cleanup deletes it. src/build.sh reads this line.
+sub print_page_count {
+    my ($base) = @_;
+    open(my $fh, '<', "$base.log") or return;
+    # TeX wraps log lines at 79 characters, so the line may be split
+    (my $log = do { local $/; <$fh> }) =~ s/\n//g;
+    close $fh;
+    print "$base.pdf: $1 page" . ($1 == 1 ? '' : 's') . "\n"
+        if $log =~ /Output written on .*?\((\d+) pages?/;
 }
