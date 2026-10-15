@@ -8,13 +8,13 @@ One maintainer keeps this repo running. Each new mechanism (CI job, hook, script
 
 ## Docs move with the change
 
-When a diff changes a path, file, mechanism or behaviour, the same diff updates every doc that describes it: `README.md`, `AGENTS.md`, `.devcontainer/README.md`, `.claude/commands/*.md`, `.claude/skills/*/`, `src/scaffold/data/README.md`, `docs/agents/` and `CLAUDE.local.md`. Grep for the old name.
+When a diff changes a path, file, mechanism or behaviour, the same diff updates every doc that describes it: `README.md`, `AGENTS.md`, `.devcontainer/README.md`, `.claude/skills/*/`, `src/scaffold/data/README.md`, `docs/agents/` and `CLAUDE.local.md`. Grep for the old name.
 
 ## Each file serves its reader
 
 - `README.md`: users setting up and using the tool.
 - `AGENTS.md`: loaded on every turn in every user's fork. Holds only what any user's agent needs on every task, mostly pointers.
-- `.claude/commands/*.md` and `.claude/skills/*/SKILL.md`: self-contained; each carries the gotchas its own steps need. A forked skill (`context: fork`) sees none of the conversation, so its `SKILL.md` names every file it needs.
+- `.claude/skills/*/SKILL.md`: self-contained; each carries the gotchas its own steps need. A forked skill (`context: fork`) sees none of the conversation, so its `SKILL.md` names every file it needs.
 - `CLAUDE.local.md` and `docs/agents/`: maintainer-only material.
 
 ## Comments say why

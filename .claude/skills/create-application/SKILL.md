@@ -40,7 +40,7 @@ flowchart TD
 
 2. **Choose the case** from the `**Role Template:**` and `**Posting language:**` lines in the fit analysis. If they're missing, read the Role Templates as in `/review-job` step 3, choose one by the rule in its step 6, add both lines at the end of `### Framing Recommendation` as its template shows, and ask with its step 7 prompt. On "No", stop without writing anything else. If the named Role Template isn't in `data/templates/`, list the ones that are and ask.
 
-   Source language = the Profile's; target = the posting's; `<code>` = the target's code from the table in `.claude/commands/translate.md`.
+   Source language = the Profile's; target = the posting's; `<code>` = the target's code from the table in `.claude/skills/translate/SKILL.md`.
 
    | Case | When | Resume | Output |
    |------|------|--------|--------|
@@ -54,11 +54,11 @@ flowchart TD
 
    **From a Role Template:** copy the Role Template's file, then tailor it:
    - Reorder experience, projects and bullets so the top 3–5 requirements come first; remove what's irrelevant or over the page count.
-   - For requirements the Role Template doesn't cover, search the Profile (`grep -il '<keyword>' data/profile/*.md data/profile/projects/*.md`, the same files as the `stat` in step 1) and read only the matching files. Add bullets in the Role Template's style. In case B, write them in the source language and translate them following `/translate` in text mode (`.claude/commands/translate.md`).
+   - For requirements the Role Template doesn't cover, search the Profile (`grep -il '<keyword>' data/profile/*.md data/profile/projects/*.md`, the same files as the `stat` in step 1) and read only the matching files. Add bullets in the Role Template's style. In case B, write them in the source language and translate them following `/translate` in text mode (`.claude/skills/translate/SKILL.md`).
    - **Never reword a bullet already in the Role Template**, not even for a typo or a keyword. Its wording is reviewed, and unchanged bullets keep the diff against the Role Template small. If one looks wrong, tell the user to fix it in the Role Template.
    - Leave commented-out entries in the Role Template commented out and unchanged; don't uncomment or replace them.
    - Check `\resumeheader[...]` against `contact.md`, which wins.
-   - In case B, if the copied file lacks the `babel` line or the objective relabel from the LaTeX rules in `.claude/commands/translate.md`, add them and tell the user to add them to the Role Template too.
+   - In case B, if the copied file lacks the `babel` line or the objective relabel from the LaTeX rules in `.claude/skills/translate/SKILL.md`, add them and tell the user to add them to the Role Template too.
 
    **From scratch:** read `data/profile/experience.md`, `qualifications.md` and all of `projects/`. Start from `src/scaffold/application/resume.tex`, fill `\resumeheader[...]` from `contact.md`, and emphasise the top 3–5 requirements in the most relevant experience entries.
 

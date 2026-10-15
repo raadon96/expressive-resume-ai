@@ -1,6 +1,6 @@
 # Expressive Resume AI
 
-An AI-assisted LaTeX resume and cover-letter generator, driven by Claude Code slash-commands, meant to be cloned/forked and used for a real job search.
+An AI-assisted LaTeX resume and cover-letter generator, driven by Claude Code skills, meant to be cloned/forked and used for a real job search.
 
 ## Language
 
@@ -25,7 +25,7 @@ The list of a user's Applications in their Data Repo, one row per Application (d
 _Avoid_: tracker, applications list, status board.
 
 **Tool Repo**:
-expressive-resume-ai, the public, generic code (document classes, Scaffold, slash-commands, scripts), kept free of personal data. Also any user's fork or clone of it; say "upstream Tool Repo" when the original specifically is meant.
+expressive-resume-ai, the public, generic code (document classes, Scaffold, skills, scripts), kept free of personal data. Also any user's fork or clone of it; say "upstream Tool Repo" when the original specifically is meant.
 _Avoid_: Public Template Repo, the template, the base repo, upstream (on its own).
 
 **Data Repo**:
