@@ -45,7 +45,7 @@ This command knows nothing about Applications, Role Templates, or the Profile. I
 
 - **Adapt, don't transliterate.** Rewrite each sentence the way a native speaker would phrase the same content, instead of carrying over the source's sentence structure word for word. A literal translation reads stiff even when every word is correct. That is the failure this command exists to avoid.
 - **Don't change the content.** Add no claims, drop none, and keep every number, metric, and date.
-- **Keep the style.** Keep the tone, length, and paragraph structure. Terse, parallel resume bullets stay terse and parallel. If the source avoids em dashes, so does the translation.
+- **Keep the style.** Keep the tone, length, and paragraph structure. Terse, parallel resume bullets stay terse and parallel.
 - **Follow `.claude/skills/copyedit/rules.md`** in the target language, so the translation reads as written by a person in that language, not as a translated application.
 - **Keep unchanged:** company, product, and person names; technology names; URLs; email addresses; code and commands.
 - Leave established English technical terms in English when a native speaker would (e.g. `Pipeline`, `Deployment`, `Machine Learning` in German).

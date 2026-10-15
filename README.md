@@ -33,7 +33,7 @@ Everyone needs **git** and a **Claude Pro or Max subscription or an Anthropic AP
 | | Dev Container (recommended) | Local |
 |---|---|---|
 | Platforms | Windows, macOS, Linux | Linux, macOS |
-| You install | Docker, VS Code and the Dev Containers extension | LaTeX with `latexmk`, Claude Code |
+| You install | Docker, VS Code and the Dev Containers extension | LaTeX with `latexmk`, Claude Code v2.1.218 or later |
 | Comes ready | LaTeX, Claude Code, VS Code extensions; `./setup.sh` runs automatically | — |
 
 Choose the Dev Container on Windows, or if you don't want LaTeX on your machine. The first container start downloads a LaTeX image of several GB and takes a few minutes; later starts are fast.
