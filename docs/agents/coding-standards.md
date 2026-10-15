@@ -14,7 +14,7 @@ When a diff changes a path, file, mechanism or behaviour, the same diff updates 
 
 - `README.md`: users setting up and using the tool.
 - `AGENTS.md`: loaded on every turn in every user's fork. Holds only what any user's agent needs on every task, mostly pointers.
-- `.claude/skills/*/SKILL.md`: self-contained; each carries the gotchas its own steps need. A forked skill (`context: fork`) sees none of the conversation, so its `SKILL.md` names every file it needs.
+- `.claude/skills/*/SKILL.md`: self-contained beyond `AGENTS.md`; each carries the gotchas its own steps need. A forked skill (`context: fork`) sees none of the conversation and is fully self-contained: its `SKILL.md` names every file it needs.
 - `CLAUDE.local.md` and `docs/agents/`: maintainer-only material.
 
 ## Comments say why

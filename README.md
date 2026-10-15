@@ -157,7 +157,7 @@ Use a new repository for this, not a fork: a fork of a public repository is alwa
 /review-job
 ```
 
-Claude asks you to paste the job description, then:
+Claude asks you to paste the job posting, then:
 
 1. creates `data/applications/YY.MM.DD_<role>@<company>/`
 2. writes the fit analysis to `description.md`: strengths, gaps, how to frame your experience, which Role Template to start from, and the posting's language
@@ -165,13 +165,13 @@ Claude asks you to paste the job description, then:
 
 Confirm, and Claude writes `resume.tex` and `coverletter.tex`, builds the PDFs and adds a row to your Application Index, `data/index.md`. At the prompt you can also pick another Role Template, or ask for the resume to be written from scratch. Cover letters are always written from scratch.
 
-> **Tip:** copy job descriptions with a "Copy as Markdown" browser extension. Claude reads requirements more accurately from Markdown, but plain text works too.
+> **Tip:** copy job postings with a "Copy as Markdown" browser extension. Claude reads requirements more accurately from Markdown, but plain text works too.
 
-Other ways to pass the job description:
+Other ways to pass the job posting:
 
-| Command | Job description |
+| Command | Job posting |
 |---------|-----------------|
-| `/review-job <job description>` | pasted inline |
+| `/review-job <job posting>` | pasted inline |
 | `/review-job https://company.com/careers/some-role` | fetched from the URL. LinkedIn needs a login, so Claude asks you to paste it instead |
 | `/review-job data/applications/<folder>` | read from `description.md` in that folder |
 
@@ -193,7 +193,7 @@ You can also translate any `.tex` or `.md` file yourself:
 /translate data/applications/26.04.26_pydev@examplecompany/coverletter.tex german
 ```
 
-Claude writes `coverletter_de.tex` next to the original, phrased the way a native speaker would write it rather than word for word, and builds the PDF. The original is never overwritten. Given text instead of a path, it returns the translation.
+Claude writes `coverletter_de.tex` next to the original, phrased the way a native speaker would write it rather than word for word, and builds the PDF. Like `/copyedit`, it works in a fresh context that sees only the input and the translation rules, so the job posting's keywords can't creep into the translation. The original is never overwritten; if `coverletter_de.tex` already exists, it stops and says so, and `/translate <file> german overwrite` replaces it. Given text instead of a path, it returns the translation.
 
 ### Copyediting
 
