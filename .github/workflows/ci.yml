@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: ShellCheck
-        run: shellcheck setup.sh new-application.sh src/build.sh tests/*.sh
+        run: shellcheck setup.sh src/build.sh tests/*.sh
       - name: No personal data in the Tool Repo
         run: test -z "$(git ls-files data/)"
       - name: .claude/settings.json denies git clean

@@ -13,7 +13,7 @@ The user's canonical personal/career source data (`profile/`), kept once and dra
 _Avoid_: resume data, master resume.
 
 **Application Index**:
-The list of a user's Applications in their Data Repo, one row per Application (date, company, role, link to its directory), newest first. Records that an Application was created, not whether it was sent or how it is going.
+The list of a user's Applications in their Data Repo, one row per Application (date, company, role, link to its directory), newest first. Records that an Application's resume and cover letter were created, not whether they were sent or how it is going. An Application that stopped after its fit analysis has no row.
 _Avoid_: tracker, applications list, status board.
 
 **Tool Repo**:
