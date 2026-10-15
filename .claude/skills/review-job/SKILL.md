@@ -23,7 +23,7 @@ If `data/` doesn't exist, stop and tell the user to run `./setup.sh` first.
 
 3. **Read `${CLAUDE_SKILL_DIR}/fit-analysis.md` and the Role Templates:** each `data/templates/<Name>/` is one, named after its directory; its `resume.tex` is in the Profile's language and `resume_<code>.tex` in another (`resume_de.tex`). Read each one's resumes for its job family and languages. None may exist.
 
-4. **Choose the Application directory:** in directory mode, the given one. Otherwise `data/applications/YY.MM.DD_<role>@<company>/` with today's date, a short lowercase `<role>` slug (`pydev`, `mleng`) and the company name in lowercase without spaces (`octopusenergy`); create it without asking. For a recruiter with an unnamed client, use the recruiter, and name the likely client in the Fit Analysis.
+4. **Choose the Application directory:** in directory mode, the given one. Otherwise `data/applications/YY.MM.DD_<role>@<company>/` with today's date, a short lowercase `<role>` slug (`pydev`, `mleng`) and the company name in lowercase without spaces (`octopusenergy`); create it without asking. Done when the directory exists. For a recruiter with an unnamed client, use the recruiter, and name the likely client in the Fit Analysis.
 
 5. **Write `description.md`** in the Application directory from the template in `fit-analysis.md`. In directory mode, keep the Job Posting as it is, add `# Job Description` above it if missing, and replace any existing `## Fit Analysis` and `## Verdict`. Done when every requirement in the Job Posting appears in Strengths or Gaps, and both lines under Framing Recommendation are filled.
 

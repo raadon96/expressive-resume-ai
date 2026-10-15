@@ -54,6 +54,6 @@ Proceed with creating a tailored CV and cover letter?
 - Or ask me anything about the analysis
 ```
 
-- **Yes:** go on.
+- **Yes:** go on to the caller's next step.
 - **Another Role Template or from scratch:** if the named Role Template isn't in `data/templates/`, list the ones that are and ask again, leaving `description.md` as it is. Once the user names one that exists or chooses from scratch, replace the `**Role Template:**` line with the choice plus `(chosen by the user)`, then go on.
 - **No:** confirm that `description.md` is saved, and stop. The Application directory stays.

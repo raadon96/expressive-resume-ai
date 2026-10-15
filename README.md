@@ -2,13 +2,13 @@
 
 # expressive-resume-ai
 
-Paste a job description. [Claude Code](https://claude.ai/code) analyses the fit against your profile, then generates a tailored CV and cover letter as clean LaTeX you own. Built on [thehale/expressive-resume](https://github.com/thehale/expressive-resume).
+Paste a job posting. [Claude Code](https://claude.ai/code) analyses the fit against your profile, then generates a tailored CV and cover letter as clean LaTeX you own. Built on [thehale/expressive-resume](https://github.com/thehale/expressive-resume).
 ![Example Expressive Resume](/docs/images/expressive_resume_readme_banner.svg)
 </div>
 
 ## Features
 
-- **Fit analysis:** your strengths and gaps for the posting, and how to frame your experience, saved next to the job description.
+- **Fit analysis:** your strengths and gaps for the posting, and how to frame your experience, saved next to the job posting.
 - **Tailored resume and cover letter** as LaTeX, built to PDF.
 - **Role Templates:** start each resume from your own reviewed resume for that job family. Claude tailors it without rewording your bullets.
 - **Translation:** for a posting in another language, you get your documents in both languages.
@@ -22,7 +22,7 @@ See the fictional [example application](example/applications/26.04.26_mleng@exam
 2. Open the folder in the Dev Container, or run `./setup.sh` for a local install.
 3. Replace the example profile in `data/profile/` with your own.
 4. Start Claude Code in the folder and run `/review-job`.
-5. Paste a job description, and confirm when Claude asks to create the documents.
+5. Paste a job posting, and confirm when Claude asks to create the documents.
 
 The sections below cover each step.
 

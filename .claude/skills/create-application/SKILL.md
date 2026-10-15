@@ -10,7 +10,7 @@ If `data/` doesn't exist, stop and tell the user to run `./setup.sh` first.
 
 ## Steps
 
-1. **Read** `$ARGUMENTS/description.md` (the Job Posting and its Fit Analysis), `data/profile/contact.md` (the header details) and `.claude/skills/copyedit/rules.md` (steps 3 and 4 write by it). Read Profile files only as the steps below say, and only those you haven't read this session or whose text you no longer have.
+1. **Read** `$ARGUMENTS/description.md` (the Job Posting and its Fit Analysis) unless this session just wrote it, `data/profile/contact.md` (the header details) and `.claude/skills/copyedit/rules.md` (steps 3 and 4 write by it). Read Profile files only as the steps below say, and only those you haven't read this session or whose text you no longer have.
 
    **Job title:** the objective, the cover letter and the index row use the job title as written in the Job Posting. If it has none (e.g. a LinkedIn paste starting at "About the job"), infer it from the responsibilities and say so in the final report.
 
@@ -52,7 +52,7 @@ If `data/` doesn't exist, stop and tell the user to run `./setup.sh` first.
    - **Evidence:** usually two quantified achievements that address the top requirements. Take them from the resume and the Fit Analysis' Strengths; look up the Profile only if those aren't enough.
    - **Close:** one sentence on what the user would like to work on or ask about, then the Scaffold's contact line filled from `contact.md`, and the sign-off.
 
-   Then call `/copyedit $ARGUMENTS/coverletter.tex data/profile/voice.md`, leaving out the voice file when it's missing or holds only comments.
+   Then call `/copyedit $ARGUMENTS/coverletter.tex data/profile/voice.md`, leaving out the voice file when it's missing or holds only comments. Done when the Evidence paragraph addresses at least two of the top requirements with numbers from the Profile and `/copyedit` has returned.
 
 5. **Build the PDFs** from the repo root:
    ```bash
@@ -60,9 +60,9 @@ If `data/` doesn't exist, stop and tell the user to run `./setup.sh` first.
    ```
    If a build fails, show the script's output and the same command so the user can retry after fixing the issue. Done when both print a page count.
 
-6. **Translate** (cases B and C): call `/translate $ARGUMENTS/coverletter.tex <language> overwrite` with the Skill tool, and in case C also `/translate $ARGUMENTS/resume.tex <language> overwrite`; step 2 already asked about overwriting. Each writes and builds its `_<code>` file. Pass on any page growth or build failure it reports.
+6. **Translate** (cases B and C): call `/translate $ARGUMENTS/coverletter.tex <language> overwrite` with the Skill tool, and in case C also `/translate $ARGUMENTS/resume.tex <language> overwrite`; step 2 already asked about overwriting. Each writes and builds its `_<code>` file. Pass on any page growth or build failure it reports. Keep both language versions.
 
-   Then call `/copyedit $ARGUMENTS/coverletter_<code>.tex` with the voice file as in step 4, and rebuild it with `src/build.sh $ARGUMENTS/coverletter_<code>.tex`. `resume_<code>.tex` stays as `/translate` wrote it: most of its bullets come from the Role Template.
+   Then call `/copyedit $ARGUMENTS/coverletter_<code>.tex` with the voice file as in step 4, and rebuild it with `src/build.sh $ARGUMENTS/coverletter_<code>.tex`. `resume_<code>.tex` stays as `/translate` wrote it: most of its bullets come from the Role Template. Done when every `_<code>` file in the case's Output column has a PDF.
 
 7. **Add a row to `data/index.md`,** keeping it newest first: insert it above the first row with an older date, or at the end if none is older; usually that's directly below the header separator (`|------|…`). The date comes from the directory name (`YY.MM.DD` → `20YY-MM-DD`); the company and full job title as written in the Job Posting (`Octopus Energy`, `Python Developer`), not the slugs. Skip if a row for this directory exists.
    ```
