@@ -1,3 +1,9 @@
+# Finds the document classes next to this file, so each clone uses its own.
+# latexmk evals rc files, so __FILE__ is no use; it records each path it reads.
+use File::Basename;
+use Cwd 'abs_path';
+ensure_path('TEXINPUTS', dirname(abs_path($rc_files_read[-1])));
+
 # Set to 1 to delete build artifacts after each successful build (keeps PDF).
 # Set to 0 to keep artifacts (enables faster incremental rebuilds).
 our $cleanup_after_build = 1;

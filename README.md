@@ -86,7 +86,7 @@ docker volume rm expressive-resume-ai-claude-code
    ./setup.sh
    ```
 
-Setup creates `data/`, the folder for your profile and applications, starting from a fictional example profile. It also makes the document classes available to LaTeX. It's safe to re-run: an existing `data/` is left untouched.
+Setup creates `data/`, the folder for your profile and applications, starting from a fictional example profile. It's safe to re-run: an existing `data/` is left untouched.
 
 ### 3. Log in to Claude Code
 
@@ -234,12 +234,16 @@ src/build.sh data/applications/YY.MM.DD_<role>@<company>/resume.tex data/applica
 
 It prints each PDF with its page count, or the LaTeX errors if a build fails. Only the `.pdf` is kept next to the `.tex` source; build artifacts are deleted after each successful build.
 
+**Other editors:** run `src/build.sh`, or pass `-r <tool folder>/src/latexmkrc` to latexmk.
+
 ## Getting updates
 
 - **Fork:** click **Sync fork** on your fork's `main` branch on GitHub, then `git pull`.
 - **Clone:** `git pull`.
 
 Your `data/` isn't affected by either.
+
+If you set up the tool before LaTeX found its document classes through `src/latexmkrc`, you can delete `~/texmf/tex/latex/expressive-resume-ai`: it's no longer used.
 
 ## Setup on another machine
 
@@ -250,7 +254,7 @@ To use your backed-up `data/` on another machine, or to get it back after losing
    ```bash
    git clone <your-data-repo> data
    ```
-3. Run `./setup.sh`, or open the folder in the Dev Container. Setup leaves your `data/` untouched and only sets up LaTeX.
+3. Run `./setup.sh`, or open the folder in the Dev Container. Setup leaves your `data/` untouched and only checks for LaTeX.
 
 If setup ran first, it created a `data/` from the example, and the clone fails. Delete that `data/` and clone again.
 
