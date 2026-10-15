@@ -8,7 +8,7 @@ expressive-resume-ai: Claude Code commands that tailor LaTeX resumes and cover l
 
 Searches from the repo root skip the gitignored `data/`, so search explicit `data/…` paths.
 
-`git clean -ffdx` in the Tool Repo deletes `data/` with its history; `.claude/settings.json` denies `git clean`. Remove build artifacts with `latexmk -C <file>.tex`.
+`git clean -ffdx` in the Tool Repo deletes `data/` with its history; `.claude/settings.json` denies `git clean`. Remove build artifacts with `latexmk -C <file>.tex` from the document's directory.
 
 ## Editing documents
 
@@ -21,10 +21,10 @@ Searches from the repo root skip the gitignored `data/`, so search explicit `dat
 
 ## Building
 
-From the document's directory:
+From the repo root, one or more files:
 
 ```bash
-latexmk -pdf -r ../../../src/latexmkrc resume.tex
+src/build.sh data/applications/<dir>/resume.tex data/applications/<dir>/coverletter.tex
 ```
 
-`../../../src/latexmkrc` reaches the Tool Repo's rc file from any `data/applications/<dir>/`, `data/templates/<Name>/` or `example/applications/<dir>/`. `git rev-parse --show-toplevel` resolves to `data/` inside the Data Repo, where latexmk fails with "RC file does not exist". The `.cls` files resolve through `~/texmf` symlinks created by `./setup.sh`.
+It prints each PDF's page count, or the LaTeX errors of a failed build, and exits non-zero if any build failed. The `.cls` files resolve through `~/texmf` symlinks created by `./setup.sh`.
