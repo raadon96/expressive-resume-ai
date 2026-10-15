@@ -33,7 +33,7 @@ Everyone needs **git** and a **Claude Pro or Max subscription or an Anthropic AP
 | | Dev Container (recommended) | Local |
 |---|---|---|
 | Platforms | Windows, macOS, Linux | Linux, macOS |
-| You install | Docker, VS Code and the Dev Containers extension | LaTeX with `latexmk`, Claude Code |
+| You install | Docker, VS Code and the Dev Containers extension | LaTeX with `latexmk`, Claude Code v2.1.218 or later |
 | Comes ready | LaTeX, Claude Code, VS Code extensions; `./setup.sh` runs automatically | — |
 
 Choose the Dev Container on Windows, or if you don't want LaTeX on your machine. The first container start downloads a LaTeX image of several GB and takes a few minutes; later starts are fast.
@@ -120,6 +120,7 @@ In the Dev Container, set `ANTHROPIC_API_KEY` on your **host** before opening th
 | `data/profile/projects/*.md` | One file per project you want Claude to reference. **Delete the example projects**, or their fictional content can end up in your resumes |
 | `data/profile/qualifications.md` | Your degrees, certifications and spoken languages |
 | `data/profile/images/qr_code.png` | Your LinkedIn QR code (or a QR code for any URL you want on the resume) |
+| `data/profile/voice.md` | Optional: samples of your own writing and notes on your style, used for cover letters. If your `data/profile/` predates this file, copy it from `example/profile/voice.md` |
 
 `data/` is its own git repo, separate from the tool, so a `git add .` in the tool can't publish your data. Commit your profile there:
 
@@ -194,6 +195,20 @@ You can also translate any `.tex` or `.md` file yourself:
 
 Claude writes `coverletter_de.tex` next to the original, phrased the way a native speaker would write it rather than word for word, and builds the PDF. The original is never overwritten. Given text instead of a path, it returns the translation.
 
+### Copyediting
+
+Claude writes by one set of rules, `.claude/skills/copyedit/rules.md`, so the text reads like you wrote it for a recruiter rather than like a template: no stock phrases, inflated verbs or empty claims. `/copyedit` then checks the result in a fresh context that sees only the text, the rules and your voice file, never the conversation that wrote it. It keeps every fact and number, and never makes the text longer.
+
+`/create-application` runs it on what Claude wrote: the resume's objective and any bullets added from your profile (or the whole resume, if written from scratch), and the cover letter in every language. Bullets from your Role Template are left alone.
+
+You can run it on any file, optionally with your voice file:
+
+```
+/copyedit data/applications/26.04.26_pydev@examplecompany/coverletter.tex data/profile/voice.md
+```
+
+It edits the file in place, so rebuild the PDF afterwards. Given text instead of a path, it returns the edited text.
+
 ## Role Templates
 
 A Role Template is your own reviewed resume for a job family you apply to often, e.g. `PyDev` or `MLOps`. Most of your resumes repeat the same bullets, so instead of writing each one from scratch, Claude copies the closest Role Template and tailors it: it rewrites the objective, and reorders, removes, or adds bullets from your profile. **It never rewords a bullet that's already in the Role Template,** so your reviewed wording stays as it is, and a diff shows exactly what changed:
@@ -212,7 +227,8 @@ Role Templates are optional. Without them, or when none fits, the resume is writ
    ```bash
    src/build.sh data/templates/<Name>/resume.tex
    ```
-4. Optional: add a version in another language as `resume_<code>.tex`, e.g. with `/translate data/templates/<Name>/resume.tex german`, then proofread it too.
+4. Copyedit it once with `/copyedit data/templates/<Name>/resume.tex`, review the changes with `git diff` in `data/`, and rebuild it.
+5. Optional: add a version in another language as `resume_<code>.tex`, e.g. with `/translate data/templates/<Name>/resume.tex german`, then proofread it too.
 
 `resume.tex` is in your profile's language. `example/templates/MLEng/` is a Role Template built from the fictional example profile.
 

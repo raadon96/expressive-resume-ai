@@ -21,9 +21,9 @@ flowchart TD
     L1 -- yes --> DE{"&lt;Name&gt;/resume_de.tex<br/>exists?"}
     DE -- "yes (B)" --> B["3. tailor it; bullets added from the<br/>Profile are translated one by one<br/>→ resume_de.tex"]
     DE -- "no (C)" --> C["3. tailor &lt;Name&gt;/resume.tex<br/>→ resume.tex"]
-    BS & A & B & C --> S4["4. coverletter.tex<br/>always from scratch, in the Profile's language"]
+    BS & A & B & C --> S4["4. coverletter.tex<br/>always from scratch, in the Profile's language<br/>→ /copyedit"]
     S4 --> S5["5. Build the PDFs"]
-    S5 --> S6["6. /translate if languages differ<br/>B: coverletter.tex<br/>C: resume.tex + coverletter.tex"]
+    S5 --> S6["6. /translate if languages differ<br/>B: coverletter.tex<br/>C: resume.tex + coverletter.tex<br/>→ /copyedit coverletter_de.tex"]
     S6 --> S7["7. Add a row to data/index.md"]
     S7 --> S8["8. Report the files + diff command"]
 ```
@@ -33,6 +33,8 @@ flowchart TD
 1. **Read** `$ARGUMENTS/description.md` and `data/profile/contact.md` (the canonical header details). Skip `description.md` if this session already wrote or read it and it hasn't changed since (e.g. `/review-job` just wrote it). Read the rest of the Profile only as the steps below say.
 
    **Job title:** the objective, the cover letter and the index row use the job title as written in the posting. If the posting has none (e.g. a LinkedIn paste starting at "About the job"), infer it from the responsibilities and say so in the final report.
+
+   **Prose rules:** read `.claude/skills/copyedit/rules.md`. Steps 3 and 4 write by it, and `/copyedit` checks against it.
 
    **Profile reads:** before reading Profile files, run `stat -c '%Y %n' data/profile/*.md data/profile/projects/*.md` and keep the output. If this session already read a file (e.g. in `/review-job`), compare against the earlier output and skip it unless its timestamp is newer or you no longer have its text (e.g. after compaction).
 
@@ -65,11 +67,14 @@ flowchart TD
    - Use only achievements from the Profile; don't invent or embellish.
    - `qrcode=../../profile/images/qr_code.png` (Applications and Role Templates are both one level below `data/<folder>/`).
    - Write `$\sim$` for "approximately", never `\~` (an accent command that breaks the build).
+   - **Copyedit what you wrote.** From a Role Template: call `/copyedit` once in text mode on the `\objective{}` line and the bullets you added, as they stand in the file (in case B, the translated bullets), and replace each with its returned line. The Role Template's own bullets stay out of the call. From scratch: `/copyedit $ARGUMENTS/<resume>.tex`.
 
-4. **Write `$ARGUMENTS/coverletter.tex`**, always from scratch and in the source language. Start from `src/scaffold/application/coverletter.tex` and fill `\coverletterheader[...]` from `contact.md`. Three paragraphs:
-   - **Hook:** why this role at this company, citing something concrete from the posting.
-   - **Evidence:** 2–3 quantified achievements that address the top requirements. Take them from the resume and the fit analysis' Strengths; look up the Profile only if those aren't enough.
-   - **Close:** enthusiasm, an invitation to next steps, a professional sign-off.
+4. **Write `$ARGUMENTS/coverletter.tex`**, always from scratch and in the source language. Start from `src/scaffold/application/coverletter.tex` and fill `\coverletterheader[...]` from `contact.md`. If `data/profile/voice.md` exists and holds more than comments, read it and write in that voice. Three paragraphs:
+   - **Hook:** tie something concrete in the posting to the user's own work.
+   - **Evidence:** usually two quantified achievements that address the top requirements. Take them from the resume and the fit analysis' Strengths; look up the Profile only if those aren't enough.
+   - **Close:** one sentence on what the user would like to work on or ask about, then the scaffold's contact line filled from `contact.md`, and the sign-off.
+
+   Then call `/copyedit $ARGUMENTS/coverletter.tex data/profile/voice.md`, leaving out the voice file when it's missing or holds only comments.
 
 5. **Build the PDFs** from the repo root, the resume from step 3 (`resume.tex`, or `resume_<code>.tex` in case B) and the cover letter:
    ```bash
@@ -78,6 +83,8 @@ flowchart TD
    If a build fails, show the script's output and the same command so the user can retry after fixing the issue.
 
 6. **Translate** (cases B and C) following `/translate` in file mode with the target language: `coverletter.tex`, and in case C also `resume.tex`. It writes and builds the `_<code>` files and flags page growth. Keep both versions. Skip `/translate`'s overwrite question: step 2 already asked.
+
+   Then call `/copyedit $ARGUMENTS/coverletter_<code>.tex` with the voice file as in step 4, and rebuild it with `src/build.sh $ARGUMENTS/coverletter_<code>.tex`. Leave `resume_<code>.tex` as `/translate` wrote it: most of its bullets come from the Role Template.
 
 7. **Add a row to `data/index.md`,** keeping it newest first: insert it above the first row with an older date, or at the end if none is older. Usually that's directly below the header separator (`|------|…`). Date from the directory name (`YY.MM.DD` → `20YY-MM-DD`); the company and full job title as written in the posting (`Octopus Energy`, `Python Developer`), not the slugs. Skip if a row for this folder exists.
    ```
