@@ -9,7 +9,7 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 WORK_DIR="$TMP_DIR/expressive-resume-ai"
-EXAMPLE_APP="26.04.26_mleng@ExampleCompany"
+EXAMPLE_APP="26.04.26_mleng@examplecompany"
 
 step() { echo ""; echo "=== $1 ==="; }
 fail() { echo "[FAIL]  $1" >&2; exit 1; }
@@ -92,13 +92,7 @@ if (cd "$WORK_DIR" && src/build.sh missing.tex > /dev/null); then
 fi
 pass "src/build.sh fails on a missing file"
 
-step "3. ./new-application.sh test acme"
-"$WORK_DIR/new-application.sh" test acme
-app_dir="$WORK_DIR/data/applications/$(date +"%y.%m.%d")_test@acme"
-[ -f "$app_dir/description.md" ] || fail "$(rel "$app_dir")/description.md missing"
-pass "created $(rel "$app_dir")/description.md"
-
-step "4. ./setup.sh again"
+step "3. ./setup.sh again"
 before="$(snapshot_data)"
 "$WORK_DIR/setup.sh"
 [ "$before" = "$(snapshot_data)" ] || fail "re-running setup.sh changed data/"

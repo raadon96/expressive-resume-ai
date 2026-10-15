@@ -14,7 +14,7 @@ Paste a job description. [Claude Code](https://claude.ai/code) analyses the fit 
 - **Translation:** for a posting in another language, you get your documents in both languages.
 - **Your data stays private:** your profile and applications live in their own git repo, separate from the tool.
 
-See the fictional [example application](example/applications/26.04.26_mleng@ExampleCompany/): its [fit analysis](example/applications/26.04.26_mleng@ExampleCompany/description.md), [resume](example/applications/26.04.26_mleng@ExampleCompany/resume.pdf) and [cover letter](example/applications/26.04.26_mleng@ExampleCompany/coverletter.pdf).
+See the fictional [example application](example/applications/26.04.26_mleng@examplecompany/): its [fit analysis](example/applications/26.04.26_mleng@examplecompany/description.md), [resume](example/applications/26.04.26_mleng@examplecompany/resume.pdf) and [cover letter](example/applications/26.04.26_mleng@examplecompany/coverletter.pdf).
 
 ## Quick start
 
@@ -174,12 +174,10 @@ Other ways to pass the job description:
 | `/review-job https://company.com/careers/some-role` | fetched from the URL. LinkedIn needs a login, so Claude asks you to paste it instead |
 | `/review-job data/applications/<folder>` | read from `description.md` in that folder |
 
-To create the folder yourself first, run `./new-application.sh <role> <company>`, paste the job description into its `description.md`, and run `/review-job` on the folder.
-
 If a session ends after the fit analysis but before the documents are written, continue with:
 
 ```
-/create-application data/applications/26.04.26_pydev@ExampleCompany
+/create-application data/applications/26.04.26_pydev@examplecompany
 ```
 
 Your applications are files in `data/`. Commit them there: `cd data && git add . && git commit`.
@@ -191,7 +189,7 @@ If the posting's language differs from your profile's (e.g. a German posting, an
 You can also translate any `.tex` or `.md` file yourself:
 
 ```
-/translate data/applications/26.04.26_pydev@ExampleCompany/coverletter.tex german
+/translate data/applications/26.04.26_pydev@examplecompany/coverletter.tex german
 ```
 
 Claude writes `coverletter_de.tex` next to the original, phrased the way a native speaker would write it rather than word for word, and builds the PDF. The original is never overwritten. Given text instead of a path, it returns the translation.
@@ -201,7 +199,7 @@ Claude writes `coverletter_de.tex` next to the original, phrased the way a nativ
 A Role Template is your own reviewed resume for a job family you apply to often, e.g. `PyDev` or `MLOps`. Most of your resumes repeat the same bullets, so instead of writing each one from scratch, Claude copies the closest Role Template and tailors it: it rewrites the objective, and reorders, removes, or adds bullets from your profile. **It never rewords a bullet that's already in the Role Template,** so your reviewed wording stays as it is, and a diff shows exactly what changed:
 
 ```bash
-diff data/templates/MLOps/resume.tex data/applications/26.04.26_mlops@ExampleCompany/resume.tex
+diff data/templates/MLOps/resume.tex data/applications/26.04.26_mlops@examplecompany/resume.tex
 ```
 
 Role Templates are optional. Without them, or when none fits, the resume is written from your profile.

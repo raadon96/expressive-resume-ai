@@ -16,7 +16,7 @@ CLAUDE.local.md
 
 # PDF files generated from LaTeX source files. These are the final output documents and should not be tracked in version control, as they can be easily regenerated from the source files. Tracking them can lead to unnecessary merge conflicts and bloated repository size.
 example/applications/**/*.pdf
-!example/applications/26.04.26_mleng@ExampleCompany/*.pdf
+!example/applications/26.04.26_mleng@examplecompany/*.pdf
 example/profile/**/*.pdf
 example/templates/**/*.pdf
 
