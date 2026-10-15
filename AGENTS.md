@@ -1,8 +1,8 @@
-expressive-resume-ai: Claude Code commands that tailor LaTeX resumes and cover letters to job postings. Terms (Tool Repo, Data Repo, Profile, Application, Role Template, Scaffold, Application Index) are defined in `GLOSSARY.md`.
+expressive-resume-ai: Claude Code skills that tailor LaTeX resumes and cover letters to job postings. Terms (Tool Repo, Data Repo, Profile, Application, Role Template, Scaffold, Application Index) are defined in `GLOSSARY.md`.
 
 ## Two repos in one folder
 
-- **Tool Repo** (this repo): document classes, Scaffold, commands and scripts. Keep it free of personal data.
+- **Tool Repo** (this repo): document classes, Scaffold, skills and scripts. Keep it free of personal data.
 - **Data Repo** (`data/`): the user's Profile, Role Templates, Applications and Application Index. Its own git repo, gitignored by the Tool Repo: commit data changes inside `data/`.
 - `example/` mirrors `data/` with fictional content.
 
