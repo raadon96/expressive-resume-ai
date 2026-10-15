@@ -8,6 +8,14 @@ An AI-assisted LaTeX resume and cover-letter generator, driven by Claude Code sl
 A single job application's working directory in the user's Data Repo, `applications/YY.MM.DD_<role>@<company>/`, holding that application's job posting, fit analysis, generated resume, cover letter, and notes.
 _Avoid_: "the application" for the software/repo itself — always say "this repo" or "expressive-resume-ai" instead; job, posting, submission.
 
+**Job Posting**:
+The employer's advertisement for one role, as the user received it; the starting point of an Application.
+_Avoid_: job description, JD, job ad.
+
+**Fit Analysis**:
+The assessment of a Job Posting against the Profile, kept in its Application: strengths, gaps, how to frame the application, which Role Template to start from, the Job Posting's language, and a verdict on whether to apply.
+_Avoid_: job review, match report.
+
 **Profile**:
 The user's canonical personal/career source data (`profile/`), kept once and drawn on by every Application. Not itself an Application, and not a generated document.
 _Avoid_: resume data, master resume.
