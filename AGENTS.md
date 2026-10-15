@@ -27,4 +27,4 @@ From the repo root, one or more files:
 src/build.sh data/applications/<dir>/resume.tex data/applications/<dir>/coverletter.tex
 ```
 
-It prints each PDF's page count, or the LaTeX errors of a failed build, and exits non-zero if any build failed. The `.cls` files resolve through `~/texmf` symlinks created by `./setup.sh`.
+It prints each PDF's page count, or the LaTeX errors of a failed build, and exits non-zero if any build failed. `src/latexmkrc` puts `src/` on `TEXINPUTS`, so the `.cls` files are found only through it.

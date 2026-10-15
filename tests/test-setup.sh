@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Walks the README's setup steps in a temp copy of the repo with a temp HOME,
-# so the real data/ and ~/texmf stay untouched. Fails on the first error. Linux
-# only (GNU find), like CI.
+# Walks the README's setup steps in a temp copy of the repo, so the real data/
+# stays untouched. A temp HOME and no TEXINPUTS/TEXMFHOME keep classes linked
+# into a real ~/texmf by an older setup.sh from masking a broken src/latexmkrc.
+# Fails on the first error. Linux only (GNU find), like CI.
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -72,7 +73,13 @@ diff -r "$WORK_DIR/example/profile" "$WORK_DIR/data/profile" > /dev/null ||
     fail "data/profile/ differs from example/profile/"
 pass "data/ is a git repo with the Scaffold files and the example profile"
 
-step "2. Building with src/build.sh and the ~/texmf symlinks"
+# The builds below then prove the classes come from src/latexmkrc
+if kpsewhich ExpressiveResume.cls > /dev/null; then
+    fail "LaTeX finds ExpressiveResume.cls without src/latexmkrc"
+fi
+pass "LaTeX can't find the classes without src/latexmkrc"
+
+step "2. Building with src/build.sh"
 build_pdfs "$WORK_DIR" src/scaffold/application/resume.tex src/scaffold/application/coverletter.tex
 mkdir -p "$WORK_DIR/data/applications"
 cp -R "$WORK_DIR/example/applications/$EXAMPLE_APP" "$WORK_DIR/data/applications/"
