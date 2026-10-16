@@ -27,6 +27,10 @@ Fit analysis written to data/applications/26.04.26_mleng@examplecompany/descript
 Strong fit — 7 of 9 core requirements match directly. Recommend applying.
 
 Proceed with creating a tailored CV and cover letter?
+- Yes  → I will create the application files now, starting from the MLEng Role Template
+- Yes, but from <another Role Template> or from scratch → I will record your choice and create the files
+- No   → I will save description.md and close
+- Or ask me anything about the analysis
 > Yes
 
 Built resume.pdf and coverletter.pdf
@@ -41,8 +45,8 @@ See the fictional example's [fit analysis](example/applications/26.04.26_mleng@e
 1. **Fork** this repository, then clone your fork. To clone without forking, see the [setup guide](docs/guides/setup.md#1-get-the-tool).
 2. Install, one of two ways:
    - **Dev Container (recommended):** with Docker, [VS Code](https://code.visualstudio.com/) and its Dev Containers extension installed, open the folder and click **Reopen in Container**. The first start downloads several GB.
-   - **Or local** (Linux and macOS): install LaTeX with `latexmk`, then run `./setup.sh`.
-3. Run `claude`, then `/login`.
+   - **Or local** (Linux and macOS): install LaTeX with `latexmk` and [Claude Code](https://claude.ai/code), then run `./setup.sh`.
+3. Run `claude`, then `/login`. In the Dev Container, use the Claude Code panel in the sidebar.
 4. Replace the example profile in `data/profile/` with your own work history, projects, qualifications and contact details. **Delete the example projects**, or their fictional content can end up in your resumes.
 5. Run `/review-job`, then paste a job posting.
 
