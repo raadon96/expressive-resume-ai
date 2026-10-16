@@ -27,8 +27,8 @@ else
     cp -R "$REPO_DIR/example/profile" "$DATA_DIR/profile"
     git -C "$DATA_DIR" init --quiet
     ok "created data/ from the scaffold and the example profile (git repo, no commits)"
-    warn "data/profile/ is a fictional example: replace it with your own data (see README.md, Setup step 4)"
-    warn "Restoring a backup? Delete data/ and clone your Data Repo into it (see README.md, Setup on another machine)"
+    warn "data/profile/ is a fictional example: replace it with your own data (see docs/guides/setup.md, step 4)"
+    warn "Restoring a backup? Delete data/ and clone your Data Repo into it (see docs/guides/setup.md, Setup on another machine)"
 fi
 
 # ----- 2. Check LaTeX -----
