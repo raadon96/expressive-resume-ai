@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# Walks the README's setup steps in a temp copy of the repo with a temp HOME,
-# so the real data/ and ~/texmf stay untouched. Fails on the first error. Linux
-# only (GNU find), like CI.
+# Walks the setup steps in docs/guides/setup.md in a temp copy of the repo, so
+# the real data/ stays untouched. A temp HOME and no TEXINPUTS/TEXMFHOME keep
+# classes linked into a real ~/texmf by an older setup.sh from masking a broken
+# src/latexmkrc.
+# Fails on the first error. Linux only (GNU find), like CI.
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 WORK_DIR="$TMP_DIR/expressive-resume-ai"
-EXAMPLE_APP="26.04.26_mleng@ExampleCompany"
+EXAMPLE_APP="26.04.26_mleng@examplecompany"
 
 step() { echo ""; echo "=== $1 ==="; }
 fail() { echo "[FAIL]  $1" >&2; exit 1; }
@@ -21,14 +23,21 @@ snapshot_data() {
     (cd "$WORK_DIR/data" && find . -printf '%p %s %T@\n' | sort)
 }
 
-# Builds a .tex file the documented way and checks its PDF exists
-build_pdf() {
-    local dir="$1" tex="$2"
-    local pdf="${tex%.tex}.pdf"
-    rm -f "$dir/$pdf"
-    (cd "$dir" && latexmk -pdf -interaction=nonstopmode -r ../../../.latexmkrc "$tex")
-    [ -f "$dir/$pdf" ] || fail "no PDF built for $(rel "$dir")/$tex"
-    pass "built $(rel "$dir")/$pdf"
+# Builds .tex files through src/build.sh from a working directory and checks
+# each PDF exists and its page count line was printed
+build_pdfs() {
+    local cwd="$1" tex pdf output
+    shift
+    for tex in "$@"; do rm -f "$cwd/${tex%.tex}.pdf"; done
+    output="$(cd "$cwd" && "$WORK_DIR/src/build.sh" "$@")" ||
+        { echo "$output"; fail "src/build.sh $* failed in $(rel "$cwd")"; }
+    echo "$output"
+    for tex in "$@"; do
+        pdf="${tex%.tex}.pdf"
+        [ -f "$cwd/$pdf" ] || fail "no PDF built for $(rel "$cwd/$tex")"
+        [[ "$output" == *"$pdf: "[0-9]*" page"* ]] || fail "no page count printed for $pdf"
+        pass "built $(rel "$cwd/$pdf")"
+    done
 }
 
 # The working tree minus everything gitignored, as CI would see it after committing.
@@ -65,22 +74,26 @@ diff -r "$WORK_DIR/example/profile" "$WORK_DIR/data/profile" > /dev/null ||
     fail "data/profile/ differs from example/profile/"
 pass "data/ is a git repo with the Scaffold files and the example profile"
 
-step "2. Building with latexmk and the ~/texmf symlinks"
-build_pdf "$WORK_DIR/src/scaffold/application" resume.tex
-build_pdf "$WORK_DIR/src/scaffold/application" coverletter.tex
+# The builds below then prove the classes come from src/latexmkrc
+if kpsewhich ExpressiveResume.cls > /dev/null; then
+    fail "LaTeX finds ExpressiveResume.cls without src/latexmkrc"
+fi
+pass "LaTeX can't find the classes without src/latexmkrc"
+
+step "2. Building with src/build.sh"
+build_pdfs "$WORK_DIR" src/scaffold/application/resume.tex src/scaffold/application/coverletter.tex
 mkdir -p "$WORK_DIR/data/applications"
 cp -R "$WORK_DIR/example/applications/$EXAMPLE_APP" "$WORK_DIR/data/applications/"
-build_pdf "$WORK_DIR/data/applications/$EXAMPLE_APP" resume.tex
-build_pdf "$WORK_DIR/data/applications/$EXAMPLE_APP" coverletter.tex
-build_pdf "$WORK_DIR/example/templates/MLEng" resume.tex
+build_pdfs "$WORK_DIR" "data/applications/$EXAMPLE_APP/resume.tex"
+# From inside the Data Repo, where git rev-parse can't find the Tool Repo
+build_pdfs "$WORK_DIR/data" "applications/$EXAMPLE_APP/coverletter.tex"
+build_pdfs "$WORK_DIR" example/templates/MLEng/resume.tex
+if (cd "$WORK_DIR" && src/build.sh missing.tex > /dev/null); then
+    fail "src/build.sh succeeded on a missing file"
+fi
+pass "src/build.sh fails on a missing file"
 
-step "3. ./new-application.sh test acme"
-"$WORK_DIR/new-application.sh" test acme
-app_dir="$WORK_DIR/data/applications/$(date +"%y.%m.%d")_test@acme"
-[ -f "$app_dir/description.md" ] || fail "$(rel "$app_dir")/description.md missing"
-pass "created $(rel "$app_dir")/description.md"
-
-step "4. ./setup.sh again"
+step "3. ./setup.sh again"
 before="$(snapshot_data)"
 "$WORK_DIR/setup.sh"
 [ "$before" = "$(snapshot_data)" ] || fail "re-running setup.sh changed data/"

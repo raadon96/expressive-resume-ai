@@ -1,0 +1,34 @@
+# Finds the document classes next to this file, so each clone uses its own.
+# latexmk evals rc files, so __FILE__ is no use; it records each path it reads.
+use File::Basename;
+use Cwd 'abs_path';
+ensure_path('TEXINPUTS', dirname(abs_path($rc_files_read[-1])));
+
+# Set to 1 to delete build artifacts after each successful build (keeps PDF).
+# Set to 0 to keep artifacts (enables faster incremental rebuilds).
+our $cleanup_after_build = 1;
+
+$success_cmd = 'internal cleanup_build_artifacts';
+
+sub cleanup_build_artifacts {
+    (my $base = $root_filename) =~ s/\.tex$//;
+    print_page_count($base);
+    return unless $cleanup_after_build;
+    my @exts = qw(aux fdb_latexmk fls log out synctex.gz);
+    for my $ext (@exts) {
+        my $file = "$base.$ext";
+        unlink $file if -e $file;
+    }
+}
+
+# Prints "<base>.pdf: N pages" from the log, which is the only record of the
+# count once cleanup deletes it. src/build.sh reads this line.
+sub print_page_count {
+    my ($base) = @_;
+    open(my $fh, '<', "$base.log") or return;
+    # TeX wraps log lines at 79 characters, so the line may be split
+    (my $log = do { local $/; <$fh> }) =~ s/\n//g;
+    close $fh;
+    print "$base.pdf: $1 page" . ($1 == 1 ? '' : 's') . "\n"
+        if $log =~ /Output written on .*?\((\d+) pages?/;
+}

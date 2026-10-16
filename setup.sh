@@ -2,9 +2,6 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CLS_DIR="$REPO_DIR/src"
-TEXMF_DIR="$HOME/texmf/tex/latex/expressive-resume-ai"
-CLS_FILES=("Expressive.cls" "ExpressiveResume.cls" "ExpressiveCoverLetter.cls")
 DATA_DIR="$REPO_DIR/data"
 
 RED='\033[0;31m'
@@ -30,8 +27,8 @@ else
     cp -R "$REPO_DIR/example/profile" "$DATA_DIR/profile"
     git -C "$DATA_DIR" init --quiet
     ok "created data/ from the scaffold and the example profile (git repo, no commits)"
-    warn "data/profile/ is a fictional example: replace it with your own data (see README.md, Setup step 4)"
-    warn "Restoring a backup? Delete data/ and clone your Data Repo into it (see README.md, Setup on another machine)"
+    warn "data/profile/ is a fictional example: replace it with your own data (see docs/guides/setup.md, step 4)"
+    warn "Restoring a backup? Delete data/ and clone your Data Repo into it (see docs/guides/setup.md, Setup on another machine)"
 fi
 
 # ----- 2. Check LaTeX -----
@@ -48,60 +45,6 @@ else
     exit 1
 fi
 
-# ----- 3. Symlink setup -----
 echo ""
-echo "--- Setting up .cls symlinks ---"
-
-mkdir -p "$TEXMF_DIR"
-
-all_ok=true
-for cls in "${CLS_FILES[@]}"; do
-    src="$CLS_DIR/$cls"
-    dst="$TEXMF_DIR/$cls"
-
-    if [ -L "$dst" ]; then
-        current_target="$(readlink "$dst")"
-        if [ "$current_target" = "$src" ]; then
-            ok "$cls — already linked correctly, skipping"
-        else
-            warn "$cls — symlink exists but points to '$current_target' instead of '$src'"
-            warn "       Run: ln -sf \"$src\" \"$dst\"  to fix manually"
-            all_ok=false
-        fi
-    elif [ -e "$dst" ]; then
-        warn "$cls — a non-symlink file already exists at '$dst'"
-        warn "       Remove it manually and re-run this script"
-        all_ok=false
-    else
-        ln -s "$src" "$dst"
-        ok "$cls — symlink created"
-    fi
-done
-
-# ----- 4. Refresh texmf index -----
-echo ""
-echo "--- Refreshing texmf index ---"
-if mktexlsr "$HOME/texmf" &> /dev/null; then
-    ok "mktexlsr completed"
-else
-    warn "mktexlsr failed — you may need to run it manually: mktexlsr ~/texmf"
-fi
-
-# ----- 5. Verify -----
-echo ""
-echo "--- Verifying ---"
-if kpsewhich ExpressiveResume.cls &> /dev/null; then
-    ok "LaTeX can find ExpressiveResume.cls"
-else
-    fail "LaTeX cannot find ExpressiveResume.cls — something went wrong"
-    exit 1
-fi
-
-# ----- Summary -----
-echo ""
-if [ "$all_ok" = true ]; then
-    echo -e "${GREEN}Setup complete. You're ready to build.${NC}"
-else
-    echo -e "${YELLOW}Setup completed with warnings. Review the messages above.${NC}"
-fi
+echo -e "${GREEN}Setup complete. You're ready to build.${NC}"
 echo ""

@@ -1,6 +1,6 @@
 # Dev Container
 
-The Dev Container for expressive-resume-ai: LaTeX, Claude Code and the VS Code extensions the tool uses, ready in one container. Setup is in the main [README](../README.md#option-a--dev-container-recommended).
+The Dev Container for expressive-resume-ai: LaTeX, Claude Code and the VS Code extensions the tool uses, ready in one container. Setup is in the [setup guide](../docs/guides/setup.md#option-a-dev-container-recommended).
 
 Based on [qdm12/latexdevcontainer](https://github.com/qdm12/latexdevcontainer) by Quentin McGaw, under the MIT licence in [LICENSE](LICENSE).
 
@@ -17,7 +17,7 @@ The Docker socket is not mounted, so the container can't control the host's Dock
 
 Claude Code keeps its login and global config in the named volume `expressive-resume-ai-claude-code`, mounted at `/root/.claude`. `CLAUDE_CONFIG_DIR` points there, so the global config file `.claude.json` lands in the volume too. A `/login` made in the container survives rebuilds, and none of your host Claude Code setup (settings, plugins, user `CLAUDE.md`, history) enters the container.
 
-To reset the login, remove the volume as described in the main [README](../README.md#option-a--dev-container-recommended).
+To reset the login, remove the volume as described in the [setup guide](../docs/guides/setup.md#option-a-dev-container-recommended).
 
 ## Files
 
@@ -33,6 +33,27 @@ After editing any of them, run **Dev Containers: Rebuild Container** from the co
 ## Checking a change
 
 The `Dev Container` workflow creates the container with the Dev Container CLI and runs `tests/test-setup.sh` inside it, on PRs that touch this folder, `setup.sh`, `tests/` or the workflow, and weekly.
+
+To run the same job locally before pushing, work on a throwaway copy of the repo, including uncommitted changes:
+
+```bash
+T=~/.cache/devc-test
+mkdir -p "$T" && git ls-files -z -co --exclude-standard | xargs -0 cp --parents -t "$T"
+git -C "$T" init -q
+sed -i 's/name: expressive-resume-ai-claude-code/name: devc-test-claude-code/' "$T/.devcontainer/docker-compose.yml"
+npx -y @devcontainers/cli up --workspace-folder "$T"
+npx -y @devcontainers/cli exec --workspace-folder "$T" tests/test-setup.sh
+
+# Teardown
+docker compose -p devc-test_devcontainer -f ~/.cache/devc-test/.devcontainer/docker-compose.yml down -v
+rm -rf ~/.cache/devc-test
+```
+
+- **Under `$HOME`, not `/tmp`:** Docker Desktop shares only `/home` with its VM, so `up` fails on a copy in `/tmp`.
+- **`git init`:** `tests/test-setup.sh` lists the files to copy with `git ls-files`.
+- **The `sed`:** the Claude Code volume has a fixed name, so without it the copy mounts your real login volume and `down -v` deletes it.
+- **Project name:** the CLI names the Compose project `<folder>_devcontainer`, here `devc-test_devcontainer`.
+- **Slow first `up`:** the post-create step downloads Claude Code (about 265 MB), so it can look stuck on a slow connection.
 
 CI can't drive VS Code. After changing anything in this folder, rebuild the container and check:
 
