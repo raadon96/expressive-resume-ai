@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Walks the README's setup steps in a temp copy of the repo, so the real data/
-# stays untouched. A temp HOME and no TEXINPUTS/TEXMFHOME keep classes linked
-# into a real ~/texmf by an older setup.sh from masking a broken src/latexmkrc.
+# Walks the setup steps in docs/guides/setup.md in a temp copy of the repo, so
+# the real data/ stays untouched. A temp HOME and no TEXINPUTS/TEXMFHOME keep
+# classes linked into a real ~/texmf by an older setup.sh from masking a broken
+# src/latexmkrc.
 # Fails on the first error. Linux only (GNU find), like CI.
 set -euo pipefail
 

@@ -12,7 +12,7 @@ data/
 
 `./setup.sh` ran `git init` here but made no commit. Everything starts untracked, so you can see what you still have to replace.
 
-The tool's [README](../README.md) covers what to do next: replace the example profile (Setup, step 4), back this repo up (step 5), and use it on another machine (Setup on another machine).
+The tool's [setup guide](../docs/guides/setup.md) covers what to do next: replace the example profile (step 4), back this repo up (step 5), and use it on another machine (Setup on another machine).
 
 > [!WARNING]
 > `git clean -ffdx` in the tool folder **deletes `data/`**, including its git history. Keep this repo pushed to a remote so you can recover it.
