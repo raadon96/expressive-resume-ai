@@ -1,93 +1,37 @@
-# Interview Prep: DataFlow Pipeline
+# DataFlow Pipeline
+Context: DataStream GmbH · 2020 · Python Backend Developer
 
 ## Summary
+An Apache Airflow ETL framework that ingests 12 third-party data feeds into one analytics platform.
+It gives every feed the same idempotent extraction, schema validation and dead-letter routing.
 
-An Apache Airflow-based ETL orchestration framework built at DataStream GmbH for
-ingesting 12 third-party data feeds into a unified analytics platform. Emphasises
-idempotency, structured error handling, and dead-letter routing.
+## Problem & Stakeholders
+The feeds came from CRM, ERP, ad network and logistics APIs, and each had been integrated ad hoc.
+A failed feed silently left customer dashboards stale, and "my data is wrong" was the top support ticket category.
+The data team spent about 3 hours a week on on-call triage.
 
----
+## What I Did
+- Built a DAG factory that generates each feed's DAG from a YAML config (endpoint, auth, schema, schedule, rate limit).
+- Wrote the shared operators: `IdempotentExtractOperator`, `ValidateAndLoadOperator` and `DeadLetterOperator`.
+- Added structured JSON logging for every DAG run, and Slack alerts when a feed is more than 15 minutes late.
+- Migrated all 12 feeds in 6 weeks. I ran old and new pipelines in parallel and compared outputs row by row before each cutover.
 
-## Context & Pain Points
+## How It Works
+Each extracted record is hashed, and records with a known hash are skipped.
+Records that pass schema validation load into the PostgreSQL warehouse.
+Records that fail go to a dead-letter table, which triggers an alert, and the data team reprocesses or discards them.
 
-**Domain:** DataStream's analytics platform aggregated data from 12 third-party
-APIs (CRM, ERP, ad networks, logistics providers) into a single data warehouse
-for customer dashboards.
+## Key Decisions
+- Content hashing for idempotency: re-running a DAG for the same time window can't double-count, so retries are safe.
+- YAML configs with no per-feed Python: adding a feed is a config change.
+- Dead-letter table: invalid records are kept for review, never dropped.
+- Airflow over a custom scheduler: it already ran other workloads, so this avoided operating a second scheduler.
 
-**Why this was a problem:**
-- **For the data team:** each feed had been integrated ad hoc; no consistent error
-  handling, retry logic, or observability — a feed failure would silently produce
-  stale dashboard data
-- **For customers:** stale dashboards eroded trust; "my data is wrong" was the top
-  support ticket category
-- **For engineering:** pipeline failures required manual intervention — on average
-  2–3 hours/week of on-call triage
+## Results
+- Pipeline failures down 35%, from about 4 a week to about 2.5.
+- On-call triage down from about 3 hours a week to under 30 minutes.
+- No customer-visible downtime during the migration.
 
-**The solution:** A reusable Airflow DAG template and shared operator library that
-enforced idempotency, structured alerting, and dead-letter routing across all 12
-feed integrations.
-
----
-
-## How It Works — Spoken Narrative
-
-### The problem in one sentence
-Each of 12 data feed integrations was a unique snowflake — no shared error
-handling, no consistent retry logic, failures silently produced stale data.
-
-### What we built
-- A reusable Airflow DAG factory: parametrised by feed config (endpoint, auth,
-  schema, schedule)
-- Shared operator library: `IdempotentExtractOperator`, `ValidateAndLoadOperator`,
-  `DeadLetterOperator`
-- Dead-letter routing: records that fail schema validation go to a dead-letter
-  table; alerting fires; data team reviews and reprocesses or discards
-- Structured logging: every DAG run emits JSON log events to a central aggregator;
-  SLA breach alerts fire if a feed is >15min late
-
-### Outcome
-- Pipeline failure rate down 35% (from ~4 failures/week to ~2.5)
-- On-call triage time down from ~3h/week to <30min (structured logs made
-  root-cause obvious)
-- All 12 feeds migrated over 6 weeks with no customer-visible downtime
-
----
-
-## Architecture
-
-```mermaid
-graph TD
-    CONFIG["Feed Config YAML\n(endpoint, auth, schema, schedule)"]
-    FACTORY["DAG Factory\n(dag_factory.py)"]
-    EXTRACT["IdempotentExtractOperator\n(fetch + deduplicate by content hash)"]
-    VALIDATE["ValidateAndLoadOperator\n(schema check → DWH load)"]
-    DLQ["DeadLetterOperator\n(failed records → dead_letter table)"]
-    DWH["Data Warehouse\n(PostgreSQL)"]
-    ALERT["Alerting\n(Slack on SLA breach)"]
-
-    CONFIG --> FACTORY
-    FACTORY --> EXTRACT
-    EXTRACT --> VALIDATE
-    VALIDATE -->|valid| DWH
-    VALIDATE -->|invalid| DLQ
-    DLQ --> ALERT
-```
-
-### Key design decisions
-- **Idempotency via content hash:** each extracted record is hashed; duplicate
-  re-ingestion is a no-op; this allows safe retries without double-counting
-- **DAG factory pattern:** all 12 feeds are defined as YAML configs; no per-feed
-  Python code; adding a new feed is a config change, not a code change
-- **Dead-letter table:** invalid records are preserved for manual review and
-  reprocessing — never silently dropped
-
----
-
-## Q&A Cheat Sheet
-
-| Question | Answer |
-|---|---|
-| Why Airflow over a custom scheduler? | Already running Airflow for other workloads; leveraging existing infrastructure was faster than operating a second scheduler |
-| How did you handle API rate limits? | Each feed config includes a `rate_limit` field; the extract operator sleeps between pages to stay within limits |
-| What is idempotency in this context? | Re-running a DAG for the same time window produces the same result as running it once; achieved by content-hashing records and skipping already-loaded hashes |
-| What was the hardest part? | Migrating the existing 12 ad hoc integrations without downtime — ran old and new pipelines in parallel for each feed during cutover, comparing outputs row-by-row before switching |
+## Skills & Technologies
+- Concepts: ETL, data pipeline orchestration, idempotency, schema validation, dead-letter routing, observability, zero-downtime migration
+- Tools: Python, Apache Airflow, PostgreSQL, YAML, Slack alerting

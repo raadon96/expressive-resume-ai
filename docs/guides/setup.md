@@ -91,7 +91,7 @@ In the Dev Container, set `ANTHROPIC_API_KEY` on your **host** before opening th
 |------|-------------------|
 | `data/profile/contact.md` | Your name, email, phone, LinkedIn handle, GitHub handle, city, country |
 | `data/profile/experience.md` | Your work history in LinkedIn Experience section format |
-| `data/profile/projects/*.md` | One file per project you want Claude to reference. **Delete the example projects**, or their fictional content can end up in your resumes |
+| `data/profile/projects/*.md` | One [Project Description](projects.md) per project you want Claude to reference. **Delete the example projects**, or their fictional content can end up in your resumes |
 | `data/profile/qualifications.md` | Your degrees, certifications and spoken languages |
 | `data/profile/images/qr_code.png` | Your LinkedIn QR code (or a QR code for any URL you want on the resume) |
 | `data/profile/voice.md` | Optional: samples of your own writing and notes on your style, used for cover letters. If your `data/profile/` predates this file, copy it from `example/profile/voice.md` |
