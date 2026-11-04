@@ -40,8 +40,8 @@ If `data/` doesn't exist, stop and tell the user to run `./setup.sh` first.
 
    **Both:**
    - Rewrite `\objective{}` to name the role and the company.
-   - **Choose the projects:** add or remove whole projects in `\section{Technical Projects}` to suit the Job Posting, judging each Project Description by its content, since it may name a requirement in other words ("object detection" for "machine vision"). A project you add takes its name and dates from its Project Description.
-   - Every achievement comes from the Profile as it stands there, and a number keeps its caveat.
+   - **Choose the projects:** add or remove whole projects in `\section{Technical Projects}` (under its translated title in case B) to suit the Job Posting, judging each Project Description by its content, since it may name a requirement in other words ("object detection" for "machine vision"). A project you add takes its name and dates from its Project Description; `experience.md` wins on titles, dates and employers.
+   - Every achievement comes from the Profile as it stands there, and a number keeps its caveat. For a project, its Project Description decides what can be claimed.
    - `qrcode=../../profile/images/qr_code.png` (Applications and Role Templates are both one level below `data/<folder>/`).
    - Write `$\sim$` for "approximately"; `\~` is an accent command and breaks the build.
    - **Copyedit what you wrote.** From a Role Template: call `/copyedit` once in text mode on the `\objective{}` line and the bullets you added, as they stand in the file, and replace each with its returned line; the Role Template's own bullets stay out of the call. From scratch: `/copyedit $ARGUMENTS/<resume>.tex`.

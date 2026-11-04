@@ -60,7 +60,7 @@ See the fictional example's [fit analysis](example/applications/26.04.26_mleng@e
 - [Setup](docs/guides/setup.md): every setup option, backups, and getting updates.
 - [Applying for a job](docs/guides/applying.md): other ways to pass a job posting, resuming an application, postings in another language, `/translate`, `/copyedit` and building the PDFs.
 - [Role Templates](docs/guides/role-templates.md): what they are, and how to create and maintain one.
-- [Project Descriptions](docs/guides/projects.md): the format for your project files, with a template to copy.
+- [Project Descriptions](docs/guides/projects.md): the format, with a template to copy.
 
 ## Issues and changes
 
