@@ -4,8 +4,6 @@ The reader is a recruiter who has read hundreds of applications this week and re
 
 Each rule below names a pattern to find and what to write in its place. The examples are English; the patterns are not. In any other language, look for that language's own form of each pattern: its stock application phrases, its officialese, its buzzwords. Find them natively, rather than translating the English examples and searching for those.
 
-A voice file's Notes override these rules where they conflict: it is the author's own voice.
-
 ## Structure
 
 - **Contrast framing.** "Not just X, but Y", "It's not about X, it's about Y", "more than X". Write Y on its own.
