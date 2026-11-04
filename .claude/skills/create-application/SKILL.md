@@ -20,7 +20,7 @@ Every achievement, number and caveat comes from the Profile, with nothing invent
 
 ## Steps
 
-1. **Read** `$ARGUMENTS/description.md` (the Job Posting and its Fit Analysis), the whole Profile (`data/profile/contact.md`, `experience.md`, `qualifications.md` and all of `projects/`) and `.claude/skills/copyedit/rules.md`, which step 3 writes by. Skip only files whose text you still have from this session. If `description.md` has no `## Fit Analysis`, stop and tell the user to run `/review-job`.
+1. **Read** `$ARGUMENTS/description.md` (the Job Posting and its Fit Analysis), the whole Profile (every text file in `data/profile/`, `projects/` included) and `.claude/skills/copyedit/rules.md`, which step 3 writes by. Skip only files whose text you still have from this session. If `description.md` has no `## Fit Analysis`, stop and tell the user to run `/review-job`.
 
 2. **Work out the languages** and the Output files. If any Output file already exists in `$ARGUMENTS/`, list them all and ask once: "These files already exist and will be overwritten: … Overwrite them?" On no, stop.
 
@@ -33,7 +33,7 @@ Every achievement, number and caveat comes from the Profile, with nothing invent
    - Write `\objective{}` to name the role and the company.
    - Order experience, projects and bullets so the top 3–5 requirements come first.
    - **Choose the projects** in `\section{Technical Projects}` to suit the Job Posting, judging each Project Description by its content, since it may name a requirement in other words ("object detection" for "machine vision"). A project takes its name and dates from its Project Description; `experience.md` wins on titles, dates and employers. For a project, its Project Description decides what can be claimed.
-   - Fill Education, Skills and Languages from the Profile. Keep Awards only if the Profile holds awards.
+   - Fill the remaining sections from the Profile: delete a section it has nothing for, and add one for what it holds beyond the Scaffold's, such as certifications.
    - Write `$\sim$` for "approximately"; `\~` is an accent command and breaks the build.
 
    **Cover letter:** fill `\coverletterheader[...]` from `contact.md`, then write three paragraphs:

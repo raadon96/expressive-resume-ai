@@ -55,7 +55,7 @@ Claude writes `coverletter_de.tex` next to the original, phrased the way a nativ
 
 ## Reusing a past resume
 
-Every resume is written from your profile. To reuse a past one, copy it anywhere in `data/` and edit it by hand. `/copyedit` and `/translate` work on the copy, and no skill reads it.
+Every resume is written from your profile. To reuse a past one, copy it anywhere in `data/` and edit it by hand. If the copy sits at another folder depth, adjust its `qrcode` path. `/copyedit` and `/translate` work on the copy, and no skill reads it.
 
 ## Copyediting
 

@@ -9,7 +9,7 @@ Every Application's resume and cover letter are written from the Profile, starti
 ## Considered Options
 
 - **Role Templates, tailored within fixed limits** (the previous model, decided in https://github.com/raadon96/expressive-resume-ai/issues/4): rejected. An Application's resume was copied from the user's closest reviewed resume for a job family, and its bullets were never reworded. It kept reviewed wording stable and let a diff show what changed, but it added a second source of wording to keep in sync with the Profile by hand, and three cases per Application, depending on the Role Template's languages.
-- **Bullet library in the Profile, every resume assembled from it**: rejected. It means restructuring the Profile and doesn't keep hand-tuned layout.
+- **Bullet library in the Profile, every resume assembled from it**: rejected. It means restructuring the Profile.
 
 ## Consequences
 
