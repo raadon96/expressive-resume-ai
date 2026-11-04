@@ -28,10 +28,10 @@ If `data/` doesn't exist, stop and tell the user to run `./setup.sh` first.
 
 3. **Write the resume** in `$ARGUMENTS/`: `resume.tex`, or `resume_<code>.tex` in case B.
 
-   **From a Role Template:** copy the Role Template's file, then tailor it.
+   **From a Role Template:** copy the Role Template's file, read `data/profile/experience.md`, `qualifications.md` and all of `projects/`, then tailor it.
    - Reorder experience, projects and bullets so the top 3–5 requirements come first; remove what's irrelevant or over the page count.
-   - For requirements the Role Template doesn't cover, search the Profile (`grep -il '<keyword>' data/profile/*.md data/profile/projects/*.md`) and read only the matching files. Add bullets in the Role Template's style. In case B, write them in the source language, then translate all of them in one call: `/translate <bullets> <language>` with the Skill tool, replacing each with its returned line.
-   - **Copy Role Template bullets verbatim.** Their wording is reviewed, and unchanged bullets keep the diff against the Role Template small (ADR 0002). Never reword one, not even for a typo or a keyword; if one looks wrong, tell the user to fix it in `data/templates/<Name>/`.
+   - For requirements the Role Template doesn't cover, add bullets from the Profile in the Role Template's style. In case B, write them, including those of any project you add, in the source language, then translate all of them in one call: `/translate <bullets> <language>` with the Skill tool, replacing each with its returned line.
+   - **Copy Role Template bullets verbatim,** including those of projects that stay. Their wording is reviewed, and unchanged bullets keep the diff against the Role Template small (ADR 0002). Never reword one, not even for a typo or a keyword; if one looks wrong, tell the user to fix it in `data/templates/<Name>/`.
    - Keep the Role Template's commented-out entries commented out and unchanged.
    - Check `\resumeheader[...]` against `contact.md`, which wins.
    - In case B, if the copied file lacks the `babel` line or the objective label from the Preamble in `.claude/skills/translate/latex.md`, add them and tell the user to add them to the Role Template too.
@@ -40,7 +40,8 @@ If `data/` doesn't exist, stop and tell the user to run `./setup.sh` first.
 
    **Both:**
    - Rewrite `\objective{}` to name the role and the company.
-   - Every achievement comes from the Profile as it stands there.
+   - **Choose the projects:** add or remove whole projects in `\section{Technical Projects}` (under its translated title in case B) to suit the Job Posting, judging each Project Description by its content, since it may name a requirement in other words ("object detection" for "machine vision"). A project you add takes its name and dates from its Project Description; `experience.md` wins on titles, dates and employers.
+   - Every achievement comes from the Profile as it stands there, and a number keeps its caveat. For a project, its Project Description decides what can be claimed.
    - `qrcode=../../profile/images/qr_code.png` (Applications and Role Templates are both one level below `data/<folder>/`).
    - Write `$\sim$` for "approximately"; `\~` is an accent command and breaks the build.
    - **Copyedit what you wrote.** From a Role Template: call `/copyedit` once in text mode on the `\objective{}` line and the bullets you added, as they stand in the file, and replace each with its returned line; the Role Template's own bullets stay out of the call. From scratch: `/copyedit $ARGUMENTS/<resume>.tex`.

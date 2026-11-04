@@ -20,6 +20,14 @@ _Avoid_: job review, match report.
 The user's canonical personal/career source data (`profile/`), kept once and drawn on by every Application. Not itself an Application, and not a generated document.
 _Avoid_: resume data, master resume.
 
+**Project**:
+A distinct piece of work the user can describe on its own, whether from an employer, a thesis or on the side. It may or may not appear in their work history.
+_Avoid_: case study, portfolio item.
+
+**Project Description**:
+The Profile's account of one Project: what it is, what the user did, and the skills and technologies involved. Resumes and cover letters draw on it.
+_Avoid_: project notes, project summary, description (on its own).
+
 **Application Index**:
 The list of a user's Applications in their Data Repo, one row per Application (date, company, role, link to its directory), newest first. Records that an Application's resume and cover letter were created, not whether they were sent or how it is going. An Application that stopped after its fit analysis has no row.
 _Avoid_: tracker, applications list, status board.
