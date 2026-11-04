@@ -11,10 +11,10 @@ From job posting to PDFs, and what to do when you need more than the default pat
 Claude asks you to paste the job posting, then:
 
 1. creates `data/applications/YY.MM.DD_<role>@<company>/`
-2. writes the fit analysis to `description.md`: strengths, gaps, how to frame your experience, which [Role Template](role-templates.md) to start from, and the posting's language
+2. writes the fit analysis to `description.md`: strengths, gaps, how to frame your experience, and a verdict
 3. asks whether to create the documents
 
-Confirm, and Claude writes `resume.tex` and `coverletter.tex`, builds the PDFs and adds a row to your Application Index, `data/index.md`. At the prompt you can also pick another Role Template, or ask for the resume to be written from scratch. Cover letters are always written from scratch.
+Confirm, and Claude writes `resume_en.tex` and `coverletter_en.tex` from your profile, builds the PDFs, adds a row to your Application Index, `data/index.md`, and reports each file's page count, flagging a resume over 2 pages or a cover letter over 1 for you to shorten. The suffix is the document's language, here English.
 
 Your applications are files in `data/`. Commit them there: `cd data && git add . && git commit`.
 
@@ -26,7 +26,6 @@ Your applications are files in `data/`. Commit them there: `cd data && git add .
 |---------|-------------|
 | `/review-job <job posting>` | pasted inline |
 | `/review-job https://company.com/careers/some-role` | fetched from the URL. LinkedIn needs a login, so Claude asks you to paste it instead |
-| `/review-job data/applications/<folder>` | read from `description.md` in that folder |
 
 ## Resuming an application
 
@@ -38,26 +37,36 @@ If a session ends after the fit analysis but before the documents are written, c
 
 ## Postings in another language
 
-If the posting's language differs from your profile's (e.g. a German posting, an English profile), Claude writes the documents in your profile's language and translates them, keeping both: `resume.tex` and `resume_de.tex`, `coverletter.tex` and `coverletter_de.tex`. If the Role Template already has a version in the posting's language (`resume_de.tex`), the resume is tailored from that directly, and there's only `resume_de.tex`.
+Claude writes the documents in your profile's language, the language of `data/profile/experience.md`. If the posting's language differs, it translates them and keeps both:
+
+| Profile | Posting | Files (`.tex` and `.pdf`) |
+|---------|---------|---------------------------|
+| English | English | `resume_en`, `coverletter_en` |
+| English | German | `resume_en`, `resume_de`, `coverletter_en`, `coverletter_de` |
+| German | German | `resume_de`, `coverletter_de` |
 
 You can also translate any `.tex` or `.md` file yourself:
 
 ```
-/translate data/applications/26.04.26_pydev@examplecompany/coverletter.tex german
+/translate data/applications/26.04.26_pydev@examplecompany/coverletter_en.tex german
 ```
 
-Claude writes `coverletter_de.tex` next to the original, phrased the way a native speaker would write it rather than word for word, and builds the PDF. Like `/copyedit`, it works in a fresh context that sees only the input and the translation rules, so the job posting's keywords can't creep into the translation. The original is never overwritten; if `coverletter_de.tex` already exists, it stops and says so, and `/translate <file> german overwrite` replaces it. Given text instead of a path, it returns the translation.
+Claude writes `coverletter_de.tex` next to the original, phrased the way a native speaker would write it rather than word for word, and gives you the command to build the PDF. Like `/copyedit`, it works in a fresh context that sees only the input and the translation rules, so the job posting's keywords can't creep into the translation. The original is never overwritten; if `coverletter_de.tex` already exists, it stops and says so, and `/translate <file> german overwrite` replaces it. Given text instead of a path, it returns the translation.
+
+## Reusing a past resume
+
+Every resume is written from your profile. To reuse a past one, copy it anywhere in `data/` and edit it by hand. If the copy sits at another folder depth, adjust its `qrcode` path. `/copyedit` and `/translate` work on the copy, and no skill reads it.
 
 ## Copyediting
 
-Claude writes by one set of rules, `.claude/skills/copyedit/rules.md`, so the text reads like you wrote it for a recruiter rather than like a template: no stock phrases, inflated verbs or empty claims. `/copyedit` then checks the result in a fresh context that sees only the text, the rules and your voice file, never the conversation that wrote it. It keeps every fact and number, and never makes the text longer.
+Claude writes by one set of rules, `.claude/skills/copyedit/rules.md`, so the text reads like you wrote it for a recruiter rather than like a template: no stock phrases, inflated verbs or empty claims. `/copyedit` then checks the result in a fresh context that sees only the text and the rules, never the conversation that wrote it. It keeps every fact and number, and never makes the text longer.
 
-`/create-application` runs it on what Claude wrote: the resume's objective and any bullets added from your profile (or the whole resume, if written from scratch), and the cover letter in every language. Bullets from your Role Template are left alone.
+`/create-application` runs it on the resume and cover letter in every language.
 
-You can run it on any file, optionally with your voice file:
+You can run it on any file:
 
 ```
-/copyedit data/applications/26.04.26_pydev@examplecompany/coverletter.tex data/profile/voice.md
+/copyedit data/applications/26.04.26_pydev@examplecompany/coverletter_en.tex
 ```
 
 It edits the file in place, so rebuild the PDF afterwards. Given text instead of a path, it returns the edited text.
@@ -71,7 +80,7 @@ Claude builds the PDFs when it writes the documents. To rebuild after your own e
 **Terminal**, from the repo root:
 
 ```bash
-src/build.sh data/applications/YY.MM.DD_<role>@<company>/resume.tex data/applications/YY.MM.DD_<role>@<company>/coverletter.tex
+src/build.sh data/applications/YY.MM.DD_<role>@<company>/resume_en.tex data/applications/YY.MM.DD_<role>@<company>/coverletter_en.tex
 ```
 
 It prints each PDF with its page count, or the LaTeX errors if a build fails. Only the `.pdf` is kept next to the `.tex` source; build artifacts are deleted after each successful build.

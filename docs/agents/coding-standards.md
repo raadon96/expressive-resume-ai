@@ -24,4 +24,4 @@ Comment where the config or code can't explain itself: a constraint, a workaroun
 
 ## Glossary terms
 
-Docs, commits and PRs name domain concepts with the terms in `GLOSSARY.md` (Tool Repo, Data Repo, Profile, Role Template, Scaffold, ...).
+Docs, commits and PRs name domain concepts with the terms in `GLOSSARY.md` (Tool Repo, Data Repo, Profile, Scaffold, ...).

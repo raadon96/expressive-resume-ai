@@ -1,6 +1,6 @@
 ---
 name: translate
-description: Translate a file or a few lines of text into another language, phrased the way a native speaker writes it. Use for a resume, cover letter, Role Template or Profile file, or bullets added to a resume in another language.
+description: Translate a file or a few lines of text into another language, phrased the way a native speaker writes it. Use for a resume, cover letter or Profile file.
 argument-hint: <file | text> <language> [overwrite]
 context: fork
 ---
@@ -13,7 +13,7 @@ Translate the input into the target language. You see only this file, the files 
 
 - **`overwrite`:** if the last word is `overwrite`, remove it; the caller allows replacing an existing target file.
 - **Language:** the last remaining word, in English, e.g. `german`, `french`, `english`. Its **code** is its ISO 639-1 code (`de`, `fr`, `en`).
-- **File mode:** the rest is the path to an existing file, e.g. `data/templates/MLOps/resume.tex`.
+- **File mode:** the rest is the path to an existing file, e.g. `data/applications/<dir>/resume_en.tex`.
 - **Text mode:** anything else is the text itself, one or more lines, e.g. two `\achievement{...}` bullets.
 
 ## Steps
@@ -26,11 +26,7 @@ Translate the input into the target language. You see only this file, the files 
 
 4. **Return:**
    - **Text mode:** reply with only the translated lines, the same number and order as the input, with no preamble or commentary, so the caller can insert them as is.
-   - **File mode:** write the target. For a `.tex` file, build it from the repo root with the source in the same call, so both page counts print:
-     ```bash
-     src/build.sh <dir>/<name>.tex <dir>/<name>_<code>.tex
-     ```
-     Reply with the file, its PDF and the page counts, e.g. `Created <dir>/resume_de.tex → <dir>/resume_de.pdf (2 pages; the source has 1)`. If the translation has more pages than the source, say so: the user shortens it by hand. If the build fails, reply with the script's output and the command, so the user can retry after fixing it.
+   - **File mode:** write the target, then reply with one line, `Translated <target>`. For a `.tex` file, add a second line: `Rebuild it: src/build.sh <target>`.
 
 ## Rules
 
