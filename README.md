@@ -12,9 +12,8 @@ Paste a job posting. [Claude Code](https://claude.ai/code) tells you honestly ho
 
 - **Honest fit analysis:** your strengths and gaps for the posting, how to frame your experience, and a verdict on whether to apply, saved next to the job posting.
 - **Tailored resume and cover letter:** written as LaTeX from your profile and built to PDF, with a row added to your Application Index.
-- **Doesn't read like AI:** one set of writing rules bans stock phrases and inflated verbs, and `/copyedit` checks the result in a fresh context against your own writing samples.
+- **Doesn't read like AI:** one set of writing rules bans stock phrases and inflated verbs, and `/copyedit` checks the result in a fresh context.
 - **Your data stays yours:** your profile and applications are plain files in their own git repo, separate from the tool, so a `git add .` in the tool can't publish them.
-- **Role Templates:** start each resume from your own reviewed resume for that job family. Claude tailors it without rewording your bullets.
 - **Multilingual:** for a posting in another language, you get your documents in both languages, phrased the way a native speaker writes.
 
 ## How it works
@@ -27,16 +26,15 @@ Fit analysis written to data/applications/26.04.26_mleng@examplecompany/descript
 Strong fit — 7 of 9 core requirements match directly. Recommend applying.
 
 Proceed with creating a tailored CV and cover letter?
-- Yes  → I will create the application files now, starting from the MLEng Role Template
-- Yes, but from <another Role Template> or from scratch → I will record your choice and create the files
+- Yes  → I will create the application files now
 - No   → I will save description.md and close
 - Or ask me anything about the analysis
 > Yes
 
-Built resume.pdf and coverletter.pdf
+Built resume_en.pdf and coverletter_en.pdf
 ```
 
-See the fictional example's [fit analysis](example/applications/26.04.26_mleng@examplecompany/description.md), [resume](example/applications/26.04.26_mleng@examplecompany/resume.pdf) and [cover letter](example/applications/26.04.26_mleng@examplecompany/coverletter.pdf).
+See the fictional example's [fit analysis](example/applications/26.04.26_mleng@examplecompany/description.md), [resume](example/applications/26.04.26_mleng@examplecompany/resume_en.pdf) and [cover letter](example/applications/26.04.26_mleng@examplecompany/coverletter_en.pdf).
 
 ## Setup
 
@@ -58,8 +56,7 @@ See the fictional example's [fit analysis](example/applications/26.04.26_mleng@e
 ## Guides
 
 - [Setup](docs/guides/setup.md): every setup option, backups, and getting updates.
-- [Applying for a job](docs/guides/applying.md): other ways to pass a job posting, resuming an application, postings in another language, `/translate`, `/copyedit` and building the PDFs.
-- [Role Templates](docs/guides/role-templates.md): what they are, and how to create and maintain one.
+- [Applying for a job](docs/guides/applying.md): other ways to pass a job posting, resuming an application, postings in another language, reusing a past resume, `/translate`, `/copyedit` and building the PDFs.
 - [Project Descriptions](docs/guides/projects.md): the format, with a template to copy.
 
 ## Issues and changes

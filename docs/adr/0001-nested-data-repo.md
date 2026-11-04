@@ -4,7 +4,7 @@ status: accepted
 
 # User data lives in a gitignored nested Data Repo, not a submodule
 
-Each user's Profile, Applications and Role Templates live in a private Data Repo cloned into a gitignored folder inside their Tool Repo folder. Git's repo boundary is the only separation: tool changes are committed in the outer repo and data changes in the inner one, with no sync scripts, hooks or CI guard. This lets a fix be made and tested on a real Application in the same folder it is applied from, without any personal data reaching the public Tool Repo. It only holds if every personal file lands in the data folder, so no command may write personal data anywhere else.
+Each user's Profile and Applications live in a private Data Repo cloned into a gitignored folder inside their Tool Repo folder. Git's repo boundary is the only separation: tool changes are committed in the outer repo and data changes in the inner one, with no sync scripts, hooks or CI guard. This lets a fix be made and tested on a real Application in the same folder it is applied from, without any personal data reaching the public Tool Repo. It only holds if every personal file lands in the data folder, so no command may write personal data anywhere else.
 
 ## Considered Options
 
