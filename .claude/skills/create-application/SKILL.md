@@ -24,16 +24,16 @@ Every achievement, number and caveat comes from the Profile, with nothing invent
 
 2. **Work out the languages** and the Output files. If any Output file already exists in `$ARGUMENTS/`, list them all and ask once: "These files already exist and will be overwritten: … Overwrite them?" On no, stop.
 
-3. **Write `$ARGUMENTS/resume_<source>.tex` and `$ARGUMENTS/coverletter_<source>.tex`** in the Source Language, from `src/scaffold/application/resume.tex` and `coverletter.tex`. The Scaffold's content is fictional: replace all of it, commented-out entries included.
+3. **Write `$ARGUMENTS/resume_<source>.tex` and `$ARGUMENTS/coverletter_<source>.tex`** in the Source Language, from `src/scaffold/application/resume.tex` and `coverletter.tex`. Use the Scaffold as the baseline for layout: its sections and its LaTeX commands. The Scaffold's content is fictional: replace all of it, commented-out entries included.
 
    **Job title:** the objective, the cover letter and the index row use the job title as written in the Job Posting. If it has none (e.g. a LinkedIn paste starting at "About the job"), infer it from the responsibilities and say so in the final report.
 
    **Resume:**
    - Fill `\resumeheader[...]` from `contact.md`, with `qrcode=../../profile/images/qr_code.png`.
    - Write `\objective{}` to name the role and the company.
-   - Order experience, projects and bullets so the top 3–5 requirements come first.
+   - Keep the Scaffold's section order. Within Work Experience and Technical Projects, order the entries and their bullets so the top 3–5 requirements come first.
    - **Choose the projects** in `\section{Technical Projects}` to suit the Job Posting, judging each Project Description by its content, since it may name a requirement in other words ("object detection" for "machine vision"). A project takes its name and dates from its Project Description; `experience.md` wins on titles, dates and employers. For a project, its Project Description decides what can be claimed.
-   - Fill the remaining sections from the Profile: delete a section it has nothing for, and add one for what it holds beyond the Scaffold's, such as certifications.
+   - Fill the remaining sections from the Profile: delete a section it has nothing for, and add one for what it holds beyond the Scaffold's, such as certifications. Deleting or adding a section leaves the Scaffold's other sections in their relative order.
    - Write `$\sim$` for "approximately"; `\~` is an accent command and breaks the build.
 
    **Cover letter:** fill `\coverletterheader[...]` from `contact.md`, then write three paragraphs:
@@ -41,7 +41,7 @@ Every achievement, number and caveat comes from the Profile, with nothing invent
    - **Evidence:** usually two quantified achievements that address the top requirements.
    - **Close:** one sentence on what the user would like to work on or ask about, then the Scaffold's contact line filled from `contact.md`, and the sign-off.
 
-   Done when each of the top 3–5 requirements is addressed in the resume or listed as a Gap in the Fit Analysis, and the Evidence paragraph addresses at least two of them with numbers from the Profile.
+   Done when the resume's Scaffold sections appear in the same relative order as in `src/scaffold/application/resume.tex`, each of the top 3–5 requirements is addressed in the resume or listed as a Gap in the Fit Analysis, and the Evidence paragraph addresses at least two of them with numbers from the Profile.
 
 4. **Copyedit both:** call `/copyedit $ARGUMENTS/resume_<source>.tex` and `/copyedit $ARGUMENTS/coverletter_<source>.tex` with the Skill tool.
 
