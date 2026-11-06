@@ -1,5 +1,6 @@
 # Directories to ignore
 .scratch/
+.claude/skills/ship
 
 # Files to ignore
 expressive-resume-ai.code-workspace
