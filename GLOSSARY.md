@@ -13,12 +13,20 @@ The employer's advertisement for one role, as the user received it; the starting
 _Avoid_: job description, JD, job ad.
 
 **Fit Analysis**:
-The assessment of a Job Posting against the Profile, kept in its Application: strengths, gaps, how to frame the application, which Role Template to start from, the Job Posting's language, and a verdict on whether to apply.
+The assessment of a Job Posting against the Profile, kept in its Application: strengths, gaps, how to frame the application, and a verdict on whether to apply.
 _Avoid_: job review, match report.
 
 **Profile**:
 The user's canonical personal/career source data (`profile/`), kept once and drawn on by every Application. Not itself an Application, and not a generated document.
 _Avoid_: resume data, master resume.
+
+**Project**:
+A distinct piece of work the user can describe on its own, whether from an employer, a thesis or on the side. It may or may not appear in their work history.
+_Avoid_: case study, portfolio item.
+
+**Project Description**:
+The Profile's account of one Project: what it is, what the user did, and the skills and technologies involved. Resumes and cover letters draw on it.
+_Avoid_: project notes, project summary, description (on its own).
 
 **Application Index**:
 The list of a user's Applications in their Data Repo, one row per Application (date, company, role, link to its directory), newest first. Records that an Application's resume and cover letter were created, not whether they were sent or how it is going. An Application that stopped after its fit analysis has no row.
@@ -29,13 +37,17 @@ expressive-resume-ai, the public, generic code (document classes, Scaffold, skil
 _Avoid_: Public Template Repo, the template, the base repo, upstream (on its own).
 
 **Data Repo**:
-A user's own private repo holding their Profile, Applications and Role Templates, kept inside their Tool Repo folder but never part of it.
+A user's own private repo holding their Profile and Applications, kept inside their Tool Repo folder but never part of it.
 _Avoid_: personal repo, private copy, fork (a fork is a Tool Repo).
 
 **Scaffold**:
 The files in the Tool Repo copied to start something new: the `resume.tex` and `coverletter.tex` every Application starts from, and the starting files of a new user's Data Repo. Lives in `src/scaffold/`.
 _Avoid_: template (ambiguous), skeleton.
 
-**Role Template**:
-A user's own pre-tailored, reviewed resume for a job family (e.g. PyDev, MLOps), kept in the user's Data Repo (`templates/<Name>/`), in one or more languages. An Application's resume starts from the closest Role Template (in the job posting's language if one exists, otherwise in the Profile's language and then translated) and is tailored from there; without a match it is written from the Profile. Belongs to the user, not to this repo.
-_Avoid_: template on its own.
+**Source Language**:
+The language of the Profile's `experience.md`. An Application's resume and cover letter are written in it first.
+_Avoid_: base language, native language.
+
+**Target Language**:
+The Job Posting's language. When it differs from the Source Language, the resume and cover letter are translated into it, and both versions are kept.
+_Avoid_: output language.

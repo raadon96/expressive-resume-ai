@@ -1,5 +1,6 @@
 # Directories to ignore
 .scratch/
+.claude/skills/ship
 
 # Files to ignore
 expressive-resume-ai.code-workspace
@@ -18,7 +19,6 @@ CLAUDE.local.md
 example/applications/**/*.pdf
 !example/applications/26.04.26_mleng@examplecompany/*.pdf
 example/profile/**/*.pdf
-example/templates/**/*.pdf
 
 # Created by https://www.gitignore.io/api/latex
 # Edit at https://www.gitignore.io/?templates=latex

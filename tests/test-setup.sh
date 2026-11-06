@@ -84,10 +84,9 @@ step "2. Building with src/build.sh"
 build_pdfs "$WORK_DIR" src/scaffold/application/resume.tex src/scaffold/application/coverletter.tex
 mkdir -p "$WORK_DIR/data/applications"
 cp -R "$WORK_DIR/example/applications/$EXAMPLE_APP" "$WORK_DIR/data/applications/"
-build_pdfs "$WORK_DIR" "data/applications/$EXAMPLE_APP/resume.tex"
+build_pdfs "$WORK_DIR" "data/applications/$EXAMPLE_APP/resume_en.tex"
 # From inside the Data Repo, where git rev-parse can't find the Tool Repo
-build_pdfs "$WORK_DIR/data" "applications/$EXAMPLE_APP/coverletter.tex"
-build_pdfs "$WORK_DIR" example/templates/MLEng/resume.tex
+build_pdfs "$WORK_DIR/data" "applications/$EXAMPLE_APP/coverletter_en.tex"
 if (cd "$WORK_DIR" && src/build.sh missing.tex > /dev/null); then
     fail "src/build.sh succeeded on a missing file"
 fi

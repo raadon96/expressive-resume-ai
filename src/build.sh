@@ -10,7 +10,7 @@ RC_FILE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/latexmkrc"
 
 if [ $# -eq 0 ]; then
     echo "Usage: src/build.sh <file.tex> [<file.tex>…]"
-    echo "Example: src/build.sh data/applications/<dir>/resume.tex data/applications/<dir>/coverletter.tex"
+    echo "Example: src/build.sh data/applications/<dir>/resume_en.tex data/applications/<dir>/coverletter_en.tex"
     exit 1
 fi
 
