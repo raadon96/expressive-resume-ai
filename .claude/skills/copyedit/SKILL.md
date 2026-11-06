@@ -24,6 +24,7 @@ Copyedit the input against one set of rules, so it reads like a specific person 
    - **Facts are fixed.** Keep every achievement, number, date, name and technology; add none. A stock self-description with no evidence behind it ("I work reliably") is not a fact and may be cut.
    - **Length stays the same or shrinks.**
    - **In LaTeX, edit only the prose.** Keep commands, `\resumeheader[...]` and `\coverletterheader[...]` blocks, `\href` targets, `\tech{}` values, comments and escapes (`\%`, `$\sim$`) exactly as they are.
+   - **In Markdown, keep HTML comments** (`<!-- ... -->`) byte-for-byte unchanged.
    - **Text mode keeps the lines:** the same number of lines, in the same order, each still wrapped in its own LaTeX command, so the caller can put each one back where it came from.
 
 3. **Return**, with no list of the fixes:

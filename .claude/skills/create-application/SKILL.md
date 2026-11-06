@@ -20,7 +20,7 @@ Every achievement, number and caveat comes from the Profile, with nothing invent
 
 ## Steps
 
-1. **Read** `$ARGUMENTS/description.md` (the Job Posting and its Fit Analysis), the whole Profile (every text file in `data/profile/`, `projects/` included) and `.claude/skills/copyedit/rules.md`, which step 3 writes by. Skip only files whose text you still have from this session. If `description.md` has no `## Fit Analysis`, stop and tell the user to run `/review-job`.
+1. **Read** `$ARGUMENTS/description.md` (the Job Posting and its Fit Analysis), the whole Profile (every text file in `data/profile/`, `projects/` included) and `.claude/skills/copyedit/rules.md`, which step 3 writes by. Read each Profile file with `src/read-profile.sh <file>` from the repo root, one call per file, which hides the text the user has commented out. Skip only files whose text you still have from this session. If `description.md` has no `## Fit Analysis`, stop and tell the user to run `/review-job`.
 
 2. **Work out the languages** and the Output files. If any Output file already exists in `$ARGUMENTS/`, list them all and ask once: "These files already exist and will be overwritten: … Overwrite them?" On no, stop.
 
