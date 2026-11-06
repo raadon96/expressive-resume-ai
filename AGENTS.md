@@ -14,7 +14,7 @@ Searches from the repo root skip the gitignored `data/`, so search explicit `dat
 
 `/review-job`, `/create-application`, `/translate` and `/copyedit` carry their own steps. When editing resumes or cover letters outside them:
 
-- Read the Profile in `data/profile/` first. `experience.md` is the source of truth for work history; `contact.md` holds the header details and wins over any `.tex` file. `experience.md` decides titles, dates and employers, and the Project Description decides what can be claimed for that project. A Project may or may not appear in `experience.md`.
+- Read the Profile in `data/profile/` first, each file with `src/read-profile.sh <file>`, which hides the text the user has commented out. When a Profile file is itself being edited, read it raw, so its comments survive the write. `experience.md` is the source of truth for work history; `contact.md` holds the header details and wins over any `.tex` file. `experience.md` decides titles, dates and employers, and the Project Description decides what can be claimed for that project. A Project may or may not appear in `experience.md`.
 - Write prose following `.claude/skills/copyedit/rules.md`.
 - For LaTeX syntax, read the Scaffold in `src/scaffold/application/` and the worked example in `example/applications/`.
 - Change layout in the `.tex` documents. The `.cls` files in `src/` come from upstream Expressive Resume and stay unchanged.

@@ -18,7 +18,7 @@ If `data/` doesn't exist, stop and tell the user to run `./setup.sh` first.
 
    Done when you hold the Job Posting's full text.
 
-2. **Read the Profile:** `data/profile/experience.md`, `data/profile/qualifications.md` and every file in `data/profile/projects/`.
+2. **Read the Profile:** `data/profile/experience.md`, `data/profile/qualifications.md` and every file in `data/profile/projects/`. Read each with `src/read-profile.sh <file>` from the repo root, one call per file, which hides the text the user has commented out.
 
 3. **Create the Application directory:** `data/applications/YY.MM.DD_<role>@<company>/` with today's date, a short lowercase `<role>` slug (`pydev`, `mleng`) and the company name in lowercase without spaces (`octopusenergy`), without asking. For a recruiter with an unnamed client, use the recruiter, and name the likely client in the Fit Analysis.
 

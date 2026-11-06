@@ -43,3 +43,4 @@ Translate the input into the target language. You see only this file, the files 
 
 - Keep headings, lists, tables, links and front matter structure; translate heading text and prose.
 - Keep fenced code blocks and inline code as they are, translating only comments in natural language.
+- Keep HTML comments (`<!-- ... -->`) byte-for-byte unchanged, untranslated.
