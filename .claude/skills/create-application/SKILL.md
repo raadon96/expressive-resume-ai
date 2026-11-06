@@ -24,7 +24,7 @@ Every achievement, number and caveat comes from the Profile, with nothing invent
 
 2. **Work out the languages** and the Output files. If any Output file already exists in `$ARGUMENTS/`, list them all and ask once: "These files already exist and will be overwritten: … Overwrite them?" On no, stop.
 
-3. **Write `$ARGUMENTS/resume_<source>.tex` and `$ARGUMENTS/coverletter_<source>.tex`** in the Source Language, from `src/scaffold/application/resume.tex` and `coverletter.tex`. The Scaffold's content is fictional: replace all of it, commented-out entries included.
+3. **Write `$ARGUMENTS/resume_<source>.tex` and `$ARGUMENTS/coverletter_<source>.tex`** in the Source Language, from `src/scaffold/application/resume.tex` and `coverletter.tex`. Use the Scaffold as the baseline for layout: its sections and its LaTeX commands. The Scaffold's content is fictional: replace all of it, commented-out entries included.
 
    **Job title:** the objective, the cover letter and the index row use the job title as written in the Job Posting. If it has none (e.g. a LinkedIn paste starting at "About the job"), infer it from the responsibilities and say so in the final report.
 
